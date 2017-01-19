@@ -360,7 +360,41 @@ namespace MotorwaySimulator
             
             if (nextVehicle == null && previousVehicle == null)
             {
+                // no vehicles
                 return true;
+            }
+            else if (nextVehicle == null)
+            {
+                // just vehicle behind
+                int stoppingDistancePixelsPreviousVehicle = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
+                if (previousVehicle.ActualSpeedMetresHour > vehicleFromOtherLane.ActualSpeedMetresHour)
+                {
+                    // previous vehicle going faster
+                    // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
+                }
+                else
+                {
+                    // previous vehicle going slower or equal to
+                    // previous vehicle can't lose stopping distance so no overlap allowed
+                }
+            }
+            else if (previousVehicle == null)
+            {
+                // just vehicle ahead
+                if (nextVehicle.ActualSpeedMetresHour >= vehicleFromOtherLane.ActualSpeedMetresHour)
+                {
+                    // next vehicle going faster or equal to
+                    // we can't overlap to change stopping distance so no overlap allowed
+                }
+                else
+                {
+                    // next vehicle going slower
+                    // we can overlap to change stopping distance so overlap by margin allowed
+                }
+            }
+            else
+            {
+                // vehicle ahead & behind
             }
 
             return false;
@@ -381,24 +415,9 @@ namespace MotorwaySimulator
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(projectedDesiredStopppingDistanceMetres));
                 int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
 
-                if (nextVehicle.ActualSpeedMetresHour > newVehicle.DesiredSpeedMetresHour)
+                if (nextVehicle.ActualSpeedMetresHour >= newVehicle.DesiredSpeedMetresHour)
                 {
-                    // Next vehicle travelling faster than new vehicle wants to travel
-                    // To spawn stopping distance needs to be at back of vehicle or further away
-                    if ((newVehicle.LocationY - projectedDesiredStopppingDistancePixels) < backOfNextVehicle)
-                    {
-                        // Stopping distance overlaps back of next vehicle
-                        // Can't spawn
-                        return false;
-                    }
-                    else
-                    {
-                        // Can spawn
-                    }
-                }
-                else if (nextVehicle.ActualSpeedMetresHour == newVehicle.DesiredSpeedMetresHour)
-                {
-                    // Next vehicle travelling equal to new vehicle
+                    // Next vehicle travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away
                     if ((newVehicle.LocationY - projectedDesiredStopppingDistancePixels) < backOfNextVehicle)
                     {
