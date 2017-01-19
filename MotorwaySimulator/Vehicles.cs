@@ -10,7 +10,6 @@ namespace MotorwaySimulator
 {
     public class Vehicle
     {
-        // Testing second git client
         public bool InSight = true;
         public int VehicleId;
 

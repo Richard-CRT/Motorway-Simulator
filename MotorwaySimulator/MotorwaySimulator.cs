@@ -62,7 +62,7 @@ namespace MotorwaySimulator
             RoadLength = 900;
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 50;
+            InterArrivalTime = 3000;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -126,7 +126,10 @@ namespace MotorwaySimulator
             bool success = false;
             while (!success && lane < this.LaneCount)
             {
-                success = Lanes[lane].AddVehicleToLane(newVehicle);
+                if (Lanes[lane].Vehicles.Count == 0)
+                {
+                    success = Lanes[lane].AddVehicleToLane(newVehicle);
+                }
                 lane++;
             }
 
@@ -304,11 +307,11 @@ namespace MotorwaySimulator
 
         public Vehicle NextVehicleDifferentLane(Vehicle vehicle)
         {
-            Vehicle[] OrderedVehicles = VehiclesOrderByReverseLocation();
+            Vehicle[] orderedVehicles = VehiclesOrderByReverseLocation();
             Vehicle nextVehicle = null;
-            if (OrderedVehicles.Length > 0)
+            if (orderedVehicles.Length > 0)
             {
-                foreach(Vehicle myVehicle in this.Vehicles)
+                foreach(Vehicle myVehicle in orderedVehicles)
                 {
                     if (myVehicle.ExactLocationY < vehicle.ExactLocationY)
                     {
@@ -326,13 +329,13 @@ namespace MotorwaySimulator
 
         public Vehicle PreviousVehicleDifferentLane(Vehicle vehicle)
         {
-            Vehicle[] OrderedVehicles = VehiclesOrderByLocation();
+            Vehicle[] orderedVehicles = VehiclesOrderByLocation();
             Vehicle previousVehicle = null;
-            if (OrderedVehicles.Length > 0)
+            if (orderedVehicles.Length > 0)
             {
-                foreach (Vehicle myVehicle in this.Vehicles)
+                foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.LocationY >= vehicle.ExactLocationY) // equal to because otherwise anomaly when vehicle in same location [unlikely the ever happen]
+                    if (myVehicle.LocationY >= vehicle.ExactLocationY) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
                     {
                         previousVehicle = myVehicle;
                         break;
