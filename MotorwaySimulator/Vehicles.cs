@@ -15,7 +15,6 @@ namespace MotorwaySimulator
 
         public int VehicleWidth;
         public int VehicleHeight;
-        public Size VehicleSize;
 
         public double DesiredSpeedMetresHour;
         public double DesiredSpeedPixelsHour;
@@ -64,16 +63,16 @@ namespace MotorwaySimulator
                 // vehicle in front
 
                 int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
-                int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
-                if (this.LocationY - projectedDesiredStopppingDistancePixels <= backOfNextVehicle)
+                int projectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.ActualSpeedMetresHour)), 0);
+                if (this.LocationY - projectedStopppingDistancePixels <= backOfNextVehicle)
                 {
-                    // desired safety distance is overlapping
+                    // safety distance is overlapping
                     if (nextVehicle.ActualSpeedMetresHour < this.ActualSpeedMetresHour)
                     {
                         //  next vehicle slower than this vehicle
-                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
+                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
 
-                        if ((this.LocationY - projectedDesiredStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
+                        if ((this.LocationY - projectedStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
                         {
                             // Stopping distance overlaps at (back of next vehicle - margin)
                             // Adjust speed to match that of vehicle ahead
@@ -82,12 +81,16 @@ namespace MotorwaySimulator
                         }
                     }
                 }
-                else if (this.LocationY - projectedDesiredStopppingDistancePixels > backOfNextVehicle + (projectedDesiredStopppingDistancePixels*0.1)) // add 10% margin 1) for realism (haha) 2) fix pixeling flashing bug
+                else
                 {
                     // stopping distance does not overlap
-
-                    this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
-                    this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
+                    int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
+                    if (this.LocationY - projectedDesiredStopppingDistancePixels > backOfNextVehicle + (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin 1) for realism (haha) 2) fix pixeling flashing bug
+                    {
+                        // desired stopping distance does not overlap
+                        this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
+                        this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
+                    }
                 }
             }
             else
@@ -134,7 +137,6 @@ namespace MotorwaySimulator
 
             this.VehicleWidth = MainForm.VehicleWidth;
             this.VehicleHeight = (int)Math.Round(MainForm.MetresToPixels(MainForm.VehicleParameters[vehicleType].Length + lengthVariation), 0);
-            this.VehicleSize = new Size(this.VehicleWidth, this.VehicleHeight);
         }
 
         public void GenerateDesiredSpeed(string vehicleType)

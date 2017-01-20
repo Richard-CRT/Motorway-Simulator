@@ -34,13 +34,15 @@ namespace MotorwaySimulator
             { "HGV", new VehicleTemplate(12,    2,  96000,     4000,      0.11) },
             { "Bus", new VehicleTemplate(11,    2,  96000,     4000,      0.01) }
 
-            /*{ "Car", new VehicleTemplate(4,     0,  112000,    0,      0.5) },
-            { "LGV", new VehicleTemplate(5.5,   0,  111000,    0,      0.5) },
+            /*{ "Car", new VehicleTemplate(4,     0,  112000,    0,      1) },
+            { "LGV", new VehicleTemplate(5.5,   0,  111000,    0,      0) },
             { "HGV", new VehicleTemplate(12,    0,  96000,     0,      0) },
             { "Bus", new VehicleTemplate(11,    0,  96000,     0,      0) }*/
         };
 
         public List<LaneControl> Lanes;
+        public bool DebugSpawn;
+        public List<DebugVehicleSpawnInstruction> DebugSpawnInstructions;
         public Random Random;
         public Stopwatch Timer;
 
@@ -52,6 +54,9 @@ namespace MotorwaySimulator
         private void MotorwaySimulator_Load(object sender, EventArgs e)
         {
             Lanes = new List<LaneControl>();
+            DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
+            DebugSpawn = true;
+
             Timer = new Stopwatch();
             Timer.Start();
 
@@ -62,7 +67,7 @@ namespace MotorwaySimulator
             RoadLength = 900;
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 3000;
+            InterArrivalTime = 50;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -78,6 +83,15 @@ namespace MotorwaySimulator
                 this.Road.Controls.Add(lane);
                 this.Lanes.Add(lane);
             }
+
+            DebugVehicleSpawnInstruction instruction;
+
+            instruction = new DebugVehicleSpawnInstruction(0, 900, "Car", Lanes[0], 2000, 112000, 4);
+            DebugSpawnInstructions.Add(instruction);
+            instruction = new DebugVehicleSpawnInstruction(1, 900, "HGV", Lanes[1], 2000, 112000, 4);
+            DebugSpawnInstructions.Add(instruction);
+            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[2], 2000, 112000, 4);
+            DebugSpawnInstructions.Add(instruction);
         }
 
         private Vehicle GenerateVehicle(int id)
@@ -126,10 +140,13 @@ namespace MotorwaySimulator
             bool success = false;
             while (!success && lane < this.LaneCount)
             {
+                /*
                 if (Lanes[lane].Vehicles.Count == 0)
                 {
                     success = Lanes[lane].AddVehicleToLane(newVehicle);
                 }
+                */
+                success = Lanes[lane].AddVehicleToLane(newVehicle);
                 lane++;
             }
 
@@ -141,18 +158,65 @@ namespace MotorwaySimulator
 
         private void CheckVehicle()
         {
-            long tempTime = Timer.ElapsedMilliseconds;
-            long elapsedTime = tempTime - LastTimerValue;
-            double scaledElapsedTime = elapsedTime * this.TimeScale;
-
-            double onePercent = InterArrivalTime * 0.01;
-            double LowerBoundInterArrivalTime = InterArrivalTime - (onePercent*this.TimeScale); // Seems fairly accurate, lowers the trigger time depending on the TimeScale since the timer has a resolution of 15ms
-
-            if (scaledElapsedTime >= LowerBoundInterArrivalTime || LastTimerValue == 0)
+            if(DebugSpawn)
             {
-                LabelData2.Text = scaledElapsedTime.ToString();
-                LastTimerValue = tempTime;
-                AddVehicle();
+                for (int instructionIndex = 0; instructionIndex < DebugSpawnInstructions.Count;)
+                {
+                    DebugVehicleSpawnInstruction instruction = DebugSpawnInstructions[instructionIndex];
+                    if (Timer.ElapsedMilliseconds >= instruction.SpawnTime)
+                    {
+                        Vehicle vehicle;
+                        switch (instruction.Type)
+                        {
+                            case "Car":
+                                vehicle = new Car(this, instruction.VehicleId);
+                                break;
+                            case "LGV":
+                                vehicle = new LGV(this, instruction.VehicleId);
+                                break;
+                            case "HGV":
+                                vehicle = new HGV(this, instruction.VehicleId);
+                                break;
+                            case "Bus":
+                                vehicle = new Bus(this, instruction.VehicleId);
+                                break;
+                            default:
+                                vehicle = null;
+                                break;
+                        }
+                        if (instruction.DesiredSpeedMetresHour != 0)
+                        {
+                            vehicle.DesiredSpeedMetresHour = instruction.DesiredSpeedMetresHour;
+                            vehicle.DesiredSpeedPixelsHour = MetresToPixels(instruction.DesiredSpeedMetresHour);
+                        }
+                        if (instruction.VehicleHeight != 0)
+                        {
+                            vehicle.VehicleHeight = (int)Math.Round(MetresToPixels(instruction.VehicleHeight));
+                        }
+                        instruction.Lane.AddVehicleToLane(vehicle);
+                        DebugSpawnInstructions.RemoveAt(instructionIndex);
+                    }
+                    else
+                    {
+                        instructionIndex++;
+                    }
+                }
+            }
+            else
+            {
+                long tempTime = Timer.ElapsedMilliseconds;
+                long elapsedTime = tempTime - LastTimerValue;
+                double scaledElapsedTime = elapsedTime * this.TimeScale;
+
+                double onePercent = InterArrivalTime * 0.01;
+                double LowerBoundInterArrivalTime = InterArrivalTime - (onePercent * this.TimeScale); // Seems fairly accurate, lowers the trigger time depending on the TimeScale since the timer has a resolution of 15ms
+
+                if (scaledElapsedTime >= LowerBoundInterArrivalTime || LastTimerValue == 0)
+                {
+                    LabelData2.Text = scaledElapsedTime.ToString();
+                    LastTimerValue = tempTime;
+                    AddVehicle();
+                }
             }
         }
 
@@ -232,19 +296,6 @@ namespace MotorwaySimulator
         private void formScrolled(object sender, ScrollEventArgs e)
         {
             Panel.Location = new Point(283, 44);
-        }
-    }
-
-    public class VehicleTemplate
-    {
-        public double Length, LengthVariation, DesiredSpeed, DesiredSpeedVariation, Probability;
-        public VehicleTemplate(double length, double lengthVariation, double desiredSpeed, double desiredSpeedVariation, double probability)
-        {
-            Length = length;
-            LengthVariation = lengthVariation;
-            DesiredSpeed = desiredSpeed;
-            DesiredSpeedVariation = desiredSpeedVariation;
-            Probability = probability;
         }
     }
 
@@ -335,7 +386,7 @@ namespace MotorwaySimulator
             {
                 foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.LocationY >= vehicle.ExactLocationY) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
+                    if (myVehicle.ExactLocationY >= vehicle.ExactLocationY) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
                     {
                         previousVehicle = myVehicle;
                         break;
@@ -351,10 +402,11 @@ namespace MotorwaySimulator
 
         public bool SpaceInLane(Vehicle vehicleFromOtherLane)
         {
-            int projectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+            int otherVehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+            /*
             int projectedOccupiedAreaLocationY = vehicleFromOtherLane.LocationY - projectedStopppingDistancePixels;
             int projectedOccupiedAreaHeight = vehicleFromOtherLane.VehicleHeight + projectedStopppingDistancePixels;
-
+            */
             Vehicle nextVehicle = NextVehicleDifferentLane(vehicleFromOtherLane);
             Vehicle previousVehicle = PreviousVehicleDifferentLane(vehicleFromOtherLane);
             
@@ -366,20 +418,36 @@ namespace MotorwaySimulator
             else if (nextVehicle == null)
             {
                 // just vehicle behind
-                int stoppingDistancePixelsPreviousVehicle = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
+                int previousVehicleStoppingDistancePixelsPreviousVehicle = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
+                int backOfThisVehicle = vehicleFromOtherLane.LocationY + vehicleFromOtherLane.VehicleHeight;
+
                 if (previousVehicle.ActualSpeedMetresHour > vehicleFromOtherLane.ActualSpeedMetresHour)
                 {
                     // previous vehicle going faster
                     // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
+                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)),0) - otherVehicleProjectedStopppingDistancePixels;
+
+                    if (previousVehicle.LocationY - previousVehicleStoppingDistancePixelsPreviousVehicle > backOfThisVehicle - previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                    {
+                        // overlaps but not enough that the previous vehicle can adjust speed to match
+                        return true;
+                    }
+
                 }
                 else
                 {
                     // previous vehicle going slower or equal to
                     // previous vehicle can't lose stopping distance so no overlap allowed
+                    if (previousVehicle.LocationY - previousVehicleStoppingDistancePixelsPreviousVehicle > backOfThisVehicle)
+                    {
+                        // no overlap so there is space
+                        return true;
+                    }
                 }
             }
             else if (previousVehicle == null)
             {
+
                 // just vehicle ahead
                 if (nextVehicle.ActualSpeedMetresHour >= vehicleFromOtherLane.ActualSpeedMetresHour)
                 {
@@ -496,7 +564,9 @@ namespace MotorwaySimulator
                     }
                     pe.Graphics.DrawRectangle(whitePen, safetyRect);
 
-                    Rectangle vehicleRect = new Rectangle(new Point(MainForm.LaneMargin, vehicle.LocationY), vehicle.VehicleSize);
+                    Size vehicleSize = new Size(vehicle.VehicleWidth, vehicle.VehicleHeight);
+
+                    Rectangle vehicleRect = new Rectangle(new Point(MainForm.LaneMargin, vehicle.LocationY), vehicleSize);
                     switch (vehicle.Type)
                     {
                         case "Car":
@@ -519,6 +589,41 @@ namespace MotorwaySimulator
                     }
                 }
             }
+        }
+    }
+
+    public class VehicleTemplate
+    {
+        public double Length, LengthVariation, DesiredSpeed, DesiredSpeedVariation, Probability;
+        public VehicleTemplate(double length, double lengthVariation, double desiredSpeed, double desiredSpeedVariation, double probability)
+        {
+            this.Length = length;
+            this.LengthVariation = lengthVariation;
+            this.DesiredSpeed = desiredSpeed;
+            this.DesiredSpeedVariation = desiredSpeedVariation;
+            this.Probability = probability;
+        }
+    }
+
+    public class DebugVehicleSpawnInstruction
+    {
+        public int VehicleId;
+        public double ExactLocationY;
+        public string Type;
+        public LaneControl Lane;
+        public long SpawnTime;
+        public double DesiredSpeedMetresHour;
+        public int VehicleHeight;
+
+        public DebugVehicleSpawnInstruction(int vehicleId, double exactLocationY, string type, LaneControl lane, long spawnTime, double desiredSpeedMetresHour = 0, int vehicleHeight = 0)
+        {
+            this.VehicleId = vehicleId;
+            this.ExactLocationY = exactLocationY;
+            this.Type = type;
+            this.Lane = lane;
+            this.SpawnTime = spawnTime;
+            this.DesiredSpeedMetresHour = desiredSpeedMetresHour;
+            this.VehicleHeight = vehicleHeight;
         }
     }
 }
