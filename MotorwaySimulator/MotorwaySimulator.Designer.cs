@@ -138,6 +138,7 @@
             this.Controls.Add(this.Road);
             this.Controls.Add(this.Panel);
             this.Name = "MotorwaySimulator";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Motorway Simulator";
             this.Load += new System.EventHandler(this.MotorwaySimulator_Load);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.formScrolled);

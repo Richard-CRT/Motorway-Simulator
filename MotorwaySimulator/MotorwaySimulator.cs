@@ -16,7 +16,7 @@ namespace MotorwaySimulator
     public partial class MotorwaySimulator : Form
     {
         public int RoadLength;
-        private int LaneCount;
+        public int LaneCount;
         public int LaneWidth;
         public int LaneMargin;
         public int VehicleWidth;
@@ -55,7 +55,7 @@ namespace MotorwaySimulator
         {
             Lanes = new List<LaneControl>();
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
-            DebugSpawn = true;
+            DebugSpawn = false;
 
             Timer = new Stopwatch();
             Timer.Start();
@@ -67,7 +67,7 @@ namespace MotorwaySimulator
             RoadLength = 900;
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 50;
+            InterArrivalTime = 300;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -86,11 +86,11 @@ namespace MotorwaySimulator
 
             DebugVehicleSpawnInstruction instruction;
 
-            instruction = new DebugVehicleSpawnInstruction(0, 900, "Car", Lanes[0], 2000, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, 900, "Car", Lanes[0], 0, 96000, 4);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(1, 900, "HGV", Lanes[1], 2000, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(1, 900, "Car", Lanes[1], 1150, 112000, 4);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[2], 2000, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[0], 800, 76000, 4);
             DebugSpawnInstructions.Add(instruction);
         }
 
@@ -246,6 +246,36 @@ namespace MotorwaySimulator
                 vehicle.MovementTick();
                 if (!vehicle.InSight)
                 {
+                    Vehicle previousVehicle = vehicle.ParentLane.PreviousVehicle(vehicle);
+                    Vehicle previousVehicleNextLane = this.Lanes[vehicle.ParentLane.LaneId + 1].PreviousVehicleDifferentLane(vehicle);
+                    if (previousVehicle == null && previousVehicleNextLane == null)
+                    {
+                        vehicle.InEffect = false;
+                    }
+                    else if (previousVehicle == null)
+                    {
+                        if (!previousVehicleNextLane.InSight)
+                        {
+                            vehicle.InEffect = false;
+                        }
+                    }
+                    else if (previousVehicleNextLane == null)
+                    {
+                        if (!previousVehicle.InSight)
+                        {
+                            vehicle.InEffect = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!previousVehicle.InSight && !previousVehicleNextLane.InSight)
+                        {
+                            vehicle.InEffect = false;
+                        }
+                    }
+                }
+                if (!vehicle.InEffect)
+                {
                     vehicle.ParentLane.Vehicles.Remove(vehicle);
                 }
                 data += vehicle.VehicleId + ": " + vehicle.DesiredSpeedMetresHour / 1000 + " kph" + Environment.NewLine;
@@ -356,6 +386,20 @@ namespace MotorwaySimulator
             }
         }
 
+        public Vehicle PreviousVehicle(Vehicle vehicle)
+        {
+            Vehicle[] OrderedVehicles = VehiclesOrderByLocation();
+            int thisIndex = Array.IndexOf(OrderedVehicles, vehicle);
+            if (OrderedVehicles.Length > 0 && thisIndex < OrderedVehicles.Length-1)
+            {
+                return OrderedVehicles[thisIndex + 1];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public Vehicle NextVehicleDifferentLane(Vehicle vehicle)
         {
             Vehicle[] orderedVehicles = VehiclesOrderByReverseLocation();
@@ -400,9 +444,58 @@ namespace MotorwaySimulator
             }
         }
 
+        private bool ClearOfPreviousVehicle(Vehicle vehicle, Vehicle previousVehicle)
+        {
+            int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
+            int previousVehicleStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
+            int backOfOtherLaneVehicle = vehicle.LocationY + vehicle.VehicleHeight;
+
+            if (previousVehicle.ActualSpeedMetresHour > vehicle.ActualSpeedMetresHour)
+            {
+                // previous vehicle going faster
+                // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
+                int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0) - vehicleProjectedStopppingDistancePixels;
+
+                if (previousVehicle.LocationY - previousVehicleStoppingDistancePixels > backOfOtherLaneVehicle - previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                {
+                    // overlaps but not quite enough that the previous vehicle can adjust speed to match yet [at least 1 pixel]
+                    return true;
+                }
+            }
+            else
+            {
+                // previous vehicle going slower or equal to
+                // previous vehicle can't lose stopping distance so no overlap allowed
+                if (previousVehicle.LocationY - previousVehicleStoppingDistancePixels > backOfOtherLaneVehicle)
+                {
+                    // no overlap so there is space
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool ClearOfNextVehicle(Vehicle vehicle, Vehicle nextVehicle)
+        {
+            int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
+            int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
+
+            // we can't overlap to change stopping distance for situations
+            // 1) vehicle ahead is faster or equal, overlap impossible
+            // 2) spec requires vehicles changing to lane N-1 must be able to stay at current speed
+            //      if vehicle allows overlap then in theory they must change speed next tick, which
+            //      is against the spec
+            // so no overlap allowed
+            if (vehicle.LocationY - vehicleProjectedStopppingDistancePixels > backOfNextVehicle + (vehicleProjectedStopppingDistancePixels * 0.1)) // add 10% margin to stop cars immediately rejoining n lane after joining n+1
+            {
+                // no overlap so there is space
+                return true;
+            }
+            return false;
+        }
+
         public bool SpaceInLane(Vehicle vehicleFromOtherLane)
         {
-            int otherVehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
             /*
             int projectedOccupiedAreaLocationY = vehicleFromOtherLane.LocationY - projectedStopppingDistancePixels;
             int projectedOccupiedAreaHeight = vehicleFromOtherLane.VehicleHeight + projectedStopppingDistancePixels;
@@ -418,54 +511,18 @@ namespace MotorwaySimulator
             else if (nextVehicle == null)
             {
                 // just vehicle behind
-                int previousVehicleStoppingDistancePixelsPreviousVehicle = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
-                int backOfThisVehicle = vehicleFromOtherLane.LocationY + vehicleFromOtherLane.VehicleHeight;
-
-                if (previousVehicle.ActualSpeedMetresHour > vehicleFromOtherLane.ActualSpeedMetresHour)
-                {
-                    // previous vehicle going faster
-                    // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
-                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)),0) - otherVehicleProjectedStopppingDistancePixels;
-
-                    if (previousVehicle.LocationY - previousVehicleStoppingDistancePixelsPreviousVehicle > backOfThisVehicle - previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
-                    {
-                        // overlaps but not enough that the previous vehicle can adjust speed to match
-                        return true;
-                    }
-
-                }
-                else
-                {
-                    // previous vehicle going slower or equal to
-                    // previous vehicle can't lose stopping distance so no overlap allowed
-                    if (previousVehicle.LocationY - previousVehicleStoppingDistancePixelsPreviousVehicle > backOfThisVehicle)
-                    {
-                        // no overlap so there is space
-                        return true;
-                    }
-                }
+                return ClearOfPreviousVehicle(vehicleFromOtherLane, previousVehicle);
             }
             else if (previousVehicle == null)
             {
-
                 // just vehicle ahead
-                if (nextVehicle.ActualSpeedMetresHour >= vehicleFromOtherLane.ActualSpeedMetresHour)
-                {
-                    // next vehicle going faster or equal to
-                    // we can't overlap to change stopping distance so no overlap allowed
-                }
-                else
-                {
-                    // next vehicle going slower
-                    // we can overlap to change stopping distance so overlap by margin allowed
-                }
+                return ClearOfNextVehicle(vehicleFromOtherLane, nextVehicle);
             }
             else
             {
                 // vehicle ahead & behind
+                return ClearOfPreviousVehicle(vehicleFromOtherLane, previousVehicle) && ClearOfNextVehicle(vehicleFromOtherLane, nextVehicle);
             }
-
-            return false;
         }
 
         public double StoppingDistance(double speed)

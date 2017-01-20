@@ -11,6 +11,7 @@ namespace MotorwaySimulator
     public class Vehicle
     {
         public bool InSight = true;
+        public bool InEffect = true;
         public int VehicleId;
 
         public int VehicleWidth;
@@ -20,6 +21,14 @@ namespace MotorwaySimulator
         public double DesiredSpeedPixelsHour;
         public double ActualSpeedMetresHour;
         public double ActualSpeedPixelsHour;
+
+        public bool IsTravellingAtDesiredSpeed
+        {
+            get
+            {
+                return DesiredSpeedMetresHour == ActualSpeedMetresHour;
+            }
+        }
 
         public double ExactLocationY;
         public int LocationY;
@@ -40,6 +49,49 @@ namespace MotorwaySimulator
             //      Else
             //          Change speed
 
+            #region Change Speed
+            Vehicle nextVehicle = ParentLane.NextVehicle(this);
+
+            if (nextVehicle != null)
+            {
+                // vehicle in front
+
+                int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
+                int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
+                if (this.LocationY - projectedDesiredStopppingDistancePixels <= backOfNextVehicle)
+                {
+                    // desired safety distance is overlapping
+                    if (nextVehicle.ActualSpeedMetresHour < this.ActualSpeedMetresHour)
+                    {
+                        //  next vehicle slower than this vehicle
+                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
+
+                        if ((this.LocationY - projectedDesiredStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
+                        {
+                            // Stopping distance overlaps at (back of next vehicle - margin)
+                            // Adjust speed to match that of vehicle ahead
+                            this.ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
+                            this.ActualSpeedPixelsHour = nextVehicle.ActualSpeedPixelsHour;
+                        }
+                    }
+                }
+                else if (this.LocationY - projectedDesiredStopppingDistancePixels > backOfNextVehicle + (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin fix pixeling flashing bug
+                {
+                    // stopping distance does not overlap
+
+                    this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
+                    this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
+                }
+            }
+            else
+            {
+                // road clear ahead
+
+                this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
+                this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
+            }
+            #endregion
+
             #region Change Lane n-1
             if (this.ParentLane.LaneId != 0)
             {
@@ -53,59 +105,24 @@ namespace MotorwaySimulator
                     this.ParentLane = leftLane;
                 }
             }
-            #endregion
-
-            #region Change Speed
-            Vehicle nextVehicle = ParentLane.NextVehicle(this);
-
-            if (nextVehicle != null)
+            if (this.ParentLane.LaneId != this.MainForm.LaneCount-1 && !this.IsTravellingAtDesiredSpeed)
             {
-                // vehicle in front
-
-                int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
-                int projectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.ActualSpeedMetresHour)), 0);
-                if (this.LocationY - projectedStopppingDistancePixels <= backOfNextVehicle)
+                // Not in Lane n
+                LaneControl rightLane = this.MainForm.Lanes[this.ParentLane.LaneId + 1];
+                bool spaceInLane = rightLane.SpaceInLane(this);
+                if (spaceInLane)
                 {
-                    // safety distance is overlapping
-                    if (nextVehicle.ActualSpeedMetresHour < this.ActualSpeedMetresHour)
-                    {
-                        //  next vehicle slower than this vehicle
-                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
-
-                        if ((this.LocationY - projectedStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
-                        {
-                            // Stopping distance overlaps at (back of next vehicle - margin)
-                            // Adjust speed to match that of vehicle ahead
-                            this.ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
-                            this.ActualSpeedPixelsHour = nextVehicle.ActualSpeedPixelsHour;
-                        }
-                    }
+                    rightLane.Vehicles.Add(this);
+                    this.ParentLane.Vehicles.Remove(this);
+                    this.ParentLane = rightLane;
                 }
-                else
-                {
-                    // stopping distance does not overlap
-                    int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
-                    if (this.LocationY - projectedDesiredStopppingDistancePixels > backOfNextVehicle + (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin 1) for realism (haha) 2) fix pixeling flashing bug
-                    {
-                        // desired stopping distance does not overlap
-                        this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
-                        this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
-                    }
-                }
-            }
-            else
-            {
-                // road clear ahead
-
-                this.ActualSpeedMetresHour = this.DesiredSpeedMetresHour;
-                this.ActualSpeedPixelsHour = this.DesiredSpeedPixelsHour;
             }
             #endregion
         }
 
         public void MovementTick()
         {
-            if (this.InSight)
+            if (this.InEffect)
             {
                 long tempTime = MainForm.Timer.ElapsedMilliseconds;
                 long elapsedTime = tempTime - LastTimerValue;
