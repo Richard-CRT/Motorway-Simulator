@@ -55,7 +55,7 @@ namespace MotorwaySimulator
         {
             Lanes = new List<LaneControl>();
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
-            DebugSpawn = false;
+            DebugSpawn = true;
 
             Timer = new Stopwatch();
             Timer.Start();
@@ -63,8 +63,8 @@ namespace MotorwaySimulator
             Random = new Random();
             TimeScale = 1;
             LastId = 0;
-            LaneCount = 7;
-            RoadLength = 900;
+            LaneCount = 3;
+            RoadLength = 10000;
             LaneWidth = 40;
             LaneMargin = 8;
             InterArrivalTime = 300;
@@ -86,11 +86,11 @@ namespace MotorwaySimulator
 
             DebugVehicleSpawnInstruction instruction;
 
-            instruction = new DebugVehicleSpawnInstruction(0, 900, "Car", Lanes[0], 0, 96000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, 900, "HGV", Lanes[0], 0, 96000, 8);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(1, 900, "Car", Lanes[1], 1150, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(1, 900, "HGV", Lanes[0], 1200, 100000, 8);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[0], 800, 76000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[0], 3000, 112000, 4);
             DebugSpawnInstructions.Add(instruction);
         }
 
@@ -247,7 +247,11 @@ namespace MotorwaySimulator
                 if (!vehicle.InSight)
                 {
                     Vehicle previousVehicle = vehicle.ParentLane.PreviousVehicle(vehicle);
-                    Vehicle previousVehicleNextLane = this.Lanes[vehicle.ParentLane.LaneId + 1].PreviousVehicleDifferentLane(vehicle);
+                    Vehicle previousVehicleNextLane = null;
+                    if (vehicle.ParentLane.LaneId != this.LaneCount - 1)
+                    {
+                        previousVehicleNextLane = this.Lanes[vehicle.ParentLane.LaneId + 1].PreviousVehicleDifferentLane(vehicle);
+                    }
                     if (previousVehicle == null && previousVehicleNextLane == null)
                     {
                         vehicle.InEffect = false;
