@@ -71,26 +71,26 @@ namespace MotorwaySimulator
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
-            Road.Height = RoadLength;
-            Road.Width = LaneCount * LaneWidth;
+            Road.Width = RoadLength;
+            Road.Height = LaneCount * LaneWidth;
             this.Controls.Add(Road);
 
             for (int i = 0; i < LaneCount; i++)
             {
                 LaneControl lane = new LaneControl(this, i);
-                lane.Location = new Point(LaneWidth * i, 0);
-                lane.Size = new Size(LaneWidth, this.Road.Height);
+                lane.Location = new Point(0, LaneWidth*i);
+                lane.Size = new Size(RoadLength, LaneWidth);
                 this.Road.Controls.Add(lane);
                 this.Lanes.Add(lane);
             }
 
             DebugVehicleSpawnInstruction instruction;
 
-            instruction = new DebugVehicleSpawnInstruction(0, 900, "HGV", Lanes[0], 0, 96000, 8);
+            instruction = new DebugVehicleSpawnInstruction(0, 0, "HGV", Lanes[0], 0, 96000, 8);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(1, 900, "HGV", Lanes[0], 1200, 100000, 8);
+            instruction = new DebugVehicleSpawnInstruction(1, 0, "HGV", Lanes[0], 1200, 100000, 6);
             DebugSpawnInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(2, 900, "Car", Lanes[0], 3000, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, 0, "Car", Lanes[0], 3000, 112000, 4);
             DebugSpawnInstructions.Add(instruction);
         }
 
@@ -227,7 +227,7 @@ namespace MotorwaySimulator
             {
                 allVehicles.AddRange(lane.Vehicles);
             }
-            return allVehicles.OrderBy(vehicle => vehicle.ExactLocationY).ToArray();
+            return allVehicles.OrderBy(vehicle => vehicle.ExactProgressY).ToArray();
         }
 
         private void FormTick_Tick(object sender, EventArgs e)
@@ -329,7 +329,7 @@ namespace MotorwaySimulator
 
         private void formScrolled(object sender, ScrollEventArgs e)
         {
-            Panel.Location = new Point(283, 44);
+            Panel.Location = new Point(12, 189);
         }
     }
 
@@ -355,12 +355,12 @@ namespace MotorwaySimulator
 
         private Vehicle[] VehiclesOrderByLocation()
         {
-            return this.Vehicles.OrderBy(vehicle => vehicle.ExactLocationY).ToArray();
+            return this.Vehicles.OrderByDescending(vehicle => vehicle.ExactProgressY).ToArray();
         }
 
         private Vehicle[] VehiclesOrderByReverseLocation()
         {
-            return this.Vehicles.OrderByDescending(vehicle => vehicle.ExactLocationY).ToArray();
+            return this.Vehicles.OrderBy(vehicle => vehicle.ExactProgressY).ToArray();
         }
 
         public Vehicle LastVehicle()
@@ -412,7 +412,7 @@ namespace MotorwaySimulator
             {
                 foreach(Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.ExactLocationY < vehicle.ExactLocationY)
+                    if (myVehicle.ExactProgressY > vehicle.ExactProgressY)
                     {
                         nextVehicle = myVehicle;
                         break;
@@ -434,7 +434,7 @@ namespace MotorwaySimulator
             {
                 foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.ExactLocationY >= vehicle.ExactLocationY) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
+                    if (myVehicle.ExactProgressY <= vehicle.ExactProgressY) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
                     {
                         previousVehicle = myVehicle;
                         break;
@@ -452,7 +452,7 @@ namespace MotorwaySimulator
         {
             int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
             int previousVehicleStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
-            int backOfOtherLaneVehicle = vehicle.LocationY + vehicle.VehicleHeight;
+            int backOfOtherLaneVehicle = vehicle.ProgressY - vehicle.VehicleHeight;
 
             if (previousVehicle.ActualSpeedMetresHour > vehicle.ActualSpeedMetresHour)
             {
@@ -460,7 +460,7 @@ namespace MotorwaySimulator
                 // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
                 int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0) - vehicleProjectedStopppingDistancePixels;
 
-                if (previousVehicle.LocationY - previousVehicleStoppingDistancePixels > backOfOtherLaneVehicle - previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                if (previousVehicle.ProgressY + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
                 {
                     // overlaps but not quite enough that the previous vehicle can adjust speed to match yet [at least 1 pixel]
                     return true;
@@ -470,7 +470,7 @@ namespace MotorwaySimulator
             {
                 // previous vehicle going slower or equal to
                 // previous vehicle can't lose stopping distance so no overlap allowed
-                if (previousVehicle.LocationY - previousVehicleStoppingDistancePixels > backOfOtherLaneVehicle)
+                if (previousVehicle.ProgressY + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle)
                 {
                     // no overlap so there is space
                     return true;
@@ -482,7 +482,7 @@ namespace MotorwaySimulator
         private bool ClearOfNextVehicle(Vehicle vehicle, Vehicle nextVehicle)
         {
             int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
-            int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
+            int backOfNextVehicle = nextVehicle.ProgressY - nextVehicle.VehicleHeight;
 
             // we can't overlap to change stopping distance for situations
             // 1) vehicle ahead is faster or equal, overlap impossible
@@ -490,7 +490,7 @@ namespace MotorwaySimulator
             //      if vehicle allows overlap then in theory they must change speed next tick, which
             //      is against the spec
             // so no overlap allowed
-            if (vehicle.LocationY - vehicleProjectedStopppingDistancePixels > backOfNextVehicle + (vehicleProjectedStopppingDistancePixels * 0.1)) // add 10% margin to stop cars immediately rejoining n lane after joining n+1
+            if (vehicle.ProgressY + vehicleProjectedStopppingDistancePixels < backOfNextVehicle - (vehicleProjectedStopppingDistancePixels * 0.1)) // add 10% margin to stop cars immediately rejoining n lane after joining n+1
             {
                 // no overlap so there is space
                 return true;
@@ -500,10 +500,6 @@ namespace MotorwaySimulator
 
         public bool SpaceInLane(Vehicle vehicleFromOtherLane)
         {
-            /*
-            int projectedOccupiedAreaLocationY = vehicleFromOtherLane.LocationY - projectedStopppingDistancePixels;
-            int projectedOccupiedAreaHeight = vehicleFromOtherLane.VehicleHeight + projectedStopppingDistancePixels;
-            */
             Vehicle nextVehicle = NextVehicleDifferentLane(vehicleFromOtherLane);
             Vehicle previousVehicle = PreviousVehicleDifferentLane(vehicleFromOtherLane);
             
@@ -542,21 +538,17 @@ namespace MotorwaySimulator
             {
                 double projectedDesiredStopppingDistanceMetres = StoppingDistance(newVehicle.DesiredSpeedMetresHour);
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(projectedDesiredStopppingDistanceMetres));
-                int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
+                int backOfNextVehicle = nextVehicle.ProgressY - nextVehicle.VehicleHeight;
 
                 if (nextVehicle.ActualSpeedMetresHour >= newVehicle.DesiredSpeedMetresHour)
                 {
                     // Next vehicle travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away
-                    if ((newVehicle.LocationY - projectedDesiredStopppingDistancePixels) < backOfNextVehicle)
+                    if ((newVehicle.ProgressY + projectedDesiredStopppingDistancePixels) > backOfNextVehicle)
                     {
                         // Stopping distance overlaps back of next vehicle
                         // Can't spawn
                         return false;
-                    }
-                    else
-                    {
-                        // Can spawn
                     }
                 }
                 else
@@ -568,15 +560,11 @@ namespace MotorwaySimulator
                     // as soon as this overlap is reached in order for the stopping distance to be at
                     // the back of the next vehicle
                     int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
-                    if ((newVehicle.LocationY - projectedDesiredStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
+                    if ((newVehicle.ProgressY + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
                     {
                         // Stopping distance overlaps (back of next vehicle - margin)
                         // Can't spawn
                         return false;
-                    }
-                    else
-                    {
-                        // Can spawn
                     }
                 }
             }
@@ -593,8 +581,8 @@ namespace MotorwaySimulator
             using (Pen whitePen = new Pen(Color.White, 1))
             {
                 whitePen.DashPattern = new float[] { 15, 20 };
-                pe.Graphics.DrawLine(whitePen, new Point(this.Size.Width - 1, 0), new Point(this.Size.Width - 1, this.Size.Height));
-                pe.Graphics.DrawLine(whitePen, new Point(0, 0), new Point(0, this.Size.Height));
+                pe.Graphics.DrawLine(whitePen, new Point(0, 0), new Point(this.Size.Width,0));
+                pe.Graphics.DrawLine(whitePen, new Point(0, this.Size.Height - 1), new Point(this.Size.Width, this.Size.Height-1));
             }
 
             using (Pen whitePen = new Pen(Color.White, 2))
@@ -614,7 +602,7 @@ namespace MotorwaySimulator
 
                     int safetyDistanceHeight = (int)Math.Round(MainForm.MetresToPixels(StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
 
-                    Rectangle safetyRect = new Rectangle(new Point(MainForm.LaneMargin, vehicle.LocationY - safetyDistanceHeight), new Size(vehicle.VehicleWidth, safetyDistanceHeight));
+                    Rectangle safetyRect = new Rectangle(new Point(vehicle.ProgressY, MainForm.LaneMargin), new Size(safetyDistanceHeight,vehicle.VehicleWidth));
                     if (vehicle.ActualSpeedMetresHour == vehicle.DesiredSpeedMetresHour)
                     {
                         pe.Graphics.FillRectangle(translucentYellowBrush, safetyRect);
@@ -625,9 +613,9 @@ namespace MotorwaySimulator
                     }
                     pe.Graphics.DrawRectangle(whitePen, safetyRect);
 
-                    Size vehicleSize = new Size(vehicle.VehicleWidth, vehicle.VehicleHeight);
+                    Size vehicleSize = new Size(vehicle.VehicleHeight, vehicle.VehicleWidth);
 
-                    Rectangle vehicleRect = new Rectangle(new Point(MainForm.LaneMargin, vehicle.LocationY), vehicleSize);
+                    Rectangle vehicleRect = new Rectangle(new Point(vehicle.ProgressY-vehicle.VehicleHeight, MainForm.LaneMargin), vehicleSize);
                     switch (vehicle.Type)
                     {
                         case "Car":
@@ -646,7 +634,7 @@ namespace MotorwaySimulator
                     pe.Graphics.DrawRectangle(blackPen, vehicleRect);
                     using (Font drawFont = new Font("Courier New", 8))
                     {
-                        pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, MainForm.LaneMargin, vehicle.LocationY);
+                        pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.ProgressY- vehicle.VehicleHeight, MainForm.LaneMargin);
                     }
                 }
             }
@@ -669,17 +657,17 @@ namespace MotorwaySimulator
     public class DebugVehicleSpawnInstruction
     {
         public int VehicleId;
-        public double ExactLocationY;
+        public double ExactProgressY;
         public string Type;
         public LaneControl Lane;
         public long SpawnTime;
         public double DesiredSpeedMetresHour;
         public int VehicleHeight;
 
-        public DebugVehicleSpawnInstruction(int vehicleId, double exactLocationY, string type, LaneControl lane, long spawnTime, double desiredSpeedMetresHour = 0, int vehicleHeight = 0)
+        public DebugVehicleSpawnInstruction(int vehicleId, double exactProgressY, string type, LaneControl lane, long spawnTime, double desiredSpeedMetresHour = 0, int vehicleHeight = 0)
         {
             this.VehicleId = vehicleId;
-            this.ExactLocationY = exactLocationY;
+            this.ExactProgressY = exactProgressY;
             this.Type = type;
             this.Lane = lane;
             this.SpawnTime = spawnTime;

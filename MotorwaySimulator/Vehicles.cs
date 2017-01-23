@@ -30,8 +30,8 @@ namespace MotorwaySimulator
             }
         }
 
-        public double ExactLocationY;
-        public int LocationY;
+        public double ExactProgressY;
+        public int ProgressY;
 
         public long LastTimerValue;
 
@@ -56,9 +56,9 @@ namespace MotorwaySimulator
             {
                 // vehicle in front
 
-                int backOfNextVehicle = nextVehicle.LocationY + nextVehicle.VehicleHeight;
+                int backOfNextVehicle = nextVehicle.ProgressY - nextVehicle.VehicleHeight;
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
-                if (this.LocationY - projectedDesiredStopppingDistancePixels <= backOfNextVehicle)
+                if (this.ProgressY + projectedDesiredStopppingDistancePixels >= backOfNextVehicle)
                 {
                     // desired safety distance is overlapping
                     if (nextVehicle.ActualSpeedMetresHour < this.ActualSpeedMetresHour)
@@ -66,7 +66,7 @@ namespace MotorwaySimulator
                         //  next vehicle slower than this vehicle
                         int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(ParentLane.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
 
-                        if ((this.LocationY - projectedDesiredStopppingDistancePixels) <= (backOfNextVehicle - stoppingDistanceChangeByChangingSpeedsPixels))
+                        if ((this.ProgressY + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
                         {
                             // Stopping distance overlaps at (back of next vehicle - margin)
                             // Adjust speed to match that of vehicle ahead
@@ -75,7 +75,7 @@ namespace MotorwaySimulator
                         }
                     }
                 }
-                else if (this.LocationY - projectedDesiredStopppingDistancePixels > backOfNextVehicle + (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin fix pixeling flashing bug
+                else if (this.ProgressY + projectedDesiredStopppingDistancePixels < backOfNextVehicle - (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin fix pixeling flashing bug
                 {
                     // stopping distance does not overlap
 
@@ -105,6 +105,9 @@ namespace MotorwaySimulator
                     this.ParentLane = leftLane;
                 }
             }
+            #endregion
+
+            #region Change Lane n+1
             if (this.ParentLane.LaneId != this.MainForm.LaneCount-1 && !this.IsTravellingAtDesiredSpeed)
             {
                 // Not in Lane n
@@ -138,11 +141,11 @@ namespace MotorwaySimulator
 
                 #region Move Forward
                 double pixelsMoved = MainForm.PixelHoursToPixelTicks(ActualSpeedPixelsHour, scaledElapsedTime);
-                ExactLocationY -= pixelsMoved;
-                LocationY = (int)Math.Round(ExactLocationY,0);
+                ExactProgressY += pixelsMoved;
+                ProgressY = (int)Math.Round(ExactProgressY,0);
                 #endregion
             }
-            if (ExactLocationY <= -VehicleHeight)
+            if (ExactProgressY >= MainForm.RoadLength + this.VehicleHeight)
             {
                 InSight = false;
             }
@@ -185,8 +188,8 @@ namespace MotorwaySimulator
             GenerateDesiredSpeed("Car");
             GenerateSize("Car");
 
-            this.ExactLocationY = mainForm.RoadLength;
-            this.LocationY = mainForm.RoadLength;
+            this.ExactProgressY = 0;
+            this.ProgressY = 0;
         }
     }
 
@@ -203,8 +206,8 @@ namespace MotorwaySimulator
             GenerateDesiredSpeed("LGV");
             GenerateSize("LGV");
 
-            this.ExactLocationY = mainForm.RoadLength;
-            this.LocationY = mainForm.RoadLength;
+            this.ExactProgressY = 0;
+            this.ProgressY = 0;
         }
     }
 
@@ -221,8 +224,8 @@ namespace MotorwaySimulator
             GenerateDesiredSpeed("HGV");
             GenerateSize("HGV");
 
-            this.ExactLocationY = mainForm.RoadLength;
-            this.LocationY = mainForm.RoadLength;
+            this.ExactProgressY = 0;
+            this.ProgressY = 0;
         }
     }
 
@@ -239,8 +242,8 @@ namespace MotorwaySimulator
             GenerateDesiredSpeed("Bus");
             GenerateSize("Bus");
 
-            this.ExactLocationY = mainForm.RoadLength;
-            this.LocationY = mainForm.RoadLength;
+            this.ExactProgressY = 0;
+            this.ProgressY = 0;
         }
     }
 }

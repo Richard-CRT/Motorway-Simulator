@@ -53,7 +53,7 @@
             this.Road.BackColor = System.Drawing.SystemColors.Control;
             this.Road.Location = new System.Drawing.Point(0, 0);
             this.Road.Name = "Road";
-            this.Road.Size = new System.Drawing.Size(100, 900);
+            this.Road.Size = new System.Drawing.Size(100, 100);
             this.Road.TabIndex = 0;
             // 
             // TextBoxData
@@ -69,7 +69,7 @@
             // 
             // ButtonPause
             // 
-            this.ButtonPause.Location = new System.Drawing.Point(24, 278);
+            this.ButtonPause.Location = new System.Drawing.Point(168, 12);
             this.ButtonPause.Name = "ButtonPause";
             this.ButtonPause.Size = new System.Drawing.Size(120, 41);
             this.ButtonPause.TabIndex = 2;
@@ -79,7 +79,7 @@
             // 
             // ButtonResume
             // 
-            this.ButtonResume.Location = new System.Drawing.Point(24, 325);
+            this.ButtonResume.Location = new System.Drawing.Point(168, 59);
             this.ButtonResume.Name = "ButtonResume";
             this.ButtonResume.Size = new System.Drawing.Size(120, 41);
             this.ButtonResume.TabIndex = 3;
@@ -90,7 +90,7 @@
             // trackBar1
             // 
             this.trackBar1.LargeChange = 10;
-            this.trackBar1.Location = new System.Drawing.Point(24, 372);
+            this.trackBar1.Location = new System.Drawing.Point(168, 106);
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(120, 45);
@@ -101,7 +101,7 @@
             // LabelData2
             // 
             this.LabelData2.AutoSize = true;
-            this.LabelData2.Location = new System.Drawing.Point(59, 420);
+            this.LabelData2.Location = new System.Drawing.Point(294, 12);
             this.LabelData2.Name = "LabelData2";
             this.LabelData2.Size = new System.Drawing.Size(35, 13);
             this.LabelData2.TabIndex = 5;
@@ -110,7 +110,7 @@
             // LabelData3
             // 
             this.LabelData3.AutoSize = true;
-            this.LabelData3.Location = new System.Drawing.Point(59, 447);
+            this.LabelData3.Location = new System.Drawing.Point(294, 26);
             this.LabelData3.Name = "LabelData3";
             this.LabelData3.Size = new System.Drawing.Size(13, 13);
             this.LabelData3.TabIndex = 6;
@@ -124,9 +124,9 @@
             this.Panel.Controls.Add(this.ButtonPause);
             this.Panel.Controls.Add(this.trackBar1);
             this.Panel.Controls.Add(this.ButtonResume);
-            this.Panel.Location = new System.Drawing.Point(283, 44);
+            this.Panel.Location = new System.Drawing.Point(12, 189);
             this.Panel.Name = "Panel";
-            this.Panel.Size = new System.Drawing.Size(175, 474);
+            this.Panel.Size = new System.Drawing.Size(338, 285);
             this.Panel.TabIndex = 7;
             // 
             // MotorwaySimulator
@@ -134,7 +134,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(501, 900);
+            this.ClientSize = new System.Drawing.Size(1120, 507);
             this.Controls.Add(this.Road);
             this.Controls.Add(this.Panel);
             this.Name = "MotorwaySimulator";
