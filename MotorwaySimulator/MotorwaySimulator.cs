@@ -55,7 +55,7 @@ namespace MotorwaySimulator
         {
             Lanes = new List<LaneControl>();
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
-            DebugSpawn = true;
+            DebugSpawn = false;
 
             Timer = new Stopwatch();
             Timer.Start();
@@ -67,7 +67,7 @@ namespace MotorwaySimulator
             RoadLength = 10000;
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 300;
+            InterArrivalTime = 500;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -227,7 +227,7 @@ namespace MotorwaySimulator
             {
                 allVehicles.AddRange(lane.Vehicles);
             }
-            return allVehicles.OrderBy(vehicle => vehicle.ExactProgressY).ToArray();
+            return allVehicles.OrderByDescending(vehicle => vehicle.ExactProgressY).ToArray();
         }
 
         private void FormTick_Tick(object sender, EventArgs e)
