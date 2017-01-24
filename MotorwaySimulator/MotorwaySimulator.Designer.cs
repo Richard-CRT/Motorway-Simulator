@@ -34,12 +34,12 @@
             this.TextBoxData = new System.Windows.Forms.TextBox();
             this.ButtonPause = new System.Windows.Forms.Button();
             this.ButtonResume = new System.Windows.Forms.Button();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
             this.LabelData2 = new System.Windows.Forms.Label();
             this.LabelData3 = new System.Windows.Forms.Label();
             this.Panel = new System.Windows.Forms.Panel();
             this.LabelVehicleCount = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.Panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,16 +88,16 @@
             this.ButtonResume.UseVisualStyleBackColor = true;
             this.ButtonResume.Click += new System.EventHandler(this.ButtonResume_Click);
             // 
-            // trackBar1
+            // TrackBarTimescale
             // 
-            this.trackBar1.LargeChange = 10;
-            this.trackBar1.Location = new System.Drawing.Point(168, 106);
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(120, 45);
-            this.trackBar1.TabIndex = 4;
-            this.trackBar1.Value = 10;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.TrackBarTimescale.LargeChange = 10;
+            this.TrackBarTimescale.Location = new System.Drawing.Point(168, 106);
+            this.TrackBarTimescale.Minimum = 1;
+            this.TrackBarTimescale.Name = "TrackBarTimescale";
+            this.TrackBarTimescale.Size = new System.Drawing.Size(120, 45);
+            this.TrackBarTimescale.TabIndex = 4;
+            this.TrackBarTimescale.Value = 10;
+            this.TrackBarTimescale.Scroll += new System.EventHandler(this.TrackBarTimescale_Scroll);
             // 
             // LabelData2
             // 
@@ -124,7 +124,7 @@
             this.Panel.Controls.Add(this.TextBoxData);
             this.Panel.Controls.Add(this.LabelData2);
             this.Panel.Controls.Add(this.ButtonPause);
-            this.Panel.Controls.Add(this.trackBar1);
+            this.Panel.Controls.Add(this.TrackBarTimescale);
             this.Panel.Controls.Add(this.ButtonResume);
             this.Panel.Location = new System.Drawing.Point(12, 287);
             this.Panel.Name = "Panel";
@@ -153,7 +153,7 @@
             this.Text = "Motorway Simulator";
             this.Load += new System.EventHandler(this.MotorwaySimulator_Load);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FormScrolled);
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
             this.ResumeLayout(false);
@@ -167,7 +167,7 @@
         private System.Windows.Forms.TextBox TextBoxData;
         private System.Windows.Forms.Button ButtonPause;
         private System.Windows.Forms.Button ButtonResume;
-        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.TrackBar TrackBarTimescale;
         private System.Windows.Forms.Label LabelData2;
         private System.Windows.Forms.Label LabelData3;
         private System.Windows.Forms.Panel Panel;

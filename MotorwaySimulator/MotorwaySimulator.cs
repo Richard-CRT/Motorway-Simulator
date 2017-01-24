@@ -77,7 +77,7 @@ namespace MotorwaySimulator
             RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres),0);
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 15;
+            InterArrivalTime = 500;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -336,9 +336,9 @@ namespace MotorwaySimulator
             this.Timer.Start();
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void TrackBarTimescale_Scroll(object sender, EventArgs e)
         {
-            this.TimeScale = trackBar1.Value/10.0f;
+            this.TimeScale = TrackBarTimescale.Value/10.0f;
         }
 
         private void FormScrolled(object sender, ScrollEventArgs e)
