@@ -38,6 +38,7 @@
             this.LabelData2 = new System.Windows.Forms.Label();
             this.LabelData3 = new System.Windows.Forms.Label();
             this.Panel = new System.Windows.Forms.Panel();
+            this.LabelVehicleCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.Panel.SuspendLayout();
             this.SuspendLayout();
@@ -118,30 +119,40 @@
             // 
             // Panel
             // 
+            this.Panel.Controls.Add(this.LabelVehicleCount);
             this.Panel.Controls.Add(this.LabelData3);
             this.Panel.Controls.Add(this.TextBoxData);
             this.Panel.Controls.Add(this.LabelData2);
             this.Panel.Controls.Add(this.ButtonPause);
             this.Panel.Controls.Add(this.trackBar1);
             this.Panel.Controls.Add(this.ButtonResume);
-            this.Panel.Location = new System.Drawing.Point(12, 189);
+            this.Panel.Location = new System.Drawing.Point(12, 287);
             this.Panel.Name = "Panel";
             this.Panel.Size = new System.Drawing.Size(338, 285);
             this.Panel.TabIndex = 7;
+            // 
+            // LabelVehicleCount
+            // 
+            this.LabelVehicleCount.AutoSize = true;
+            this.LabelVehicleCount.Location = new System.Drawing.Point(294, 40);
+            this.LabelVehicleCount.Name = "LabelVehicleCount";
+            this.LabelVehicleCount.Size = new System.Drawing.Size(35, 13);
+            this.LabelVehicleCount.TabIndex = 7;
+            this.LabelVehicleCount.Text = "label1";
             // 
             // MotorwaySimulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1120, 507);
+            this.ClientSize = new System.Drawing.Size(1120, 594);
             this.Controls.Add(this.Road);
             this.Controls.Add(this.Panel);
             this.Name = "MotorwaySimulator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Motorway Simulator";
             this.Load += new System.EventHandler(this.MotorwaySimulator_Load);
-            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.formScrolled);
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FormScrolled);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
@@ -160,6 +171,7 @@
         private System.Windows.Forms.Label LabelData2;
         private System.Windows.Forms.Label LabelData3;
         private System.Windows.Forms.Panel Panel;
+        private System.Windows.Forms.Label LabelVehicleCount;
     }
 }
 
