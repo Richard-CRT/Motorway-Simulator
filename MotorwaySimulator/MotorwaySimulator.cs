@@ -34,20 +34,7 @@ namespace MotorwaySimulator
         public int InterArrivalTime;
         private int LastId;
         public double TimeScale;
-        public Dictionary<VehicleTypes, VehicleTemplate> VehicleParameters = new Dictionary<VehicleTypes, VehicleTemplate>()
-        {
-            // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Probability
-
-            { VehicleTypes.Car, new VehicleTemplate(4,     1,  112000,    16000,     0.74) },
-            { VehicleTypes.LGV, new VehicleTemplate(5.5,   1,  112000,    8000,      0.14) },
-            { VehicleTypes.HGV, new VehicleTemplate(12,    2,  96000,     4000,      0.11) },
-            { VehicleTypes.Bus, new VehicleTemplate(11,    2,  96000,     4000,      0.01) }
-
-            /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
-            { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
-            { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
-            { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
-        };
+        public Dictionary<VehicleTypes, VehicleTemplate> VehicleParameters;
 
         public List<LaneControl> Lanes;
         public bool DebugSpawn;
@@ -62,19 +49,37 @@ namespace MotorwaySimulator
 
         private void MotorwaySimulator_Load(object sender, EventArgs e)
         {
-            Lanes = new List<LaneControl>();
+        }
+
+        private void ButtonStart_Click(object sender, EventArgs e)
+        {
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
             DebugSpawn = false;
+            Lanes = new List<LaneControl>();
+
+            VehicleParameters = new Dictionary<VehicleTypes, VehicleTemplate>()
+            {
+                // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Probability
+
+                { VehicleTypes.Car, new VehicleTemplate((double)this.NumericCarLength.Value, (double)this.NumericCarLengthVar.Value,  (double)this.NumericCarDesiredSpeed.Value,  (double)this.NumericCarDesiredSpeedVar.Value,     0.74) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)this.NumericLGVLength.Value, (double)this.NumericLGVLengthVar.Value,  (double)this.NumericLGVDesiredSpeed.Value,  (double)this.NumericLGVDesiredSpeedVar.Value,      0.14) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)this.NumericHGVLength.Value, (double)this.NumericHGVLengthVar.Value,  (double)this.NumericHGVDesiredSpeed.Value,  (double)this.NumericHGVDesiredSpeedVar.Value,      0.11) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)this.NumericBusLength.Value, (double)this.NumericBusLengthVar.Value,  (double)this.NumericBusDesiredSpeed.Value,  (double)this.NumericBusDesiredSpeedVar.Value,      0.01) }
+
+                /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
+                { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
+                { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
+                { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
+            };
 
             Timer = new Stopwatch();
-            Timer.Start();
 
             Random = new Random();
             TimeScale = 1;
             LastId = 0;
             LaneCount = 7;
-            RoadLengthMetres = 10000;
-            RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres),0);
+            RoadLengthMetres = 300;
+            RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres), 0);
             LaneWidth = 40;
             LaneMargin = 8;
             InterArrivalTime = 500;
@@ -83,12 +88,11 @@ namespace MotorwaySimulator
 
             Road.Width = RoadLengthPixels;
             Road.Height = LaneCount * LaneWidth;
-            this.Controls.Add(Road);
 
             for (int i = 0; i < LaneCount; i++)
             {
                 LaneControl lane = new LaneControl(this, i);
-                lane.Location = new Point(0, LaneWidth*i);
+                lane.Location = new Point(0, LaneWidth * i);
                 lane.Size = new Size(RoadLengthPixels, LaneWidth);
                 this.Road.Controls.Add(lane);
                 this.Lanes.Add(lane);
@@ -102,6 +106,26 @@ namespace MotorwaySimulator
             DebugSpawnInstructions.Add(instruction);
             instruction = new DebugVehicleSpawnInstruction(2, 0, VehicleTypes.Car, Lanes[0], 3000, 112000, 4);
             DebugSpawnInstructions.Add(instruction);
+
+            Timer.Restart();
+            this.FormTick.Enabled = true;
+            this.ButtonStart.Enabled = false;
+            this.ButtonStop.Enabled = true;
+        }
+
+        private void ButtonStop_Click(object sender, EventArgs e)
+        {
+            Timer.Stop();
+
+            for (int i = LaneCount-1; i >= 0; i--)
+            {
+                LaneControl lane = Lanes[i];
+                this.Road.Controls.Remove(lane);
+                this.Lanes.Remove(lane);
+            }
+
+            this.ButtonStop.Enabled = false;
+            this.ButtonStart.Enabled = true;
         }
 
         private Vehicle GenerateVehicle(int id)
@@ -343,7 +367,7 @@ namespace MotorwaySimulator
 
         private void FormScrolled(object sender, ScrollEventArgs e)
         {
-            Panel.Location = new Point(12, 287);
+            PanelSettings.Location = new Point(12, 287);
         }
     }
 
@@ -612,6 +636,24 @@ namespace MotorwaySimulator
                 {
                     Vehicle vehicle = this.Vehicles[vehicleIndex];
                     int safetyDistanceHeight = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
+                    
+                    if (MainForm.CheckBoxTrackVehicle.Checked && vehicle.VehicleId == (int)MainForm.NumericVehicleId.Value)
+                    {
+                        if (!vehicle.InSight)
+                        {
+                            MainForm.CheckBoxTrackVehicle.Checked = false;
+                        }
+                        int newPosition = vehicle.Progress - (viewPortWidth / 2);
+                        if (newPosition < 0)
+                        {
+                            newPosition = 0;
+                        }
+                        if (newPosition > MainForm.HorizontalScroll.Maximum)
+                        {
+                            newPosition = MainForm.HorizontalScroll.Maximum;
+                        }
+                        MainForm.HorizontalScroll.Value = newPosition;
+                    }
 
                     if ((vehicle.Progress+safetyDistanceHeight) >= viewPortLocation && (vehicle.Progress-vehicle.VehicleHeight) < viewPortLocation + viewPortWidth)
                     {
