@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MotorwaySimulator.Properties
+namespace MotorwaySimulatorNameSpace.Properties
 {
 
 

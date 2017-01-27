@@ -1,4 +1,4 @@
-﻿namespace MotorwaySimulator
+﻿namespace MotorwaySimulatorNameSpace
 {
     partial class MotorwaySimulator
     {
@@ -35,9 +35,8 @@
             this.ButtonPause = new System.Windows.Forms.Button();
             this.ButtonResume = new System.Windows.Forms.Button();
             this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
-            this.LabelData2 = new System.Windows.Forms.Label();
-            this.LabelData3 = new System.Windows.Forms.Label();
             this.PanelSettings = new System.Windows.Forms.Panel();
+            this.TreeViewVehicles = new CustomControls.BufferedTreeView();
             this.CheckBoxTrackVehicle = new System.Windows.Forms.CheckBox();
             this.NumericVehicleId = new System.Windows.Forms.NumericUpDown();
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
@@ -62,7 +61,6 @@
             this.NumericCarLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLength = new System.Windows.Forms.NumericUpDown();
             this.LabelCarTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumericVehicleId)).BeginInit();
@@ -110,7 +108,7 @@
             // 
             // ButtonPause
             // 
-            this.ButtonPause.Location = new System.Drawing.Point(168, 157);
+            this.ButtonPause.Location = new System.Drawing.Point(320, 152);
             this.ButtonPause.Name = "ButtonPause";
             this.ButtonPause.Size = new System.Drawing.Size(120, 41);
             this.ButtonPause.TabIndex = 2;
@@ -120,7 +118,7 @@
             // 
             // ButtonResume
             // 
-            this.ButtonResume.Location = new System.Drawing.Point(168, 111);
+            this.ButtonResume.Location = new System.Drawing.Point(320, 106);
             this.ButtonResume.Name = "ButtonResume";
             this.ButtonResume.Size = new System.Drawing.Size(120, 41);
             this.ButtonResume.TabIndex = 3;
@@ -131,7 +129,7 @@
             // TrackBarTimescale
             // 
             this.TrackBarTimescale.LargeChange = 10;
-            this.TrackBarTimescale.Location = new System.Drawing.Point(168, 212);
+            this.TrackBarTimescale.Location = new System.Drawing.Point(320, 207);
             this.TrackBarTimescale.Minimum = 1;
             this.TrackBarTimescale.Name = "TrackBarTimescale";
             this.TrackBarTimescale.Size = new System.Drawing.Size(120, 45);
@@ -139,26 +137,9 @@
             this.TrackBarTimescale.Value = 10;
             this.TrackBarTimescale.Scroll += new System.EventHandler(this.TrackBarTimescale_Scroll);
             // 
-            // LabelData2
-            // 
-            this.LabelData2.AutoSize = true;
-            this.LabelData2.Location = new System.Drawing.Point(294, 12);
-            this.LabelData2.Name = "LabelData2";
-            this.LabelData2.Size = new System.Drawing.Size(35, 13);
-            this.LabelData2.TabIndex = 5;
-            this.LabelData2.Text = "label1";
-            // 
-            // LabelData3
-            // 
-            this.LabelData3.AutoSize = true;
-            this.LabelData3.Location = new System.Drawing.Point(294, 26);
-            this.LabelData3.Name = "LabelData3";
-            this.LabelData3.Size = new System.Drawing.Size(13, 13);
-            this.LabelData3.TabIndex = 6;
-            this.LabelData3.Text = "0";
-            // 
             // PanelSettings
             // 
+            this.PanelSettings.Controls.Add(this.TreeViewVehicles);
             this.PanelSettings.Controls.Add(this.CheckBoxTrackVehicle);
             this.PanelSettings.Controls.Add(this.NumericVehicleId);
             this.PanelSettings.Controls.Add(this.NumericBusDesiredSpeedVar);
@@ -183,10 +164,7 @@
             this.PanelSettings.Controls.Add(this.NumericCarLengthVar);
             this.PanelSettings.Controls.Add(this.NumericCarLength);
             this.PanelSettings.Controls.Add(this.LabelCarTitle);
-            this.PanelSettings.Controls.Add(this.LabelVehicleCount);
-            this.PanelSettings.Controls.Add(this.LabelData3);
             this.PanelSettings.Controls.Add(this.TextBoxData);
-            this.PanelSettings.Controls.Add(this.LabelData2);
             this.PanelSettings.Controls.Add(this.ButtonPause);
             this.PanelSettings.Controls.Add(this.TrackBarTimescale);
             this.PanelSettings.Controls.Add(this.ButtonResume);
@@ -194,6 +172,13 @@
             this.PanelSettings.Name = "PanelSettings";
             this.PanelSettings.Size = new System.Drawing.Size(874, 285);
             this.PanelSettings.TabIndex = 7;
+            // 
+            // TreeViewVehicles
+            // 
+            this.TreeViewVehicles.Location = new System.Drawing.Point(168, 12);
+            this.TreeViewVehicles.Name = "TreeViewVehicles";
+            this.TreeViewVehicles.Size = new System.Drawing.Size(146, 260);
+            this.TreeViewVehicles.TabIndex = 8;
             // 
             // CheckBoxTrackVehicle
             // 
@@ -234,7 +219,7 @@
             0,
             0,
             0});
-            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(542, 235);
+            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(571, 232);
             this.NumericBusDesiredSpeedVar.Maximum = new decimal(new int[] {
             30000,
             0,
@@ -256,7 +241,7 @@
             0,
             0,
             0});
-            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(542, 209);
+            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(571, 206);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
             500000,
             0,
@@ -279,7 +264,7 @@
             // NumericBusLengthVar
             // 
             this.NumericBusLengthVar.DecimalPlaces = 1;
-            this.NumericBusLengthVar.Location = new System.Drawing.Point(542, 183);
+            this.NumericBusLengthVar.Location = new System.Drawing.Point(571, 180);
             this.NumericBusLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -302,7 +287,7 @@
             0,
             0,
             65536});
-            this.NumericBusLength.Location = new System.Drawing.Point(542, 157);
+            this.NumericBusLength.Location = new System.Drawing.Point(571, 154);
             this.NumericBusLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -325,7 +310,7 @@
             // LableBusTitle
             // 
             this.LableBusTitle.AutoSize = true;
-            this.LableBusTitle.Location = new System.Drawing.Point(539, 139);
+            this.LableBusTitle.Location = new System.Drawing.Point(568, 136);
             this.LableBusTitle.Name = "LableBusTitle";
             this.LableBusTitle.Size = new System.Drawing.Size(25, 13);
             this.LableBusTitle.TabIndex = 25;
@@ -338,7 +323,7 @@
             0,
             0,
             0});
-            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(417, 235);
+            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(446, 232);
             this.NumericHGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30000,
             0,
@@ -360,7 +345,7 @@
             0,
             0,
             0});
-            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(417, 209);
+            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(446, 206);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
             500000,
             0,
@@ -383,7 +368,7 @@
             // NumericHGVLengthVar
             // 
             this.NumericHGVLengthVar.DecimalPlaces = 1;
-            this.NumericHGVLengthVar.Location = new System.Drawing.Point(417, 183);
+            this.NumericHGVLengthVar.Location = new System.Drawing.Point(446, 180);
             this.NumericHGVLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -406,7 +391,7 @@
             0,
             0,
             65536});
-            this.NumericHGVLength.Location = new System.Drawing.Point(417, 157);
+            this.NumericHGVLength.Location = new System.Drawing.Point(446, 154);
             this.NumericHGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -429,7 +414,7 @@
             // LabelHGVTitle
             // 
             this.LabelHGVTitle.AutoSize = true;
-            this.LabelHGVTitle.Location = new System.Drawing.Point(414, 139);
+            this.LabelHGVTitle.Location = new System.Drawing.Point(443, 136);
             this.LabelHGVTitle.Name = "LabelHGVTitle";
             this.LabelHGVTitle.Size = new System.Drawing.Size(30, 13);
             this.LabelHGVTitle.TabIndex = 20;
@@ -442,7 +427,7 @@
             0,
             0,
             0});
-            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(542, 111);
+            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(571, 108);
             this.NumericLGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30000,
             0,
@@ -464,7 +449,7 @@
             0,
             0,
             0});
-            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(542, 85);
+            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(571, 82);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
             500000,
             0,
@@ -487,7 +472,7 @@
             // NumericLGVLengthVar
             // 
             this.NumericLGVLengthVar.DecimalPlaces = 1;
-            this.NumericLGVLengthVar.Location = new System.Drawing.Point(542, 59);
+            this.NumericLGVLengthVar.Location = new System.Drawing.Point(571, 56);
             this.NumericLGVLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -510,7 +495,7 @@
             0,
             0,
             65536});
-            this.NumericLGVLength.Location = new System.Drawing.Point(542, 33);
+            this.NumericLGVLength.Location = new System.Drawing.Point(571, 30);
             this.NumericLGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -533,7 +518,7 @@
             // LabelLGVTitle
             // 
             this.LabelLGVTitle.AutoSize = true;
-            this.LabelLGVTitle.Location = new System.Drawing.Point(539, 15);
+            this.LabelLGVTitle.Location = new System.Drawing.Point(568, 12);
             this.LabelLGVTitle.Name = "LabelLGVTitle";
             this.LabelLGVTitle.Size = new System.Drawing.Size(28, 13);
             this.LabelLGVTitle.TabIndex = 15;
@@ -542,7 +527,7 @@
             // ButtonStop
             // 
             this.ButtonStop.Enabled = false;
-            this.ButtonStop.Location = new System.Drawing.Point(168, 64);
+            this.ButtonStop.Location = new System.Drawing.Point(320, 59);
             this.ButtonStop.Name = "ButtonStop";
             this.ButtonStop.Size = new System.Drawing.Size(120, 41);
             this.ButtonStop.TabIndex = 14;
@@ -552,7 +537,7 @@
             // 
             // ButtonStart
             // 
-            this.ButtonStart.Location = new System.Drawing.Point(168, 17);
+            this.ButtonStart.Location = new System.Drawing.Point(320, 12);
             this.ButtonStart.Name = "ButtonStart";
             this.ButtonStart.Size = new System.Drawing.Size(120, 41);
             this.ButtonStart.TabIndex = 13;
@@ -567,7 +552,7 @@
             0,
             0,
             0});
-            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(417, 111);
+            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(446, 108);
             this.NumericCarDesiredSpeedVar.Maximum = new decimal(new int[] {
             30000,
             0,
@@ -589,7 +574,7 @@
             0,
             0,
             0});
-            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(417, 85);
+            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(446, 82);
             this.NumericCarDesiredSpeed.Maximum = new decimal(new int[] {
             500000,
             0,
@@ -612,7 +597,7 @@
             // NumericCarLengthVar
             // 
             this.NumericCarLengthVar.DecimalPlaces = 1;
-            this.NumericCarLengthVar.Location = new System.Drawing.Point(417, 59);
+            this.NumericCarLengthVar.Location = new System.Drawing.Point(446, 56);
             this.NumericCarLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -635,7 +620,7 @@
             0,
             0,
             65536});
-            this.NumericCarLength.Location = new System.Drawing.Point(417, 33);
+            this.NumericCarLength.Location = new System.Drawing.Point(446, 30);
             this.NumericCarLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -658,20 +643,11 @@
             // LabelCarTitle
             // 
             this.LabelCarTitle.AutoSize = true;
-            this.LabelCarTitle.Location = new System.Drawing.Point(414, 15);
+            this.LabelCarTitle.Location = new System.Drawing.Point(443, 12);
             this.LabelCarTitle.Name = "LabelCarTitle";
             this.LabelCarTitle.Size = new System.Drawing.Size(23, 13);
             this.LabelCarTitle.TabIndex = 8;
             this.LabelCarTitle.Text = "Car";
-            // 
-            // LabelVehicleCount
-            // 
-            this.LabelVehicleCount.AutoSize = true;
-            this.LabelVehicleCount.Location = new System.Drawing.Point(294, 40);
-            this.LabelVehicleCount.Name = "LabelVehicleCount";
-            this.LabelVehicleCount.Size = new System.Drawing.Size(35, 13);
-            this.LabelVehicleCount.TabIndex = 7;
-            this.LabelVehicleCount.Text = "label1";
             // 
             // MotorwaySimulator
             // 
@@ -684,7 +660,6 @@
             this.Name = "MotorwaySimulator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Motorway Simulator";
-            this.Load += new System.EventHandler(this.MotorwaySimulator_Load);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FormScrolled);
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.PanelSettings.ResumeLayout(false);
@@ -718,10 +693,7 @@
         private System.Windows.Forms.Button ButtonPause;
         private System.Windows.Forms.Button ButtonResume;
         private System.Windows.Forms.TrackBar TrackBarTimescale;
-        private System.Windows.Forms.Label LabelData2;
-        private System.Windows.Forms.Label LabelData3;
         private System.Windows.Forms.Panel PanelSettings;
-        private System.Windows.Forms.Label LabelVehicleCount;
         private System.Windows.Forms.Label LabelCarTitle;
         private System.Windows.Forms.NumericUpDown NumericCarLength;
         private System.Windows.Forms.NumericUpDown NumericCarLengthVar;
@@ -746,6 +718,7 @@
         private System.Windows.Forms.Label LabelHGVTitle;
         public System.Windows.Forms.NumericUpDown NumericVehicleId;
         public System.Windows.Forms.CheckBox CheckBoxTrackVehicle;
+        private CustomControls.BufferedTreeView TreeViewVehicles;
     }
 }
 
