@@ -179,6 +179,7 @@
             this.TreeViewVehicles.Name = "TreeViewVehicles";
             this.TreeViewVehicles.Size = new System.Drawing.Size(146, 260);
             this.TreeViewVehicles.TabIndex = 8;
+            this.TreeViewVehicles.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeNodeVehicleSelected);
             // 
             // CheckBoxTrackVehicle
             // 

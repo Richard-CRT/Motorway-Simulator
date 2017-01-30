@@ -29,6 +29,7 @@ namespace CustomControls
     public class LaneControl : UserControl
     {
         public TreeNode LaneNode;
+        private Vehicle[] OldOrderedLaneVehicles;
         public int LaneId;
         public List<Vehicle> Vehicles;
         private MotorwaySimulator MainForm;
@@ -45,18 +46,57 @@ namespace CustomControls
             this.LaneId = laneId;
 
             Vehicles = new List<Vehicle>();
+            OldOrderedLaneVehicles = new Vehicle[0];
         }
 
         public void UpdateTreeNode()
         {
+            List<Vehicle> vehiclesToAdd = new List<Vehicle>();
+            List<Vehicle> vehiclesToRemove = new List<Vehicle>();
+
             Vehicle[] orderedLaneVehicles = VehiclesOrderByLocation();
-            TreeNode[] vehicleNodes = new TreeNode[orderedLaneVehicles.Length];
-            LaneNode.Nodes.Clear();
-            for (int vehicleIndex = 0; vehicleIndex < orderedLaneVehicles.Length; vehicleIndex++)
+
+            foreach (Vehicle vehicle in orderedLaneVehicles)
             {
-                vehicleNodes[vehicleIndex] = new TreeNode("Vehicle " + (orderedLaneVehicles[vehicleIndex].VehicleId + 1));
+                if (!OldOrderedLaneVehicles.Contains(vehicle))
+                {
+                    vehiclesToAdd.Add(vehicle);
+                }
             }
-            LaneNode.Nodes.AddRange(vehicleNodes);
+
+            foreach (Vehicle oldVehicle in OldOrderedLaneVehicles)
+            {
+                if (!orderedLaneVehicles.Contains(oldVehicle))
+                {
+                    vehiclesToRemove.Add(oldVehicle);
+                }
+            }
+
+            if (vehiclesToRemove.Count > 0)
+            {
+                for (int treeNodeIndex = 0; treeNodeIndex < LaneNode.Nodes.Count;)
+                {
+                    TreeNode treeNode = LaneNode.Nodes[treeNodeIndex];
+                    if (vehiclesToRemove.Contains((Vehicle)treeNode.Tag))
+                    {
+                        LaneNode.Nodes.RemoveAt(treeNodeIndex);
+                    }
+                    else
+                    {
+                        treeNodeIndex++;
+                    }
+                }
+            }
+
+            TreeNode[] newVehicleNodes = new TreeNode[vehiclesToAdd.Count];
+            for (int vehicleIndex = 0; vehicleIndex < vehiclesToAdd.Count; vehicleIndex++)
+            {
+                Vehicle vehicle = vehiclesToAdd[vehicleIndex];
+                newVehicleNodes[vehicleIndex] = new TreeNode("Vehicle " + (vehicle.VehicleId));
+                newVehicleNodes[vehicleIndex].Tag = vehicle;
+            }
+            LaneNode.Nodes.AddRange(newVehicleNodes);
+            OldOrderedLaneVehicles = orderedLaneVehicles;
         }
 
         public Vehicle[] VehiclesOrderByLocation()

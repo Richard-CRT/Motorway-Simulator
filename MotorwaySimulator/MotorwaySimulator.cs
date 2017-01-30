@@ -48,16 +48,6 @@ namespace MotorwaySimulatorNameSpace
             InitializeComponent();
         }
 
-        private void PopulateTreeViewVehicles()
-        {
-            this.TreeViewVehicles.Nodes.Clear();
-            for (int laneIndex = 0; laneIndex < LaneCount; laneIndex++)
-            {
-                LaneControl lane = Lanes[laneIndex];
-                this.TreeViewVehicles.Nodes.Add(lane.LaneNode);
-            }
-        }
-
         private void ButtonStart_Click(object sender, EventArgs e)
         {
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
@@ -85,7 +75,7 @@ namespace MotorwaySimulatorNameSpace
             TimeScale = 1;
             LastId = 0;
             LaneCount = 7;
-            RoadLengthMetres = 300;
+            RoadLengthMetres = 200;
             RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres), 0);
             LaneWidth = 40;
             LaneMargin = 8;
@@ -122,9 +112,20 @@ namespace MotorwaySimulatorNameSpace
             this.ButtonStop.Enabled = true;
         }
 
+        private void PopulateTreeViewVehicles()
+        {
+            this.TreeViewVehicles.Nodes.Clear();
+            for (int laneIndex = 0; laneIndex < LaneCount; laneIndex++)
+            {
+                LaneControl lane = Lanes[laneIndex];
+                this.TreeViewVehicles.Nodes.Add(lane.LaneNode);
+            }
+        }
+
         private void ButtonStop_Click(object sender, EventArgs e)
         {
             Timer.Stop();
+            this.FormTick.Enabled = false;
 
             for (int i = LaneCount-1; i >= 0; i--)
             {
@@ -262,6 +263,7 @@ namespace MotorwaySimulatorNameSpace
                 }
             }
         }
+
         private void UpdateTreeViewVehicles()
         {
             for (int laneIndex = 0; laneIndex < LaneCount; laneIndex++)
@@ -270,6 +272,7 @@ namespace MotorwaySimulatorNameSpace
                 lane.UpdateTreeNode();
             }
         }
+
         private void FormTick_Tick(object sender, EventArgs e)
         {
             CheckVehicle();
@@ -355,16 +358,16 @@ namespace MotorwaySimulatorNameSpace
             return (speed / 3600) * 0.5;
         }
 
-        private void ButtonPause_Click(object sender, EventArgs e)
-        {
-            this.FormTick.Enabled = false;
-            this.Timer.Stop();
-        }
-
         private void ButtonResume_Click(object sender, EventArgs e)
         {
             this.FormTick.Enabled = true;
             this.Timer.Start();
+        }
+
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+            this.FormTick.Enabled = false;
+            this.Timer.Stop();
         }
 
         private void TrackBarTimescale_Scroll(object sender, EventArgs e)
@@ -376,13 +379,17 @@ namespace MotorwaySimulatorNameSpace
         {
             PanelSettings.Location = new Point(12, 287);
         }
+
         private void FormScrolled(object sender, ScrollEventArgs e)
         {
             UpdateControlPanelLocation();
         }
+        
+        public void TreeNodeVehicleSelected(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // node is selected
+        }
     }
-
-    
 
     public class VehicleTemplate
     {
