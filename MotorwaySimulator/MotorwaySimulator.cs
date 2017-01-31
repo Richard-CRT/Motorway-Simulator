@@ -33,6 +33,8 @@ namespace MotorwaySimulatorNameSpace
         public int SafetyDistance;
         private long LastTimerValue;
         public int InterArrivalTime;
+        public double InterArrivalTimeVariationPercentage;
+        public double ChosenInterArrivalPercentage;
         private int LastId;
         public double TimeScale;
         public Dictionary<VehicleTypes, VehicleTemplate> VehicleParameters;
@@ -46,6 +48,32 @@ namespace MotorwaySimulatorNameSpace
         public MotorwaySimulator()
         {
             InitializeComponent();
+        }
+
+        private void MotorwaySimulator_Load(object sender, EventArgs e)
+        {
+            UpdateInterArrivalTimeLabel();
+            UpdateInterArrivalVariationLabel();
+        }
+
+        private void TrackBarInterArrivalTime_Scroll(object sender, EventArgs e)
+        {
+            UpdateInterArrivalTimeLabel();
+        }
+
+        private void TrackBarInterArrivalVariation_Scroll(object sender, EventArgs e)
+        {
+            UpdateInterArrivalVariationLabel();
+        }
+
+        private void UpdateInterArrivalTimeLabel()
+        {
+            this.LabelInterArrivalTime.Text = Math.Round(this.TrackBarInterArrivalTime.Value / (double)1000, 1) + "s"; // must be (double) to stop integer division
+        }
+
+        private void UpdateInterArrivalVariationLabel()
+        {
+            this.LabelInterArrivalVariation.Text = Math.Round(this.TrackBarInterArrivalVariation.Value / (double)10, 1) + "%"; // must be (double) to stop integer division
         }
 
         private void ButtonStart_Click(object sender, EventArgs e)
@@ -63,11 +91,15 @@ namespace MotorwaySimulatorNameSpace
                 { VehicleTypes.HGV, new VehicleTemplate((double)this.NumericHGVLength.Value, (double)this.NumericHGVLengthVar.Value,  (double)this.NumericHGVDesiredSpeed.Value,  (double)this.NumericHGVDesiredSpeedVar.Value,      0.11) },
                 { VehicleTypes.Bus, new VehicleTemplate((double)this.NumericBusLength.Value, (double)this.NumericBusLengthVar.Value,  (double)this.NumericBusDesiredSpeed.Value,  (double)this.NumericBusDesiredSpeedVar.Value,      0.01) }
 
-                /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
-                { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
-                { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
-                { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
+
+
+            /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
+            { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
+            { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
+            { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
             };
+            InterArrivalTime = TrackBarInterArrivalTime.Value;
+            InterArrivalTimeVariationPercentage = TrackBarInterArrivalTime.Value / (double)1000; // must be (double) to stop integer division
 
             Timer = new Stopwatch();
 
@@ -79,7 +111,7 @@ namespace MotorwaySimulatorNameSpace
             RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres), 0);
             LaneWidth = 40;
             LaneMargin = 8;
-            InterArrivalTime = 500;
+            ChosenInterArrivalPercentage = -1;
             LastTimerValue = 0;
             VehicleWidth = LaneWidth - (2 * LaneMargin);
 
@@ -249,15 +281,20 @@ namespace MotorwaySimulatorNameSpace
             }
             else
             {
+                if (ChosenInterArrivalPercentage == -1)
+                {
+                    ChosenInterArrivalPercentage = (Random.NextDouble() * InterArrivalTimeVariationPercentage * 2) - InterArrivalTimeVariationPercentage;
+                }
                 long tempTime = Timer.ElapsedMilliseconds;
                 long elapsedTime = tempTime - LastTimerValue;
                 double scaledElapsedTime = elapsedTime * this.TimeScale;
-
-                double onePercent = InterArrivalTime * 0.01;
-                double LowerBoundInterArrivalTime = InterArrivalTime - (onePercent * this.TimeScale); // Seems fairly accurate, lowers the trigger time depending on the TimeScale since the timer has a resolution of 15ms
+                double randomisedInterArrivalTime = InterArrivalTime + (InterArrivalTime * ChosenInterArrivalPercentage);
+                double onePercent = randomisedInterArrivalTime * 0.01;
+                double LowerBoundInterArrivalTime = randomisedInterArrivalTime - onePercent; // Seems fairly accurate, lowers the trigger time depending on the TimeScale since the timer has a resolution of 15ms
 
                 if (scaledElapsedTime >= LowerBoundInterArrivalTime || LastTimerValue == 0)
                 {
+                    ChosenInterArrivalPercentage = -1;
                     LastTimerValue = tempTime;
                     AddVehicle();
                 }
@@ -277,7 +314,6 @@ namespace MotorwaySimulatorNameSpace
         {
             CheckVehicle();
             Vehicle[] OrderedVehicles = AllVehiclesOrderByLocation();
-            string data = "";
             foreach (Vehicle vehicle in OrderedVehicles)
             {
                 vehicle.LaneTick();
@@ -324,14 +360,12 @@ namespace MotorwaySimulatorNameSpace
                 {
                     vehicle.ParentLane.Vehicles.Remove(vehicle);
                 }
-                data += vehicle.VehicleId + ": " + vehicle.Type + ": " + vehicle.DesiredSpeedMetresHour / 1000 + " kph" + Environment.NewLine;
             }
 
             foreach ( LaneControl lane in Lanes)
             {
                 lane.Invalidate(); // Repaint the lane
             }
-            TextBoxData.Text = data;
 
             UpdateTreeViewVehicles();
         }
@@ -350,7 +384,7 @@ namespace MotorwaySimulatorNameSpace
 
         public double MetresToPixels(double metres)
         {
-            return metres * 6;
+            return metres * 8;
         }
 
         public double StoppingDistance(double speed)
@@ -388,6 +422,11 @@ namespace MotorwaySimulatorNameSpace
         public void TreeNodeVehicleSelected(object sender, TreeNodeMouseClickEventArgs e)
         {
             // node is selected
+            Vehicle selectedVehicle = (Vehicle)e.Node.Tag;
+            if (selectedVehicle != null)
+            {
+                Console.WriteLine(selectedVehicle.VehicleId);
+            }
         }
     }
 

@@ -88,12 +88,34 @@ namespace CustomControls
                 }
             }
 
+            foreach (TreeNode treeNode in LaneNode.Nodes)
+            {
+                Vehicle vehicle = (Vehicle)treeNode.Tag;
+                if (vehicle.IsTravellingAtDesiredSpeed)
+                {
+                    treeNode.BackColor = Color.LimeGreen;
+                }
+                else
+                {
+                    treeNode.BackColor = Color.Red;
+                }
+            }
+
             TreeNode[] newVehicleNodes = new TreeNode[vehiclesToAdd.Count];
             for (int vehicleIndex = 0; vehicleIndex < vehiclesToAdd.Count; vehicleIndex++)
             {
                 Vehicle vehicle = vehiclesToAdd[vehicleIndex];
-                newVehicleNodes[vehicleIndex] = new TreeNode("Vehicle " + (vehicle.VehicleId));
+                newVehicleNodes[vehicleIndex] = new TreeNode("#" + vehicle.VehicleId + " - " + vehicle.VehicleType + " - " + vehicle.ActualSpeedKilometresHour + " kph");
                 newVehicleNodes[vehicleIndex].Tag = vehicle;
+                newVehicleNodes[vehicleIndex].ForeColor = Color.White;
+                if (vehicle.IsTravellingAtDesiredSpeed)
+                {
+                    newVehicleNodes[vehicleIndex].BackColor = Color.LimeGreen;
+                }
+                else
+                {
+                    newVehicleNodes[vehicleIndex].BackColor = Color.Red;
+                }
             }
             LaneNode.Nodes.AddRange(newVehicleNodes);
             OldOrderedLaneVehicles = orderedLaneVehicles;
@@ -381,7 +403,7 @@ namespace CustomControls
                         Size vehicleSize = new Size(vehicle.VehicleHeight, vehicle.VehicleWidth);
 
                         Rectangle vehicleRect = new Rectangle(new Point(vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMargin), vehicleSize);
-                        switch (vehicle.Type)
+                        switch (vehicle.VehicleType)
                         {
                             case VehicleTypes.Car:
                                 pe.Graphics.FillRectangle(yellowBrush, vehicleRect);

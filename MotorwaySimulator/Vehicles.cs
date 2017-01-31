@@ -13,14 +13,22 @@ namespace MotorwaySimulatorNameSpace
     {
         public bool InSight = true;
         public bool InEffect = true;
-        public int VehicleId;
 
+        public int VehicleId;
         public int VehicleWidth;
         public int VehicleHeight;
+        public VehicleTypes VehicleType;
 
         public double DesiredSpeedMetresHour;
         public double DesiredSpeedPixelsHour;
         public double ActualSpeedMetresHour;
+        public int ActualSpeedKilometresHour
+        {
+            get
+            {
+                return (int)Math.Round(DesiredSpeedMetresHour / 1000,0);
+            }
+        }
         public double ActualSpeedPixelsHour;
 
         public bool IsTravellingAtDesiredSpeed
@@ -35,8 +43,6 @@ namespace MotorwaySimulatorNameSpace
         public int Progress;
 
         public long LastTimerValue;
-
-        public VehicleTypes Type;
 
         public MotorwaySimulator MainForm;
         public LaneControl ParentLane;
@@ -183,7 +189,7 @@ namespace MotorwaySimulatorNameSpace
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
-            this.Type = VehicleTypes.Car;
+            this.VehicleType = VehicleTypes.Car;
             this.ParentLane = null;
 
             GenerateDesiredSpeed(VehicleTypes.Car);
@@ -202,7 +208,7 @@ namespace MotorwaySimulatorNameSpace
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
-            this.Type = VehicleTypes.LGV;
+            this.VehicleType = VehicleTypes.LGV;
             this.ParentLane = null;
 
             GenerateDesiredSpeed(VehicleTypes.LGV);
@@ -221,7 +227,7 @@ namespace MotorwaySimulatorNameSpace
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
-            this.Type = VehicleTypes.HGV;
+            this.VehicleType = VehicleTypes.HGV;
             this.ParentLane = null;
 
             GenerateDesiredSpeed(VehicleTypes.HGV);
@@ -240,7 +246,7 @@ namespace MotorwaySimulatorNameSpace
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
-            this.Type = VehicleTypes.HGV;
+            this.VehicleType = VehicleTypes.HGV;
             this.ParentLane = null;
 
             GenerateDesiredSpeed(VehicleTypes.HGV);
