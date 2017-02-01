@@ -68,7 +68,7 @@ namespace MotorwaySimulatorNameSpace
 
         private void UpdateInterArrivalTimeLabel()
         {
-            this.LabelInterArrivalTime.Text = Math.Round(this.TrackBarInterArrivalTime.Value / (double)1000, 1) + "s"; // must be (double) to stop integer division
+            this.LabelInterArrivalTime.Text = Math.Round(this.TrackBarInterArrivalTime.Value / (double)10, 10) + "s"; // must be (double) to stop integer division
         }
 
         private void UpdateInterArrivalVariationLabel()
@@ -86,10 +86,10 @@ namespace MotorwaySimulatorNameSpace
             {
                 // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Probability
 
-                { VehicleTypes.Car, new VehicleTemplate((double)this.NumericCarLength.Value, (double)this.NumericCarLengthVar.Value,  (double)this.NumericCarDesiredSpeed.Value,  (double)this.NumericCarDesiredSpeedVar.Value,     0.74) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)this.NumericLGVLength.Value, (double)this.NumericLGVLengthVar.Value,  (double)this.NumericLGVDesiredSpeed.Value,  (double)this.NumericLGVDesiredSpeedVar.Value,      0.14) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)this.NumericHGVLength.Value, (double)this.NumericHGVLengthVar.Value,  (double)this.NumericHGVDesiredSpeed.Value,  (double)this.NumericHGVDesiredSpeedVar.Value,      0.11) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)this.NumericBusLength.Value, (double)this.NumericBusLengthVar.Value,  (double)this.NumericBusDesiredSpeed.Value,  (double)this.NumericBusDesiredSpeedVar.Value,      0.01) }
+                { VehicleTypes.Car, new VehicleTemplate((double)this.NumericCarLength.Value, (double)this.NumericCarLengthVar.Value,  (double)this.NumericCarDesiredSpeed.Value*1000,  (double)this.NumericCarDesiredSpeedVar.Value*1000,     0.74) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)this.NumericLGVLength.Value, (double)this.NumericLGVLengthVar.Value,  (double)this.NumericLGVDesiredSpeed.Value*1000,  (double)this.NumericLGVDesiredSpeedVar.Value*1000,      0.14) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)this.NumericHGVLength.Value, (double)this.NumericHGVLengthVar.Value,  (double)this.NumericHGVDesiredSpeed.Value*1000,  (double)this.NumericHGVDesiredSpeedVar.Value*1000,      0.11) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)this.NumericBusLength.Value, (double)this.NumericBusLengthVar.Value,  (double)this.NumericBusDesiredSpeed.Value*1000,  (double)this.NumericBusDesiredSpeedVar.Value*1000,      0.01) }
 
 
 
@@ -98,8 +98,8 @@ namespace MotorwaySimulatorNameSpace
             { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
             { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
             };
-            InterArrivalTime = TrackBarInterArrivalTime.Value;
-            InterArrivalTimeVariationPercentage = TrackBarInterArrivalTime.Value / (double)1000; // must be (double) to stop integer division
+            InterArrivalTime = TrackBarInterArrivalTime.Value*100;
+            InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)1000; // must be (double) to stop integer division
 
             Timer = new Stopwatch();
 
