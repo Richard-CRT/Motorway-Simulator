@@ -45,7 +45,6 @@
             this.LabelDesiredSpeedTitle = new System.Windows.Forms.Label();
             this.LabelLengthVarTitle = new System.Windows.Forms.Label();
             this.LabelLengthTitle = new System.Windows.Forms.Label();
-            this.TreeViewVehicles = new CustomControls.BufferedTreeView();
             this.CheckBoxTrackVehicle = new System.Windows.Forms.CheckBox();
             this.NumericVehicleId = new System.Windows.Forms.NumericUpDown();
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
@@ -70,6 +69,7 @@
             this.NumericCarLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLength = new System.Windows.Forms.NumericUpDown();
             this.LabelCarTitle = new System.Windows.Forms.Label();
+            this.TreeViewVehicles = new CustomControls.BufferedTreeView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarInterArrivalVariation)).BeginInit();
@@ -241,11 +241,11 @@
             // LabelInterArrivalTimeTitle
             // 
             this.LabelInterArrivalTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelInterArrivalTimeTitle.Location = new System.Drawing.Point(360, 13);
+            this.LabelInterArrivalTimeTitle.Location = new System.Drawing.Point(333, 13);
             this.LabelInterArrivalTimeTitle.Name = "LabelInterArrivalTimeTitle";
-            this.LabelInterArrivalTimeTitle.Size = new System.Drawing.Size(169, 28);
+            this.LabelInterArrivalTimeTitle.Size = new System.Drawing.Size(196, 28);
             this.LabelInterArrivalTimeTitle.TabIndex = 37;
-            this.LabelInterArrivalTimeTitle.Text = "Interarrival Time";
+            this.LabelInterArrivalTimeTitle.Text = "Interarrival Time Base";
             this.LabelInterArrivalTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelDesiredSpeedVarTitle
@@ -287,14 +287,6 @@
             this.LabelLengthTitle.TabIndex = 33;
             this.LabelLengthTitle.Text = "Length Base";
             this.LabelLengthTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // TreeViewVehicles
-            // 
-            this.TreeViewVehicles.Location = new System.Drawing.Point(12, 12);
-            this.TreeViewVehicles.Name = "TreeViewVehicles";
-            this.TreeViewVehicles.Size = new System.Drawing.Size(185, 260);
-            this.TreeViewVehicles.TabIndex = 8;
-            this.TreeViewVehicles.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeNodeVehicleSelected);
             // 
             // CheckBoxTrackVehicle
             // 
@@ -743,6 +735,14 @@
             this.LabelCarTitle.TabIndex = 8;
             this.LabelCarTitle.Text = "Car";
             this.LabelCarTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TreeViewVehicles
+            // 
+            this.TreeViewVehicles.Location = new System.Drawing.Point(12, 12);
+            this.TreeViewVehicles.Name = "TreeViewVehicles";
+            this.TreeViewVehicles.Size = new System.Drawing.Size(185, 260);
+            this.TreeViewVehicles.TabIndex = 8;
+            this.TreeViewVehicles.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeNodeVehicleSelected);
             // 
             // MotorwaySimulator
             // 
