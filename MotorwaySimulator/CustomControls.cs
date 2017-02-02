@@ -389,7 +389,7 @@ namespace CustomControls
                     if ((vehicle.Progress + safetyDistanceHeight) >= viewPortLocation && (vehicle.Progress - vehicle.VehicleHeight) < viewPortLocation + viewPortWidth)
                     {
 
-                        Rectangle safetyRect = new Rectangle(new Point(vehicle.Progress, MainForm.LaneMargin), new Size(safetyDistanceHeight, vehicle.VehicleWidth));
+                        Rectangle safetyRect = new Rectangle(new Point(vehicle.Progress, MainForm.LaneMarginPixels), new Size(safetyDistanceHeight, vehicle.VehicleWidth));
                         if (vehicle.ActualSpeedMetresHour == vehicle.DesiredSpeedMetresHour)
                         {
                             pe.Graphics.FillRectangle(translucentYellowBrush, safetyRect);
@@ -402,7 +402,7 @@ namespace CustomControls
 
                         Size vehicleSize = new Size(vehicle.VehicleHeight, vehicle.VehicleWidth);
 
-                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMargin), vehicleSize);
+                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMarginPixels), vehicleSize);
                         switch (vehicle.VehicleType)
                         {
                             case VehicleTypes.Car:
@@ -421,7 +421,7 @@ namespace CustomControls
                         pe.Graphics.DrawRectangle(blackPen, vehicleRect);
                         using (Font drawFont = new Font("Courier New", 8))
                         {
-                            pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMargin);
+                            pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMarginPixels);
                         }
                     }
                 }

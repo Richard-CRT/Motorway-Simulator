@@ -162,7 +162,7 @@ namespace MotorwaySimulatorNameSpace
         {
             double lengthVariation = (MainForm.Random.NextDouble() * MainForm.VehicleParameters[vehicleType].LengthVariation * 2) - MainForm.VehicleParameters[vehicleType].LengthVariation;
 
-            this.VehicleWidth = MainForm.VehicleWidth;
+            this.VehicleWidth = MainForm.VehicleWidthPixels;
             this.VehicleHeight = (int)Math.Round(MainForm.MetresToPixels(MainForm.VehicleParameters[vehicleType].Length + lengthVariation), 0);
         }
 

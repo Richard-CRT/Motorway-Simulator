@@ -35,6 +35,17 @@
             this.ButtonResume = new System.Windows.Forms.Button();
             this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
             this.PanelSettings = new System.Windows.Forms.Panel();
+            this.LabelDesiredSpeedVarUnit = new System.Windows.Forms.Label();
+            this.LabelDesiredSpeedUnitTitle = new System.Windows.Forms.Label();
+            this.LabelLengthVariationUnitTitle = new System.Windows.Forms.Label();
+            this.LabelLengthUnitTitle = new System.Windows.Forms.Label();
+            this.LabelRoadLength = new System.Windows.Forms.Label();
+            this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
+            this.LabelRoadLengthTitle = new System.Windows.Forms.Label();
+            this.LabelCarTitle = new System.Windows.Forms.Label();
+            this.LableBusTitle = new System.Windows.Forms.Label();
+            this.LabelHGVTitle = new System.Windows.Forms.Label();
+            this.LabelLGVTitle = new System.Windows.Forms.Label();
             this.TrackBarInterArrivalVariation = new System.Windows.Forms.TrackBar();
             this.LabelInterArrivalVariation = new System.Windows.Forms.Label();
             this.LabelInterArrivalVariationTitle = new System.Windows.Forms.Label();
@@ -51,27 +62,24 @@
             this.NumericBusDesiredSpeed = new System.Windows.Forms.NumericUpDown();
             this.NumericBusLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericBusLength = new System.Windows.Forms.NumericUpDown();
-            this.LableBusTitle = new System.Windows.Forms.Label();
             this.NumericHGVDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.NumericHGVDesiredSpeed = new System.Windows.Forms.NumericUpDown();
             this.NumericHGVLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericHGVLength = new System.Windows.Forms.NumericUpDown();
-            this.LabelHGVTitle = new System.Windows.Forms.Label();
             this.NumericLGVDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.NumericLGVDesiredSpeed = new System.Windows.Forms.NumericUpDown();
             this.NumericLGVLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericLGVLength = new System.Windows.Forms.NumericUpDown();
-            this.LabelLGVTitle = new System.Windows.Forms.Label();
             this.ButtonStop = new System.Windows.Forms.Button();
             this.ButtonStart = new System.Windows.Forms.Button();
             this.NumericCarDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.NumericCarDesiredSpeed = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLength = new System.Windows.Forms.NumericUpDown();
-            this.LabelCarTitle = new System.Windows.Forms.Label();
             this.TreeViewVehicles = new CustomControls.BufferedTreeView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarInterArrivalVariation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarInterArrivalTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericVehicleId)).BeginInit();
@@ -101,7 +109,7 @@
             // Road
             // 
             this.Road.BackColor = System.Drawing.SystemColors.Control;
-            this.Road.Location = new System.Drawing.Point(0, 0);
+            this.Road.Location = new System.Drawing.Point(0, 310);
             this.Road.Name = "Road";
             this.Road.Size = new System.Drawing.Size(100, 100);
             this.Road.TabIndex = 0;
@@ -139,6 +147,17 @@
             // 
             // PanelSettings
             // 
+            this.PanelSettings.Controls.Add(this.LabelDesiredSpeedVarUnit);
+            this.PanelSettings.Controls.Add(this.LabelDesiredSpeedUnitTitle);
+            this.PanelSettings.Controls.Add(this.LabelLengthVariationUnitTitle);
+            this.PanelSettings.Controls.Add(this.LabelLengthUnitTitle);
+            this.PanelSettings.Controls.Add(this.LabelRoadLength);
+            this.PanelSettings.Controls.Add(this.TrackBarRoadLength);
+            this.PanelSettings.Controls.Add(this.LabelRoadLengthTitle);
+            this.PanelSettings.Controls.Add(this.LabelCarTitle);
+            this.PanelSettings.Controls.Add(this.LableBusTitle);
+            this.PanelSettings.Controls.Add(this.LabelHGVTitle);
+            this.PanelSettings.Controls.Add(this.LabelLGVTitle);
             this.PanelSettings.Controls.Add(this.TrackBarInterArrivalVariation);
             this.PanelSettings.Controls.Add(this.LabelInterArrivalVariation);
             this.PanelSettings.Controls.Add(this.LabelInterArrivalVariationTitle);
@@ -156,36 +175,146 @@
             this.PanelSettings.Controls.Add(this.NumericBusDesiredSpeed);
             this.PanelSettings.Controls.Add(this.NumericBusLengthVar);
             this.PanelSettings.Controls.Add(this.NumericBusLength);
-            this.PanelSettings.Controls.Add(this.LableBusTitle);
             this.PanelSettings.Controls.Add(this.NumericHGVDesiredSpeedVar);
             this.PanelSettings.Controls.Add(this.NumericHGVDesiredSpeed);
             this.PanelSettings.Controls.Add(this.NumericHGVLengthVar);
             this.PanelSettings.Controls.Add(this.NumericHGVLength);
-            this.PanelSettings.Controls.Add(this.LabelHGVTitle);
             this.PanelSettings.Controls.Add(this.NumericLGVDesiredSpeedVar);
             this.PanelSettings.Controls.Add(this.NumericLGVDesiredSpeed);
             this.PanelSettings.Controls.Add(this.NumericLGVLengthVar);
             this.PanelSettings.Controls.Add(this.NumericLGVLength);
-            this.PanelSettings.Controls.Add(this.LabelLGVTitle);
             this.PanelSettings.Controls.Add(this.ButtonStop);
             this.PanelSettings.Controls.Add(this.ButtonStart);
             this.PanelSettings.Controls.Add(this.NumericCarDesiredSpeedVar);
             this.PanelSettings.Controls.Add(this.NumericCarDesiredSpeed);
             this.PanelSettings.Controls.Add(this.NumericCarLengthVar);
             this.PanelSettings.Controls.Add(this.NumericCarLength);
-            this.PanelSettings.Controls.Add(this.LabelCarTitle);
             this.PanelSettings.Controls.Add(this.ButtonPause);
             this.PanelSettings.Controls.Add(this.TrackBarTimescale);
             this.PanelSettings.Controls.Add(this.ButtonResume);
-            this.PanelSettings.Location = new System.Drawing.Point(12, 287);
+            this.PanelSettings.Location = new System.Drawing.Point(12, 12);
             this.PanelSettings.Name = "PanelSettings";
             this.PanelSettings.Size = new System.Drawing.Size(1055, 285);
             this.PanelSettings.TabIndex = 7;
             // 
+            // LabelDesiredSpeedVarUnit
+            // 
+            this.LabelDesiredSpeedVarUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelDesiredSpeedVarUnit.Location = new System.Drawing.Point(840, 255);
+            this.LabelDesiredSpeedVarUnit.Name = "LabelDesiredSpeedVarUnit";
+            this.LabelDesiredSpeedVarUnit.Size = new System.Drawing.Size(40, 20);
+            this.LabelDesiredSpeedVarUnit.TabIndex = 50;
+            this.LabelDesiredSpeedVarUnit.Text = "kph";
+            this.LabelDesiredSpeedVarUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelDesiredSpeedUnitTitle
+            // 
+            this.LabelDesiredSpeedUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelDesiredSpeedUnitTitle.Location = new System.Drawing.Point(840, 229);
+            this.LabelDesiredSpeedUnitTitle.Name = "LabelDesiredSpeedUnitTitle";
+            this.LabelDesiredSpeedUnitTitle.Size = new System.Drawing.Size(40, 20);
+            this.LabelDesiredSpeedUnitTitle.TabIndex = 49;
+            this.LabelDesiredSpeedUnitTitle.Text = "kph";
+            this.LabelDesiredSpeedUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelLengthVariationUnitTitle
+            // 
+            this.LabelLengthVariationUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelLengthVariationUnitTitle.Location = new System.Drawing.Point(840, 203);
+            this.LabelLengthVariationUnitTitle.Name = "LabelLengthVariationUnitTitle";
+            this.LabelLengthVariationUnitTitle.Size = new System.Drawing.Size(40, 20);
+            this.LabelLengthVariationUnitTitle.TabIndex = 48;
+            this.LabelLengthVariationUnitTitle.Text = "m";
+            this.LabelLengthVariationUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelLengthUnitTitle
+            // 
+            this.LabelLengthUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelLengthUnitTitle.Location = new System.Drawing.Point(840, 177);
+            this.LabelLengthUnitTitle.Name = "LabelLengthUnitTitle";
+            this.LabelLengthUnitTitle.Size = new System.Drawing.Size(40, 20);
+            this.LabelLengthUnitTitle.TabIndex = 47;
+            this.LabelLengthUnitTitle.Text = "m";
+            this.LabelLengthUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelRoadLength
+            // 
+            this.LabelRoadLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelRoadLength.Location = new System.Drawing.Point(555, 12);
+            this.LabelRoadLength.Name = "LabelRoadLength";
+            this.LabelRoadLength.Size = new System.Drawing.Size(60, 28);
+            this.LabelRoadLength.TabIndex = 46;
+            this.LabelRoadLength.Text = "0 km";
+            this.LabelRoadLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // TrackBarRoadLength
+            // 
+            this.TrackBarRoadLength.LargeChange = 100;
+            this.TrackBarRoadLength.Location = new System.Drawing.Point(611, 11);
+            this.TrackBarRoadLength.Maximum = 5000;
+            this.TrackBarRoadLength.Minimum = 10;
+            this.TrackBarRoadLength.Name = "TrackBarRoadLength";
+            this.TrackBarRoadLength.Size = new System.Drawing.Size(228, 45);
+            this.TrackBarRoadLength.SmallChange = 10;
+            this.TrackBarRoadLength.TabIndex = 45;
+            this.TrackBarRoadLength.TickFrequency = 250;
+            this.TrackBarRoadLength.Value = 100;
+            this.TrackBarRoadLength.Scroll += new System.EventHandler(this.TrackBarRoadLength_Scroll);
+            // 
+            // LabelRoadLengthTitle
+            // 
+            this.LabelRoadLengthTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelRoadLengthTitle.Location = new System.Drawing.Point(360, 12);
+            this.LabelRoadLengthTitle.Name = "LabelRoadLengthTitle";
+            this.LabelRoadLengthTitle.Size = new System.Drawing.Size(196, 28);
+            this.LabelRoadLengthTitle.TabIndex = 44;
+            this.LabelRoadLengthTitle.Text = "Road Length";
+            this.LabelRoadLengthTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelCarTitle
+            // 
+            this.LabelCarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelCarTitle.Location = new System.Drawing.Point(561, 151);
+            this.LabelCarTitle.Name = "LabelCarTitle";
+            this.LabelCarTitle.Size = new System.Drawing.Size(65, 23);
+            this.LabelCarTitle.TabIndex = 8;
+            this.LabelCarTitle.Text = "Car";
+            this.LabelCarTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // LableBusTitle
+            // 
+            this.LableBusTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LableBusTitle.Location = new System.Drawing.Point(774, 151);
+            this.LableBusTitle.Name = "LableBusTitle";
+            this.LableBusTitle.Size = new System.Drawing.Size(65, 23);
+            this.LableBusTitle.TabIndex = 25;
+            this.LableBusTitle.Text = "Bus";
+            this.LableBusTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // LabelHGVTitle
+            // 
+            this.LabelHGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelHGVTitle.Location = new System.Drawing.Point(703, 151);
+            this.LabelHGVTitle.Name = "LabelHGVTitle";
+            this.LabelHGVTitle.Size = new System.Drawing.Size(65, 23);
+            this.LabelHGVTitle.TabIndex = 20;
+            this.LabelHGVTitle.Text = "HGV";
+            this.LabelHGVTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // LabelLGVTitle
+            // 
+            this.LabelLGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelLGVTitle.Location = new System.Drawing.Point(632, 151);
+            this.LabelLGVTitle.Name = "LabelLGVTitle";
+            this.LabelLGVTitle.Size = new System.Drawing.Size(65, 23);
+            this.LabelLGVTitle.TabIndex = 15;
+            this.LabelLGVTitle.Text = "LGV";
+            this.LabelLGVTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // TrackBarInterArrivalVariation
             // 
             this.TrackBarInterArrivalVariation.LargeChange = 1000;
-            this.TrackBarInterArrivalVariation.Location = new System.Drawing.Point(584, 40);
+            this.TrackBarInterArrivalVariation.Location = new System.Drawing.Point(611, 114);
             this.TrackBarInterArrivalVariation.Maximum = 1000;
             this.TrackBarInterArrivalVariation.Name = "TrackBarInterArrivalVariation";
             this.TrackBarInterArrivalVariation.Size = new System.Drawing.Size(228, 45);
@@ -198,7 +327,7 @@
             // LabelInterArrivalVariation
             // 
             this.LabelInterArrivalVariation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelInterArrivalVariation.Location = new System.Drawing.Point(525, 40);
+            this.LabelInterArrivalVariation.Location = new System.Drawing.Point(552, 114);
             this.LabelInterArrivalVariation.Name = "LabelInterArrivalVariation";
             this.LabelInterArrivalVariation.Size = new System.Drawing.Size(53, 28);
             this.LabelInterArrivalVariation.TabIndex = 42;
@@ -208,7 +337,7 @@
             // LabelInterArrivalVariationTitle
             // 
             this.LabelInterArrivalVariationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelInterArrivalVariationTitle.Location = new System.Drawing.Point(329, 40);
+            this.LabelInterArrivalVariationTitle.Location = new System.Drawing.Point(356, 114);
             this.LabelInterArrivalVariationTitle.Name = "LabelInterArrivalVariationTitle";
             this.LabelInterArrivalVariationTitle.Size = new System.Drawing.Size(200, 28);
             this.LabelInterArrivalVariationTitle.TabIndex = 41;
@@ -218,7 +347,7 @@
             // LabelInterArrivalTime
             // 
             this.LabelInterArrivalTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelInterArrivalTime.Location = new System.Drawing.Point(535, 13);
+            this.LabelInterArrivalTime.Location = new System.Drawing.Point(562, 87);
             this.LabelInterArrivalTime.Name = "LabelInterArrivalTime";
             this.LabelInterArrivalTime.Size = new System.Drawing.Size(43, 28);
             this.LabelInterArrivalTime.TabIndex = 40;
@@ -228,7 +357,7 @@
             // TrackBarInterArrivalTime
             // 
             this.TrackBarInterArrivalTime.LargeChange = 10;
-            this.TrackBarInterArrivalTime.Location = new System.Drawing.Point(584, 12);
+            this.TrackBarInterArrivalTime.Location = new System.Drawing.Point(611, 86);
             this.TrackBarInterArrivalTime.Maximum = 1000;
             this.TrackBarInterArrivalTime.Minimum = 1;
             this.TrackBarInterArrivalTime.Name = "TrackBarInterArrivalTime";
@@ -241,7 +370,7 @@
             // LabelInterArrivalTimeTitle
             // 
             this.LabelInterArrivalTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelInterArrivalTimeTitle.Location = new System.Drawing.Point(333, 13);
+            this.LabelInterArrivalTimeTitle.Location = new System.Drawing.Point(360, 87);
             this.LabelInterArrivalTimeTitle.Name = "LabelInterArrivalTimeTitle";
             this.LabelInterArrivalTimeTitle.Size = new System.Drawing.Size(196, 28);
             this.LabelInterArrivalTimeTitle.TabIndex = 37;
@@ -251,7 +380,7 @@
             // LabelDesiredSpeedVarTitle
             // 
             this.LabelDesiredSpeedVarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedVarTitle.Location = new System.Drawing.Point(360, 256);
+            this.LabelDesiredSpeedVarTitle.Location = new System.Drawing.Point(387, 255);
             this.LabelDesiredSpeedVarTitle.Name = "LabelDesiredSpeedVarTitle";
             this.LabelDesiredSpeedVarTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelDesiredSpeedVarTitle.TabIndex = 36;
@@ -261,7 +390,7 @@
             // LabelDesiredSpeedTitle
             // 
             this.LabelDesiredSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedTitle.Location = new System.Drawing.Point(360, 230);
+            this.LabelDesiredSpeedTitle.Location = new System.Drawing.Point(387, 229);
             this.LabelDesiredSpeedTitle.Name = "LabelDesiredSpeedTitle";
             this.LabelDesiredSpeedTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelDesiredSpeedTitle.TabIndex = 35;
@@ -271,7 +400,7 @@
             // LabelLengthVarTitle
             // 
             this.LabelLengthVarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthVarTitle.Location = new System.Drawing.Point(360, 204);
+            this.LabelLengthVarTitle.Location = new System.Drawing.Point(387, 203);
             this.LabelLengthVarTitle.Name = "LabelLengthVarTitle";
             this.LabelLengthVarTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelLengthVarTitle.TabIndex = 34;
@@ -281,7 +410,7 @@
             // LabelLengthTitle
             // 
             this.LabelLengthTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthTitle.Location = new System.Drawing.Point(360, 178);
+            this.LabelLengthTitle.Location = new System.Drawing.Point(387, 177);
             this.LabelLengthTitle.Name = "LabelLengthTitle";
             this.LabelLengthTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelLengthTitle.TabIndex = 33;
@@ -322,7 +451,7 @@
             // 
             // NumericBusDesiredSpeedVar
             // 
-            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(751, 256);
+            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(778, 255);
             this.NumericBusDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -344,7 +473,7 @@
             0,
             0,
             0});
-            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(751, 230);
+            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(778, 229);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -367,7 +496,7 @@
             // NumericBusLengthVar
             // 
             this.NumericBusLengthVar.DecimalPlaces = 1;
-            this.NumericBusLengthVar.Location = new System.Drawing.Point(751, 204);
+            this.NumericBusLengthVar.Location = new System.Drawing.Point(778, 203);
             this.NumericBusLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -390,7 +519,7 @@
             0,
             0,
             65536});
-            this.NumericBusLength.Location = new System.Drawing.Point(751, 178);
+            this.NumericBusLength.Location = new System.Drawing.Point(778, 177);
             this.NumericBusLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -410,19 +539,9 @@
             0,
             0});
             // 
-            // LableBusTitle
-            // 
-            this.LableBusTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LableBusTitle.Location = new System.Drawing.Point(747, 152);
-            this.LableBusTitle.Name = "LableBusTitle";
-            this.LableBusTitle.Size = new System.Drawing.Size(65, 23);
-            this.LableBusTitle.TabIndex = 25;
-            this.LableBusTitle.Text = "Bus";
-            this.LableBusTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // NumericHGVDesiredSpeedVar
             // 
-            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(680, 256);
+            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(707, 255);
             this.NumericHGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -444,7 +563,7 @@
             0,
             0,
             0});
-            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(680, 230);
+            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(707, 229);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -467,7 +586,7 @@
             // NumericHGVLengthVar
             // 
             this.NumericHGVLengthVar.DecimalPlaces = 1;
-            this.NumericHGVLengthVar.Location = new System.Drawing.Point(680, 204);
+            this.NumericHGVLengthVar.Location = new System.Drawing.Point(707, 203);
             this.NumericHGVLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -490,7 +609,7 @@
             0,
             0,
             65536});
-            this.NumericHGVLength.Location = new System.Drawing.Point(680, 178);
+            this.NumericHGVLength.Location = new System.Drawing.Point(707, 177);
             this.NumericHGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -510,19 +629,9 @@
             0,
             0});
             // 
-            // LabelHGVTitle
-            // 
-            this.LabelHGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelHGVTitle.Location = new System.Drawing.Point(676, 152);
-            this.LabelHGVTitle.Name = "LabelHGVTitle";
-            this.LabelHGVTitle.Size = new System.Drawing.Size(65, 23);
-            this.LabelHGVTitle.TabIndex = 20;
-            this.LabelHGVTitle.Text = "HGV";
-            this.LabelHGVTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // NumericLGVDesiredSpeedVar
             // 
-            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(609, 256);
+            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(636, 255);
             this.NumericLGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -544,7 +653,7 @@
             0,
             0,
             0});
-            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(609, 230);
+            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(636, 229);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -567,7 +676,7 @@
             // NumericLGVLengthVar
             // 
             this.NumericLGVLengthVar.DecimalPlaces = 1;
-            this.NumericLGVLengthVar.Location = new System.Drawing.Point(609, 204);
+            this.NumericLGVLengthVar.Location = new System.Drawing.Point(636, 203);
             this.NumericLGVLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -590,7 +699,7 @@
             0,
             0,
             65536});
-            this.NumericLGVLength.Location = new System.Drawing.Point(609, 178);
+            this.NumericLGVLength.Location = new System.Drawing.Point(636, 177);
             this.NumericLGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -609,16 +718,6 @@
             0,
             0,
             65536});
-            // 
-            // LabelLGVTitle
-            // 
-            this.LabelLGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLGVTitle.Location = new System.Drawing.Point(605, 152);
-            this.LabelLGVTitle.Name = "LabelLGVTitle";
-            this.LabelLGVTitle.Size = new System.Drawing.Size(65, 23);
-            this.LabelLGVTitle.TabIndex = 15;
-            this.LabelLGVTitle.Text = "LGV";
-            this.LabelLGVTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ButtonStop
             // 
@@ -643,7 +742,7 @@
             // 
             // NumericCarDesiredSpeedVar
             // 
-            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(538, 256);
+            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(565, 255);
             this.NumericCarDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -660,7 +759,7 @@
             // 
             // NumericCarDesiredSpeed
             // 
-            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(538, 230);
+            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(565, 229);
             this.NumericCarDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -683,7 +782,7 @@
             // NumericCarLengthVar
             // 
             this.NumericCarLengthVar.DecimalPlaces = 1;
-            this.NumericCarLengthVar.Location = new System.Drawing.Point(538, 204);
+            this.NumericCarLengthVar.Location = new System.Drawing.Point(565, 203);
             this.NumericCarLengthVar.Maximum = new decimal(new int[] {
             10,
             0,
@@ -706,7 +805,7 @@
             0,
             0,
             65536});
-            this.NumericCarLength.Location = new System.Drawing.Point(538, 178);
+            this.NumericCarLength.Location = new System.Drawing.Point(565, 177);
             this.NumericCarLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -726,16 +825,6 @@
             0,
             0});
             // 
-            // LabelCarTitle
-            // 
-            this.LabelCarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelCarTitle.Location = new System.Drawing.Point(534, 152);
-            this.LabelCarTitle.Name = "LabelCarTitle";
-            this.LabelCarTitle.Size = new System.Drawing.Size(65, 23);
-            this.LabelCarTitle.TabIndex = 8;
-            this.LabelCarTitle.Text = "Car";
-            this.LabelCarTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // TreeViewVehicles
             // 
             this.TreeViewVehicles.Location = new System.Drawing.Point(12, 12);
@@ -749,7 +838,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1120, 594);
+            this.ClientSize = new System.Drawing.Size(1120, 613);
             this.Controls.Add(this.Road);
             this.Controls.Add(this.PanelSettings);
             this.Name = "MotorwaySimulator";
@@ -760,6 +849,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.PanelSettings.ResumeLayout(false);
             this.PanelSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarInterArrivalVariation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarInterArrivalTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericVehicleId)).EndInit();
@@ -826,6 +916,13 @@
         private System.Windows.Forms.Label LabelInterArrivalVariationTitle;
         private System.Windows.Forms.TrackBar TrackBarInterArrivalVariation;
         private System.Windows.Forms.Label LabelInterArrivalVariation;
+        private System.Windows.Forms.Label LabelRoadLength;
+        private System.Windows.Forms.TrackBar TrackBarRoadLength;
+        private System.Windows.Forms.Label LabelRoadLengthTitle;
+        private System.Windows.Forms.Label LabelLengthUnitTitle;
+        private System.Windows.Forms.Label LabelDesiredSpeedVarUnit;
+        private System.Windows.Forms.Label LabelDesiredSpeedUnitTitle;
+        private System.Windows.Forms.Label LabelLengthVariationUnitTitle;
     }
 }
 

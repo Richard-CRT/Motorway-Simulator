@@ -24,12 +24,17 @@ namespace MotorwaySimulatorNameSpace
     }
     public partial class MotorwaySimulator : Form
     {
+        private const int MetresToPixelsScalingFactor = 10;
+        private const double VehicleWidthMetres = 2;
+        private const double LaneMarginMetres = 0.8;
+
         public int RoadLengthPixels;
         public int RoadLengthMetres;
         public int LaneCount;
-        public int LaneWidth;
-        public int LaneMargin;
-        public int VehicleWidth;
+
+        public int LaneMarginPixels;
+        public int VehicleWidthPixels;
+
         public int SafetyDistance;
         private long LastTimerValue;
         public int InterArrivalTime;
@@ -54,6 +59,7 @@ namespace MotorwaySimulatorNameSpace
         {
             UpdateInterArrivalTimeLabel();
             UpdateInterArrivalVariationLabel();
+            UpdateRoadLengthLabel();
         }
 
         private void TrackBarInterArrivalTime_Scroll(object sender, EventArgs e)
@@ -66,6 +72,11 @@ namespace MotorwaySimulatorNameSpace
             UpdateInterArrivalVariationLabel();
         }
 
+        private void TrackBarRoadLength_Scroll(object sender, EventArgs e)
+        {
+            UpdateRoadLengthLabel();
+        }
+
         private void UpdateInterArrivalTimeLabel()
         {
             this.LabelInterArrivalTime.Text = Math.Round(this.TrackBarInterArrivalTime.Value / (double)10, 10) + "s"; // must be (double) to stop integer division
@@ -74,6 +85,11 @@ namespace MotorwaySimulatorNameSpace
         private void UpdateInterArrivalVariationLabel()
         {
             this.LabelInterArrivalVariation.Text = Math.Round(this.TrackBarInterArrivalVariation.Value / (double)10, 1) + "%"; // must be (double) to stop integer division
+        }
+
+        private void UpdateRoadLengthLabel()
+        {
+            this.LabelRoadLength.Text = Math.Round(this.TrackBarRoadLength.Value / (double)100, 2) + " km"; // must be (double) to stop integer division
         }
 
         private void ButtonStart_Click(object sender, EventArgs e)
@@ -107,22 +123,24 @@ namespace MotorwaySimulatorNameSpace
             TimeScale = 1;
             LastId = 0;
             LaneCount = 7;
-            RoadLengthMetres = 200;
+            RoadLengthMetres = TrackBarRoadLength.Value * 10;
             RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres), 0);
-            LaneWidth = 40;
-            LaneMargin = 8;
+            LaneMarginPixels = (int)Math.Round(MetresToPixels(LaneMarginMetres), 0);
+            VehicleWidthPixels = (int)Math.Round(MetresToPixels(VehicleWidthMetres), 0);
+
             ChosenInterArrivalPercentage = -1;
             LastTimerValue = 0;
-            VehicleWidth = LaneWidth - (2 * LaneMargin);
+
+            int laneWidth = VehicleWidthPixels + (2 * LaneMarginPixels);
 
             Road.Width = RoadLengthPixels;
-            Road.Height = LaneCount * LaneWidth;
+            Road.Height = LaneCount * laneWidth;
 
             for (int i = 0; i < LaneCount; i++)
             {
                 LaneControl lane = new LaneControl(this, i);
-                lane.Location = new Point(0, LaneWidth * i);
-                lane.Size = new Size(RoadLengthPixels, LaneWidth);
+                lane.Location = new Point(0, laneWidth * i);
+                lane.Size = new Size(RoadLengthPixels, laneWidth);
                 lane.LaneNode = new TreeNode("Lane " + (lane.LaneId + 1));
                 this.Road.Controls.Add(lane);
                 this.Lanes.Add(lane);
@@ -384,7 +402,7 @@ namespace MotorwaySimulatorNameSpace
 
         public double MetresToPixels(double metres)
         {
-            return metres * 8;
+            return metres * MetresToPixelsScalingFactor;
         }
 
         public double StoppingDistance(double speed)
@@ -411,7 +429,7 @@ namespace MotorwaySimulatorNameSpace
 
         public void UpdateControlPanelLocation()
         {
-            PanelSettings.Location = new Point(12, 287);
+            PanelSettings.Location = new Point(12, 12);
         }
 
         private void FormScrolled(object sender, ScrollEventArgs e)
