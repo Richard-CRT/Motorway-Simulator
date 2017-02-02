@@ -76,7 +76,7 @@
             this.NumericCarDesiredSpeed = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLengthVar = new System.Windows.Forms.NumericUpDown();
             this.NumericCarLength = new System.Windows.Forms.NumericUpDown();
-            this.TreeViewVehicles = new CustomControls.BufferedTreeView();
+            this.TreeViewVehicles = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadLength)).BeginInit();
@@ -194,7 +194,7 @@
             this.PanelSettings.Controls.Add(this.ButtonResume);
             this.PanelSettings.Location = new System.Drawing.Point(12, 12);
             this.PanelSettings.Name = "PanelSettings";
-            this.PanelSettings.Size = new System.Drawing.Size(1055, 285);
+            this.PanelSettings.Size = new System.Drawing.Size(1332, 285);
             this.PanelSettings.TabIndex = 7;
             // 
             // LabelDesiredSpeedVarUnit
@@ -838,7 +838,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1120, 613);
+            this.ClientSize = new System.Drawing.Size(1465, 613);
             this.Controls.Add(this.Road);
             this.Controls.Add(this.PanelSettings);
             this.Name = "MotorwaySimulator";
@@ -905,7 +905,7 @@
         private System.Windows.Forms.Label LabelHGVTitle;
         public System.Windows.Forms.NumericUpDown NumericVehicleId;
         public System.Windows.Forms.CheckBox CheckBoxTrackVehicle;
-        private CustomControls.BufferedTreeView TreeViewVehicles;
+        private System.Windows.Forms.TreeView TreeViewVehicles;
         private System.Windows.Forms.Label LabelDesiredSpeedVarTitle;
         private System.Windows.Forms.Label LabelDesiredSpeedTitle;
         private System.Windows.Forms.Label LabelLengthVarTitle;
