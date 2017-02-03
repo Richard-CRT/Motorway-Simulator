@@ -1,4 +1,4 @@
-﻿using MotorwaySimulatorNameSpace;
+﻿using MotorwaySimulator;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,9 +19,9 @@ namespace CustomControls
         private Vehicle[] OldOrderedLaneVehicles;
         public int LaneId;
         public List<Vehicle> Vehicles;
-        private MotorwaySimulator MainForm;
+        private MotorwaySimulatorForm MainForm;
 
-        public LaneControl(MotorwaySimulator mainForm, int laneId)
+        public LaneControl(MotorwaySimulatorForm mainForm, int laneId)
         {
             SetStyle(ControlStyles.UserPaint, true); // this should be true to set AllPaintingInWmPaint true
             SetStyle(ControlStyles.AllPaintingInWmPaint, true); // this should be true to set OptimizedDoubleBuffer true

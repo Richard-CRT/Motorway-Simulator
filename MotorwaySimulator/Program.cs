@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MotorwaySimulatorNameSpace
+namespace MotorwaySimulator
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace MotorwaySimulatorNameSpace
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MotorwaySimulator());
+            Application.Run(new MotorwaySimulatorForm());
         }
     }
 }

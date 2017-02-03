@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MotorwaySimulatorNameSpace
+namespace MotorwaySimulator
 {
 
     public enum VehicleTypes
@@ -22,7 +22,15 @@ namespace MotorwaySimulatorNameSpace
         HGV,
         Bus
     }
-    public partial class MotorwaySimulator : Form
+
+    public enum SimulationStates
+    {
+        Started,
+        Stopped,
+        Paused
+    }
+
+    public partial class MotorwaySimulatorForm : Form
     {
         private const int MetresToPixelsScalingFactor = 10;
         private const double VehicleWidthMetres = 2;
@@ -49,14 +57,19 @@ namespace MotorwaySimulatorNameSpace
         public List<DebugVehicleSpawnInstruction> DebugSpawnInstructions;
         public Random Random;
         public Stopwatch Timer;
+        public SimulationStates SimulationState;
 
-        public MotorwaySimulator()
+        public MotorwaySimulatorForm()
         {
             InitializeComponent();
         }
 
         private void MotorwaySimulator_Load(object sender, EventArgs e)
         {
+            Timer = new Stopwatch();
+            Random = new Random();
+            SimulationState = SimulationStates.Stopped;
+
             UpdateInterArrivalTimeLabel();
             UpdateInterArrivalVariationLabel();
             UpdateRoadLengthLabel();
@@ -94,6 +107,19 @@ namespace MotorwaySimulatorNameSpace
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
+            switch(SimulationState)
+            {
+                case SimulationStates.Stopped:
+                    NewSimulation();
+                    break;
+                case SimulationStates.Paused:
+                    ResumeSimulation();
+                    break;
+            }
+        }
+
+        private void NewSimulation()
+        {
             DebugSpawnInstructions = new List<DebugVehicleSpawnInstruction>();
             DebugSpawn = false;
             Lanes = new List<LaneControl>();
@@ -109,17 +135,14 @@ namespace MotorwaySimulatorNameSpace
 
 
 
-            /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
-            { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
-            { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
-            { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
+                /*{ VehicleTypes.Car, new VehicleTemplate(4,     0,  112000,    0,      1) },
+                { VehicleTypes.LGV, new VehicleTemplate(5.5,   0,  111000,    0,      0) },
+                { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
+                { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
             };
             InterArrivalTime = TrackBarInterArrivalTime.Value*100;
             InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)1000; // must be (double) to stop integer division
 
-            Timer = new Stopwatch();
-
-            Random = new Random();
             TimeScale = 1;
             LastId = 0;
             LaneCount = 7;
@@ -158,8 +181,22 @@ namespace MotorwaySimulatorNameSpace
 
             Timer.Restart();
             this.FormTick.Enabled = true;
+
+            SimulationState = SimulationStates.Started;
             this.ButtonStart.Enabled = false;
             this.ButtonStop.Enabled = true;
+            this.ButtonPause.Enabled = true;
+        }
+
+        private void ResumeSimulation()
+        {
+            this.FormTick.Enabled = true;
+            this.Timer.Start();
+
+            SimulationState = SimulationStates.Started;
+            this.ButtonStart.Enabled = false;
+            this.ButtonStop.Enabled = true;
+            this.ButtonPause.Enabled = true;
         }
 
         private void PopulateTreeViewVehicles()
@@ -186,7 +223,20 @@ namespace MotorwaySimulatorNameSpace
 
             this.TreeViewVehicles.Nodes.Clear();
 
+            SimulationState = SimulationStates.Stopped;
             this.ButtonStop.Enabled = false;
+            this.ButtonPause.Enabled = false;
+            this.ButtonStart.Enabled = true;
+        }
+
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+            this.Timer.Stop();
+            this.FormTick.Enabled = false;
+
+            SimulationState = SimulationStates.Paused;
+            this.ButtonStop.Enabled = true;
+            this.ButtonPause.Enabled = false;
             this.ButtonStart.Enabled = true;
         }
 
@@ -408,18 +458,6 @@ namespace MotorwaySimulatorNameSpace
         public double StoppingDistance(double speed)
         {
             return (speed / 3600) * 0.5;
-        }
-
-        private void ButtonResume_Click(object sender, EventArgs e)
-        {
-            this.FormTick.Enabled = true;
-            this.Timer.Start();
-        }
-
-        private void ButtonPause_Click(object sender, EventArgs e)
-        {
-            this.FormTick.Enabled = false;
-            this.Timer.Stop();
         }
 
         private void TrackBarTimescale_Scroll(object sender, EventArgs e)

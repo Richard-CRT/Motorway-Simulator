@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MotorwaySimulatorNameSpace
+namespace MotorwaySimulator
 {
     public class Vehicle
     {
@@ -44,7 +44,7 @@ namespace MotorwaySimulatorNameSpace
 
         public long LastTimerValue;
 
-        public MotorwaySimulator MainForm;
+        public MotorwaySimulatorForm MainForm;
         public LaneControl ParentLane;
 
         public void LaneTick()
@@ -184,7 +184,7 @@ namespace MotorwaySimulatorNameSpace
 
     public class Car : Vehicle
     {
-        public Car (MotorwaySimulator mainForm, int vehicleId)
+        public Car (MotorwaySimulatorForm mainForm, int vehicleId)
         {
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
@@ -203,7 +203,7 @@ namespace MotorwaySimulatorNameSpace
 
     public class LGV : Vehicle
     {
-        public LGV (MotorwaySimulator mainForm, int vehicleId)
+        public LGV (MotorwaySimulatorForm mainForm, int vehicleId)
         {
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
@@ -222,7 +222,7 @@ namespace MotorwaySimulatorNameSpace
 
     public class HGV : Vehicle
     {
-        public HGV (MotorwaySimulator mainForm, int vehicleId)
+        public HGV (MotorwaySimulatorForm mainForm, int vehicleId)
         {
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
@@ -241,7 +241,7 @@ namespace MotorwaySimulatorNameSpace
 
     public class Bus : Vehicle
     {
-        public Bus (MotorwaySimulator mainForm, int vehicleId)
+        public Bus (MotorwaySimulatorForm mainForm, int vehicleId)
         {
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
