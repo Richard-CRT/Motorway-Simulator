@@ -85,16 +85,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pause.png" />
+    <None Include="Resources\Symbols_Play_32xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\stop.png" />
+    <None Include="Resources\Symbols_Pause_32xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\play.jpg" />
+    <None Include="Resources\Symbols_Stop_32xLG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

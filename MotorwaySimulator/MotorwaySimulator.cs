@@ -70,39 +70,54 @@ namespace MotorwaySimulator
             Random = new Random();
             SimulationState = SimulationStates.Stopped;
 
-            UpdateInterArrivalTimeLabel();
-            UpdateInterArrivalVariationLabel();
-            UpdateRoadLengthLabel();
+            UpdateInterArrivalTime();
+            UpdateInterArrivalVariation();
+            UpdateRoadLength();
+            UpdateTimescale();
         }
 
         private void TrackBarInterArrivalTime_Scroll(object sender, EventArgs e)
         {
-            UpdateInterArrivalTimeLabel();
+            UpdateInterArrivalTime();
         }
 
         private void TrackBarInterArrivalVariation_Scroll(object sender, EventArgs e)
         {
-            UpdateInterArrivalVariationLabel();
+            UpdateInterArrivalVariation();
         }
 
         private void TrackBarRoadLength_Scroll(object sender, EventArgs e)
         {
-            UpdateRoadLengthLabel();
+            UpdateRoadLength();
         }
 
-        private void UpdateInterArrivalTimeLabel()
+        private void TrackBarTimescale_Scroll(object sender, EventArgs e)
+        {
+            UpdateTimescale();
+        }
+
+        private void UpdateInterArrivalTime()
         {
             this.LabelInterArrivalTime.Text = Math.Round(this.TrackBarInterArrivalTime.Value / (double)10, 10) + "s"; // must be (double) to stop integer division
+            InterArrivalTime = this.TrackBarInterArrivalTime.Value * 100;
         }
 
-        private void UpdateInterArrivalVariationLabel()
+        private void UpdateInterArrivalVariation()
         {
             this.LabelInterArrivalVariation.Text = Math.Round(this.TrackBarInterArrivalVariation.Value / (double)10, 1) + "%"; // must be (double) to stop integer division
+            InterArrivalTimeVariationPercentage = this.TrackBarInterArrivalVariation.Value / (double)1000; // must be (double) to stop integer division
         }
 
-        private void UpdateRoadLengthLabel()
+        private void UpdateRoadLength()
         {
             this.LabelRoadLength.Text = Math.Round(this.TrackBarRoadLength.Value / (double)100, 2) + " km"; // must be (double) to stop integer division
+            RoadLengthMetres = this.TrackBarRoadLength.Value * 10;
+        }
+
+        private void UpdateTimescale()
+        {
+            this.TimeScale = TrackBarTimescale.Value / (double)100;
+            this.LabelTimeScale.Text = Math.Round(this.TrackBarTimescale.Value / (double)100, 2) + "x"; // must be (double) to stop integer division
         }
 
         private void ButtonStart_Click(object sender, EventArgs e)
@@ -140,13 +155,10 @@ namespace MotorwaySimulator
                 { VehicleTypes.HGV, new VehicleTemplate(12,    0,  96000,     0,      0) },
                 { VehicleTypes.Bus, new VehicleTemplate(11,    0,  96000,     0,      0) }*/
             };
-            InterArrivalTime = TrackBarInterArrivalTime.Value*100;
-            InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)1000; // must be (double) to stop integer division
 
             TimeScale = 1;
             LastId = 0;
             LaneCount = 7;
-            RoadLengthMetres = TrackBarRoadLength.Value * 10;
             RoadLengthPixels = (int)Math.Round(MetresToPixels(RoadLengthMetres), 0);
             LaneMarginPixels = (int)Math.Round(MetresToPixels(LaneMarginMetres), 0);
             VehicleWidthPixels = (int)Math.Round(MetresToPixels(VehicleWidthMetres), 0);
@@ -158,7 +170,7 @@ namespace MotorwaySimulator
 
             Road.Width = RoadLengthPixels;
             Road.Height = LaneCount * laneWidth;
-
+            
             for (int i = 0; i < LaneCount; i++)
             {
                 LaneControl lane = new LaneControl(this, i);
@@ -178,7 +190,7 @@ namespace MotorwaySimulator
             DebugSpawnInstructions.Add(instruction);
             instruction = new DebugVehicleSpawnInstruction(2, 0, VehicleTypes.Car, Lanes[0], 3000, 112000, 4);
             DebugSpawnInstructions.Add(instruction);
-
+            
             Timer.Restart();
             this.FormTick.Enabled = true;
 
@@ -222,6 +234,7 @@ namespace MotorwaySimulator
             }
 
             this.TreeViewVehicles.Nodes.Clear();
+            this.Road.Size = new Size(10, 10);
 
             SimulationState = SimulationStates.Stopped;
             this.ButtonStop.Enabled = false;
@@ -458,11 +471,6 @@ namespace MotorwaySimulator
         public double StoppingDistance(double speed)
         {
             return (speed / 3600) * 0.5;
-        }
-
-        private void TrackBarTimescale_Scroll(object sender, EventArgs e)
-        {
-            this.TimeScale = TrackBarTimescale.Value/10.0f;
         }
 
         public void UpdateControlPanelLocation()

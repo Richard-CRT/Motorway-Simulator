@@ -34,6 +34,8 @@
             this.ButtonPause = new System.Windows.Forms.Button();
             this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
             this.PanelSettings = new System.Windows.Forms.Panel();
+            this.LabelTimeScale = new System.Windows.Forms.Label();
+            this.LabelTimescaleTitle = new System.Windows.Forms.Label();
             this.TabControlControlPanel = new System.Windows.Forms.TabControl();
             this.TabPageSetup = new System.Windows.Forms.TabPage();
             this.LabelDesiredSpeedVarUnit = new System.Windows.Forms.Label();
@@ -74,11 +76,12 @@
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
             this.TabPageSimulation = new System.Windows.Forms.TabPage();
+            this.LabelVehiclesTitle = new System.Windows.Forms.Label();
             this.TreeViewVehicles = new System.Windows.Forms.TreeView();
             this.CheckBoxTrackVehicle = new System.Windows.Forms.CheckBox();
-            this.ButtonStart = new System.Windows.Forms.Button();
             this.NumericVehicleId = new System.Windows.Forms.NumericUpDown();
             this.ButtonStop = new System.Windows.Forms.Button();
+            this.ButtonStart = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
             this.TabControlControlPanel.SuspendLayout();
@@ -114,51 +117,80 @@
             // Road
             // 
             this.Road.BackColor = System.Drawing.SystemColors.Control;
-            this.Road.Location = new System.Drawing.Point(12, 337);
+            this.Road.Location = new System.Drawing.Point(0, 370);
             this.Road.Name = "Road";
-            this.Road.Size = new System.Drawing.Size(100, 100);
+            this.Road.Size = new System.Drawing.Size(10, 10);
             this.Road.TabIndex = 0;
             // 
             // ButtonPause
             // 
+            this.ButtonPause.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonPause.BackgroundImage = global::MotorwaySimulator.Properties.Resources.Symbols_Pause_32xLG;
+            this.ButtonPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ButtonPause.Enabled = false;
-            this.ButtonPause.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonPause.Location = new System.Drawing.Point(75, 6);
+            this.ButtonPause.Location = new System.Drawing.Point(56, 3);
             this.ButtonPause.Name = "ButtonPause";
-            this.ButtonPause.Size = new System.Drawing.Size(65, 35);
-            this.ButtonPause.TabIndex = 2;
-            this.ButtonPause.Text = "Pause";
-            this.ButtonPause.UseVisualStyleBackColor = true;
+            this.ButtonPause.Size = new System.Drawing.Size(47, 47);
+            this.ButtonPause.TabIndex = 1;
+            this.ButtonPause.UseVisualStyleBackColor = false;
             this.ButtonPause.Click += new System.EventHandler(this.ButtonPause_Click);
             // 
             // TrackBarTimescale
             // 
             this.TrackBarTimescale.LargeChange = 10;
-            this.TrackBarTimescale.Location = new System.Drawing.Point(378, 31);
+            this.TrackBarTimescale.Location = new System.Drawing.Point(306, 12);
+            this.TrackBarTimescale.Maximum = 100;
             this.TrackBarTimescale.Minimum = 1;
             this.TrackBarTimescale.Name = "TrackBarTimescale";
-            this.TrackBarTimescale.Size = new System.Drawing.Size(120, 45);
-            this.TrackBarTimescale.TabIndex = 4;
-            this.TrackBarTimescale.Value = 10;
+            this.TrackBarTimescale.Size = new System.Drawing.Size(245, 45);
+            this.TrackBarTimescale.TabIndex = 3;
+            this.TrackBarTimescale.TickFrequency = 5;
+            this.TrackBarTimescale.Value = 100;
             this.TrackBarTimescale.Scroll += new System.EventHandler(this.TrackBarTimescale_Scroll);
             // 
             // PanelSettings
             // 
+            this.PanelSettings.Controls.Add(this.LabelTimeScale);
+            this.PanelSettings.Controls.Add(this.LabelTimescaleTitle);
+            this.PanelSettings.Controls.Add(this.ButtonPause);
             this.PanelSettings.Controls.Add(this.TabControlControlPanel);
-            this.PanelSettings.Location = new System.Drawing.Point(12, 12);
+            this.PanelSettings.Controls.Add(this.TrackBarTimescale);
+            this.PanelSettings.Controls.Add(this.ButtonStop);
+            this.PanelSettings.Controls.Add(this.ButtonStart);
+            this.PanelSettings.Location = new System.Drawing.Point(11, 12);
             this.PanelSettings.Name = "PanelSettings";
-            this.PanelSettings.Size = new System.Drawing.Size(1332, 304);
+            this.PanelSettings.Size = new System.Drawing.Size(967, 349);
             this.PanelSettings.TabIndex = 7;
+            // 
+            // LabelTimeScale
+            // 
+            this.LabelTimeScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelTimeScale.Location = new System.Drawing.Point(263, 17);
+            this.LabelTimeScale.Name = "LabelTimeScale";
+            this.LabelTimeScale.Size = new System.Drawing.Size(42, 22);
+            this.LabelTimeScale.TabIndex = 47;
+            this.LabelTimeScale.Text = "0x";
+            this.LabelTimeScale.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelTimescaleTitle
+            // 
+            this.LabelTimescaleTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelTimescaleTitle.Location = new System.Drawing.Point(172, 16);
+            this.LabelTimescaleTitle.Name = "LabelTimescaleTitle";
+            this.LabelTimescaleTitle.Size = new System.Drawing.Size(100, 22);
+            this.LabelTimescaleTitle.TabIndex = 45;
+            this.LabelTimescaleTitle.Text = "Timescale";
+            this.LabelTimescaleTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TabControlControlPanel
             // 
             this.TabControlControlPanel.Controls.Add(this.TabPageSetup);
             this.TabControlControlPanel.Controls.Add(this.TabPageSimulation);
-            this.TabControlControlPanel.Location = new System.Drawing.Point(3, 3);
+            this.TabControlControlPanel.Location = new System.Drawing.Point(3, 63);
             this.TabControlControlPanel.Name = "TabControlControlPanel";
             this.TabControlControlPanel.SelectedIndex = 0;
-            this.TabControlControlPanel.Size = new System.Drawing.Size(937, 282);
-            this.TabControlControlPanel.TabIndex = 52;
+            this.TabControlControlPanel.Size = new System.Drawing.Size(550, 282);
+            this.TabControlControlPanel.TabIndex = 0;
             // 
             // TabPageSetup
             // 
@@ -203,7 +235,7 @@
             this.TabPageSetup.Location = new System.Drawing.Point(4, 22);
             this.TabPageSetup.Name = "TabPageSetup";
             this.TabPageSetup.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageSetup.Size = new System.Drawing.Size(929, 256);
+            this.TabPageSetup.Size = new System.Drawing.Size(542, 256);
             this.TabPageSetup.TabIndex = 0;
             this.TabPageSetup.Text = "Setup";
             // 
@@ -213,7 +245,7 @@
             this.LabelDesiredSpeedVarUnit.Location = new System.Drawing.Point(490, 214);
             this.LabelDesiredSpeedVarUnit.Name = "LabelDesiredSpeedVarUnit";
             this.LabelDesiredSpeedVarUnit.Size = new System.Drawing.Size(40, 20);
-            this.LabelDesiredSpeedVarUnit.TabIndex = 50;
+            this.LabelDesiredSpeedVarUnit.TabIndex = 22;
             this.LabelDesiredSpeedVarUnit.Text = "kph";
             this.LabelDesiredSpeedVarUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -233,7 +265,7 @@
             this.LabelDesiredSpeedUnitTitle.Location = new System.Drawing.Point(490, 188);
             this.LabelDesiredSpeedUnitTitle.Name = "LabelDesiredSpeedUnitTitle";
             this.LabelDesiredSpeedUnitTitle.Size = new System.Drawing.Size(40, 20);
-            this.LabelDesiredSpeedUnitTitle.TabIndex = 49;
+            this.LabelDesiredSpeedUnitTitle.TabIndex = 21;
             this.LabelDesiredSpeedUnitTitle.Text = "kph";
             this.LabelDesiredSpeedUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -253,7 +285,7 @@
             this.LabelLengthVariationUnitTitle.Location = new System.Drawing.Point(490, 162);
             this.LabelLengthVariationUnitTitle.Name = "LabelLengthVariationUnitTitle";
             this.LabelLengthVariationUnitTitle.Size = new System.Drawing.Size(40, 20);
-            this.LabelLengthVariationUnitTitle.TabIndex = 48;
+            this.LabelLengthVariationUnitTitle.TabIndex = 20;
             this.LabelLengthVariationUnitTitle.Text = "m";
             this.LabelLengthVariationUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -278,7 +310,7 @@
             0});
             this.NumericCarLength.Name = "NumericCarLength";
             this.NumericCarLength.Size = new System.Drawing.Size(61, 20);
-            this.NumericCarLength.TabIndex = 9;
+            this.NumericCarLength.TabIndex = 3;
             this.NumericCarLength.Value = new decimal(new int[] {
             4,
             0,
@@ -291,7 +323,7 @@
             this.LabelLengthUnitTitle.Location = new System.Drawing.Point(490, 136);
             this.LabelLengthUnitTitle.Name = "LabelLengthUnitTitle";
             this.LabelLengthUnitTitle.Size = new System.Drawing.Size(40, 20);
-            this.LabelLengthUnitTitle.TabIndex = 47;
+            this.LabelLengthUnitTitle.TabIndex = 19;
             this.LabelLengthUnitTitle.Text = "m";
             this.LabelLengthUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -306,7 +338,7 @@
             0});
             this.NumericCarLengthVar.Name = "NumericCarLengthVar";
             this.NumericCarLengthVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericCarLengthVar.TabIndex = 10;
+            this.NumericCarLengthVar.TabIndex = 4;
             this.NumericCarLengthVar.Value = new decimal(new int[] {
             1,
             0,
@@ -338,7 +370,7 @@
             0});
             this.NumericCarDesiredSpeed.Name = "NumericCarDesiredSpeed";
             this.NumericCarDesiredSpeed.Size = new System.Drawing.Size(61, 20);
-            this.NumericCarDesiredSpeed.TabIndex = 11;
+            this.NumericCarDesiredSpeed.TabIndex = 5;
             this.NumericCarDesiredSpeed.Value = new decimal(new int[] {
             112,
             0,
@@ -365,7 +397,7 @@
             0});
             this.NumericCarDesiredSpeedVar.Name = "NumericCarDesiredSpeedVar";
             this.NumericCarDesiredSpeedVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericCarDesiredSpeedVar.TabIndex = 12;
+            this.NumericCarDesiredSpeedVar.TabIndex = 6;
             this.NumericCarDesiredSpeedVar.Value = new decimal(new int[] {
             16,
             0,
@@ -403,7 +435,7 @@
             0});
             this.NumericLGVLength.Name = "NumericLGVLength";
             this.NumericLGVLength.Size = new System.Drawing.Size(61, 20);
-            this.NumericLGVLength.TabIndex = 16;
+            this.NumericLGVLength.TabIndex = 7;
             this.NumericLGVLength.Value = new decimal(new int[] {
             55,
             0,
@@ -431,7 +463,7 @@
             0});
             this.NumericLGVLengthVar.Name = "NumericLGVLengthVar";
             this.NumericLGVLengthVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericLGVLengthVar.TabIndex = 17;
+            this.NumericLGVLengthVar.TabIndex = 8;
             this.NumericLGVLengthVar.Value = new decimal(new int[] {
             1,
             0,
@@ -446,7 +478,7 @@
             this.TrackBarInterArrivalVariation.Name = "TrackBarInterArrivalVariation";
             this.TrackBarInterArrivalVariation.Size = new System.Drawing.Size(228, 45);
             this.TrackBarInterArrivalVariation.SmallChange = 100;
-            this.TrackBarInterArrivalVariation.TabIndex = 43;
+            this.TrackBarInterArrivalVariation.TabIndex = 2;
             this.TrackBarInterArrivalVariation.TickFrequency = 50;
             this.TrackBarInterArrivalVariation.Value = 500;
             this.TrackBarInterArrivalVariation.Scroll += new System.EventHandler(this.TrackBarInterArrivalVariation_Scroll);
@@ -471,7 +503,7 @@
             0});
             this.NumericLGVDesiredSpeed.Name = "NumericLGVDesiredSpeed";
             this.NumericLGVDesiredSpeed.Size = new System.Drawing.Size(61, 20);
-            this.NumericLGVDesiredSpeed.TabIndex = 18;
+            this.NumericLGVDesiredSpeed.TabIndex = 9;
             this.NumericLGVDesiredSpeed.Value = new decimal(new int[] {
             112,
             0,
@@ -498,7 +530,7 @@
             0});
             this.NumericLGVDesiredSpeedVar.Name = "NumericLGVDesiredSpeedVar";
             this.NumericLGVDesiredSpeedVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericLGVDesiredSpeedVar.TabIndex = 19;
+            this.NumericLGVDesiredSpeedVar.TabIndex = 10;
             this.NumericLGVDesiredSpeedVar.Value = new decimal(new int[] {
             8,
             0,
@@ -536,7 +568,7 @@
             0});
             this.NumericHGVLength.Name = "NumericHGVLength";
             this.NumericHGVLength.Size = new System.Drawing.Size(61, 20);
-            this.NumericHGVLength.TabIndex = 21;
+            this.NumericHGVLength.TabIndex = 11;
             this.NumericHGVLength.Value = new decimal(new int[] {
             12,
             0,
@@ -564,7 +596,7 @@
             0});
             this.NumericHGVLengthVar.Name = "NumericHGVLengthVar";
             this.NumericHGVLengthVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericHGVLengthVar.TabIndex = 22;
+            this.NumericHGVLengthVar.TabIndex = 12;
             this.NumericHGVLengthVar.Value = new decimal(new int[] {
             2,
             0,
@@ -579,7 +611,7 @@
             this.TrackBarInterArrivalTime.Minimum = 1;
             this.TrackBarInterArrivalTime.Name = "TrackBarInterArrivalTime";
             this.TrackBarInterArrivalTime.Size = new System.Drawing.Size(228, 45);
-            this.TrackBarInterArrivalTime.TabIndex = 39;
+            this.TrackBarInterArrivalTime.TabIndex = 1;
             this.TrackBarInterArrivalTime.TickFrequency = 50;
             this.TrackBarInterArrivalTime.Value = 5;
             this.TrackBarInterArrivalTime.Scroll += new System.EventHandler(this.TrackBarInterArrivalTime_Scroll);
@@ -604,7 +636,7 @@
             0});
             this.NumericHGVDesiredSpeed.Name = "NumericHGVDesiredSpeed";
             this.NumericHGVDesiredSpeed.Size = new System.Drawing.Size(61, 20);
-            this.NumericHGVDesiredSpeed.TabIndex = 23;
+            this.NumericHGVDesiredSpeed.TabIndex = 13;
             this.NumericHGVDesiredSpeed.Value = new decimal(new int[] {
             96,
             0,
@@ -631,7 +663,7 @@
             0});
             this.NumericHGVDesiredSpeedVar.Name = "NumericHGVDesiredSpeedVar";
             this.NumericHGVDesiredSpeedVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericHGVDesiredSpeedVar.TabIndex = 24;
+            this.NumericHGVDesiredSpeedVar.TabIndex = 14;
             this.NumericHGVDesiredSpeedVar.Value = new decimal(new int[] {
             4,
             0,
@@ -669,7 +701,7 @@
             0});
             this.NumericBusLength.Name = "NumericBusLength";
             this.NumericBusLength.Size = new System.Drawing.Size(61, 20);
-            this.NumericBusLength.TabIndex = 26;
+            this.NumericBusLength.TabIndex = 15;
             this.NumericBusLength.Value = new decimal(new int[] {
             11,
             0,
@@ -697,7 +729,7 @@
             0});
             this.NumericBusLengthVar.Name = "NumericBusLengthVar";
             this.NumericBusLengthVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericBusLengthVar.TabIndex = 27;
+            this.NumericBusLengthVar.TabIndex = 16;
             this.NumericBusLengthVar.Value = new decimal(new int[] {
             2,
             0,
@@ -734,7 +766,7 @@
             0});
             this.NumericBusDesiredSpeed.Name = "NumericBusDesiredSpeed";
             this.NumericBusDesiredSpeed.Size = new System.Drawing.Size(61, 20);
-            this.NumericBusDesiredSpeed.TabIndex = 28;
+            this.NumericBusDesiredSpeed.TabIndex = 17;
             this.NumericBusDesiredSpeed.Value = new decimal(new int[] {
             96,
             0,
@@ -761,7 +793,7 @@
             0});
             this.NumericBusDesiredSpeedVar.Name = "NumericBusDesiredSpeedVar";
             this.NumericBusDesiredSpeedVar.Size = new System.Drawing.Size(61, 20);
-            this.NumericBusDesiredSpeedVar.TabIndex = 29;
+            this.NumericBusDesiredSpeedVar.TabIndex = 18;
             this.NumericBusDesiredSpeedVar.Value = new decimal(new int[] {
             4,
             0,
@@ -777,7 +809,7 @@
             this.TrackBarRoadLength.Name = "TrackBarRoadLength";
             this.TrackBarRoadLength.Size = new System.Drawing.Size(228, 45);
             this.TrackBarRoadLength.SmallChange = 10;
-            this.TrackBarRoadLength.TabIndex = 45;
+            this.TrackBarRoadLength.TabIndex = 0;
             this.TrackBarRoadLength.TickFrequency = 250;
             this.TrackBarRoadLength.Value = 100;
             this.TrackBarRoadLength.Scroll += new System.EventHandler(this.TrackBarRoadLength_Scroll);
@@ -785,25 +817,32 @@
             // TabPageSimulation
             // 
             this.TabPageSimulation.BackColor = System.Drawing.Color.White;
+            this.TabPageSimulation.Controls.Add(this.LabelVehiclesTitle);
             this.TabPageSimulation.Controls.Add(this.TreeViewVehicles);
             this.TabPageSimulation.Controls.Add(this.CheckBoxTrackVehicle);
-            this.TabPageSimulation.Controls.Add(this.ButtonStart);
             this.TabPageSimulation.Controls.Add(this.NumericVehicleId);
-            this.TabPageSimulation.Controls.Add(this.ButtonStop);
-            this.TabPageSimulation.Controls.Add(this.TrackBarTimescale);
-            this.TabPageSimulation.Controls.Add(this.ButtonPause);
             this.TabPageSimulation.Location = new System.Drawing.Point(4, 22);
             this.TabPageSimulation.Name = "TabPageSimulation";
             this.TabPageSimulation.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageSimulation.Size = new System.Drawing.Size(929, 256);
+            this.TabPageSimulation.Size = new System.Drawing.Size(542, 256);
             this.TabPageSimulation.TabIndex = 1;
-            this.TabPageSimulation.Text = "Simulation";
+            this.TabPageSimulation.Text = "Data";
+            // 
+            // LabelVehiclesTitle
+            // 
+            this.LabelVehiclesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelVehiclesTitle.Location = new System.Drawing.Point(38, 14);
+            this.LabelVehiclesTitle.Name = "LabelVehiclesTitle";
+            this.LabelVehiclesTitle.Size = new System.Drawing.Size(99, 22);
+            this.LabelVehiclesTitle.TabIndex = 49;
+            this.LabelVehiclesTitle.Text = "Vehicles";
+            this.LabelVehiclesTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TreeViewVehicles
             // 
-            this.TreeViewVehicles.Location = new System.Drawing.Point(620, 3);
+            this.TreeViewVehicles.Location = new System.Drawing.Point(13, 39);
             this.TreeViewVehicles.Name = "TreeViewVehicles";
-            this.TreeViewVehicles.Size = new System.Drawing.Size(185, 244);
+            this.TreeViewVehicles.Size = new System.Drawing.Size(151, 197);
             this.TreeViewVehicles.TabIndex = 8;
             this.TreeViewVehicles.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeNodeVehicleSelected);
             // 
@@ -813,20 +852,9 @@
             this.CheckBoxTrackVehicle.Location = new System.Drawing.Point(378, 124);
             this.CheckBoxTrackVehicle.Name = "CheckBoxTrackVehicle";
             this.CheckBoxTrackVehicle.Size = new System.Drawing.Size(54, 17);
-            this.CheckBoxTrackVehicle.TabIndex = 32;
+            this.CheckBoxTrackVehicle.TabIndex = 1;
             this.CheckBoxTrackVehicle.Text = "Track";
             this.CheckBoxTrackVehicle.UseVisualStyleBackColor = true;
-            // 
-            // ButtonStart
-            // 
-            this.ButtonStart.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonStart.Location = new System.Drawing.Point(6, 6);
-            this.ButtonStart.Name = "ButtonStart";
-            this.ButtonStart.Size = new System.Drawing.Size(65, 35);
-            this.ButtonStart.TabIndex = 13;
-            this.ButtonStart.Text = "Play";
-            this.ButtonStart.UseVisualStyleBackColor = true;
-            this.ButtonStart.Click += new System.EventHandler(this.ButtonStart_Click);
             // 
             // NumericVehicleId
             // 
@@ -843,7 +871,7 @@
             0});
             this.NumericVehicleId.Name = "NumericVehicleId";
             this.NumericVehicleId.Size = new System.Drawing.Size(120, 20);
-            this.NumericVehicleId.TabIndex = 30;
+            this.NumericVehicleId.TabIndex = 3;
             this.NumericVehicleId.Value = new decimal(new int[] {
             1,
             0,
@@ -852,15 +880,28 @@
             // 
             // ButtonStop
             // 
+            this.ButtonStop.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonStop.BackgroundImage = global::MotorwaySimulator.Properties.Resources.Symbols_Stop_32xLG;
+            this.ButtonStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ButtonStop.Enabled = false;
-            this.ButtonStop.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonStop.Location = new System.Drawing.Point(146, 6);
+            this.ButtonStop.Location = new System.Drawing.Point(114, 3);
             this.ButtonStop.Name = "ButtonStop";
-            this.ButtonStop.Size = new System.Drawing.Size(65, 35);
-            this.ButtonStop.TabIndex = 14;
-            this.ButtonStop.Text = "Stop";
-            this.ButtonStop.UseVisualStyleBackColor = true;
+            this.ButtonStop.Size = new System.Drawing.Size(47, 47);
+            this.ButtonStop.TabIndex = 2;
+            this.ButtonStop.UseVisualStyleBackColor = false;
             this.ButtonStop.Click += new System.EventHandler(this.ButtonStop_Click);
+            // 
+            // ButtonStart
+            // 
+            this.ButtonStart.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonStart.BackgroundImage = global::MotorwaySimulator.Properties.Resources.Symbols_Play_32xLG;
+            this.ButtonStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ButtonStart.Location = new System.Drawing.Point(3, 3);
+            this.ButtonStart.Name = "ButtonStart";
+            this.ButtonStart.Size = new System.Drawing.Size(47, 47);
+            this.ButtonStart.TabIndex = 0;
+            this.ButtonStart.UseVisualStyleBackColor = false;
+            this.ButtonStart.Click += new System.EventHandler(this.ButtonStart_Click);
             // 
             // MotorwaySimulatorForm
             // 
@@ -877,6 +918,7 @@
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FormScrolled);
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.PanelSettings.ResumeLayout(false);
+            this.PanelSettings.PerformLayout();
             this.TabControlControlPanel.ResumeLayout(false);
             this.TabPageSetup.ResumeLayout(false);
             this.TabPageSetup.PerformLayout();
@@ -908,6 +950,8 @@
 
         #endregion
 
+        public System.Windows.Forms.NumericUpDown NumericVehicleId;
+        public System.Windows.Forms.CheckBox CheckBoxTrackVehicle;
         private System.Windows.Forms.Timer FormTick;
         private System.Windows.Forms.Panel Road;
         private System.Windows.Forms.Button ButtonPause;
@@ -915,8 +959,6 @@
         private System.Windows.Forms.Panel PanelSettings;
         private System.Windows.Forms.Button ButtonStart;
         private System.Windows.Forms.Button ButtonStop;
-        public System.Windows.Forms.NumericUpDown NumericVehicleId;
-        public System.Windows.Forms.CheckBox CheckBoxTrackVehicle;
         private System.Windows.Forms.TreeView TreeViewVehicles;
         private System.Windows.Forms.TabControl TabControlControlPanel;
         private System.Windows.Forms.TabPage TabPageSimulation;
@@ -958,6 +1000,9 @@
         private System.Windows.Forms.NumericUpDown NumericBusDesiredSpeed;
         private System.Windows.Forms.Label LabelLengthTitle;
         private System.Windows.Forms.NumericUpDown NumericBusDesiredSpeedVar;
+        private System.Windows.Forms.Label LabelTimescaleTitle;
+        private System.Windows.Forms.Label LabelTimeScale;
+        private System.Windows.Forms.Label LabelVehiclesTitle;
     }
 }
 
