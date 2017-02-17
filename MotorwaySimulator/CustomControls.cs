@@ -78,13 +78,17 @@ namespace CustomControls
             foreach (TreeNode treeNode in LaneNode.Nodes)
             {
                 Vehicle vehicle = (Vehicle)treeNode.Tag;
-                if (vehicle.IsTravellingAtDesiredSpeed)
+                switch (vehicle.Congestion)
                 {
-                    treeNode.BackColor = Color.LimeGreen;
-                }
-                else
-                {
-                    treeNode.BackColor = Color.Red;
+                    case CongestionStates.None:
+                        treeNode.BackColor = Color.LimeGreen;
+                        break;
+                    case CongestionStates.Mild:
+                        treeNode.BackColor = Color.Red;
+                        break;
+                    case CongestionStates.Severe:
+                        treeNode.BackColor = Color.DarkRed;
+                        break;
                 }
             }
 
@@ -92,30 +96,62 @@ namespace CustomControls
             for (int vehicleIndex = 0; vehicleIndex < vehiclesToAdd.Count; vehicleIndex++)
             {
                 Vehicle vehicle = vehiclesToAdd[vehicleIndex];
-                newVehicleNodes[vehicleIndex] = new TreeNode("#" + vehicle.VehicleId + " - " + vehicle.VehicleType + " - " + vehicle.ActualSpeedKilometresHour + " kph");
+                newVehicleNodes[vehicleIndex] = new TreeNode("#" + vehicle.VehicleId + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour/1000,0) + " kph");
                 newVehicleNodes[vehicleIndex].Tag = vehicle;
                 newVehicleNodes[vehicleIndex].ForeColor = Color.White;
-                if (vehicle.IsTravellingAtDesiredSpeed)
+                switch(vehicle.Congestion)
                 {
-                    newVehicleNodes[vehicleIndex].BackColor = Color.LimeGreen;
-                }
-                else
-                {
-                    newVehicleNodes[vehicleIndex].BackColor = Color.Red;
+                    case CongestionStates.None:
+                        newVehicleNodes[vehicleIndex].BackColor = Color.LimeGreen;
+                        break;
+                    case CongestionStates.Mild:
+                        newVehicleNodes[vehicleIndex].BackColor = Color.Red;
+                        break;
+                    case CongestionStates.Severe:
+                        newVehicleNodes[vehicleIndex].BackColor = Color.DarkRed;
+                        break;
                 }
             }
-            LaneNode.Nodes.AddRange(newVehicleNodes);
+            List<TreeNode> newVehicleNodesList = newVehicleNodes.OrderByDescending(node => ((Vehicle)node.Tag).ExactProgressMetres).ToList();
+            for(int laneVehicleNodeIndex = 0; laneVehicleNodeIndex < LaneNode.Nodes.Count; laneVehicleNodeIndex++)
+            {
+                TreeNode laneVehicleNode = LaneNode.Nodes[laneVehicleNodeIndex];
+                for (int vehicleNodeIndex = 0; vehicleNodeIndex < newVehicleNodesList.Count; )
+                {
+                    TreeNode newVehicleNode = newVehicleNodesList[vehicleNodeIndex];
+                    if (((Vehicle)newVehicleNode.Tag).ExactProgressMetres > ((Vehicle)laneVehicleNode.Tag).ExactProgressMetres)
+                    {
+                        LaneNode.Nodes.Insert(laneVehicleNodeIndex, newVehicleNode);
+                        laneVehicleNodeIndex++;
+
+                        newVehicleNodesList.RemoveAt(vehicleNodeIndex);
+                    }
+                    else
+                    {
+                        vehicleNodeIndex++;
+                    }
+                }
+            }
+            newVehicleNodes.Reverse();
+            foreach (TreeNode newVehicleNode in newVehicleNodes)
+            {
+                if (LaneNode.Nodes.Count == 0 || ((Vehicle)newVehicleNode.Tag).ExactProgressMetres < ((Vehicle)LaneNode.Nodes[LaneNode.Nodes.Count-1].Tag).ExactProgressMetres)
+                {
+                    LaneNode.Nodes.Add(newVehicleNode);
+                }
+            }
+            //LaneNode.Nodes.AddRange(newVehicleNodes);
             OldOrderedLaneVehicles = orderedLaneVehicles;
         }
 
         public Vehicle[] VehiclesOrderByLocation()
         {
-            return this.Vehicles.OrderByDescending(vehicle => vehicle.ExactProgress).ToArray();
+            return this.Vehicles.OrderByDescending(vehicle => vehicle.ExactProgressMetres).ToArray();
         }
 
         public Vehicle[] VehiclesOrderByReverseLocation()
         {
-            return this.Vehicles.OrderBy(vehicle => vehicle.ExactProgress).ToArray();
+            return this.Vehicles.OrderBy(vehicle => vehicle.ExactProgressMetres).ToArray();
         }
 
         public Vehicle LastVehicle()
@@ -167,7 +203,7 @@ namespace CustomControls
             {
                 foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.ExactProgress > vehicle.ExactProgress)
+                    if (myVehicle.ExactProgressMetres > vehicle.ExactProgressMetres)
                     {
                         nextVehicle = myVehicle;
                         break;
@@ -189,7 +225,7 @@ namespace CustomControls
             {
                 foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.ExactProgress <= vehicle.ExactProgress) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
+                    if (myVehicle.ExactProgressMetres <= vehicle.ExactProgressMetres) // equal to because otherwise anomaly when vehicle in same location [unlikely to ever happen]
                     {
                         previousVehicle = myVehicle;
                         break;
@@ -207,7 +243,7 @@ namespace CustomControls
         {
             int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
             int previousVehicleStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
-            int backOfOtherLaneVehicle = vehicle.Progress - vehicle.VehicleHeight;
+            int backOfOtherLaneVehicle = vehicle.ProgressPixels - vehicle.VehicleHeightPixels;
 
             if (previousVehicle.ActualSpeedMetresHour > vehicle.ActualSpeedMetresHour)
             {
@@ -215,7 +251,7 @@ namespace CustomControls
                 // previous vehicle can lose some stopping distance by slowing down so overlap by margin allowed
                 int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0) - vehicleProjectedStopppingDistancePixels;
 
-                if (previousVehicle.Progress + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
                 {
                     // overlaps but not quite enough that the previous vehicle can adjust speed to match yet [at least 1 pixel]
                     return true;
@@ -225,7 +261,7 @@ namespace CustomControls
             {
                 // previous vehicle going slower or equal to
                 // previous vehicle can't lose stopping distance so no overlap allowed
-                if (previousVehicle.Progress + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle)
+                if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle)
                 {
                     // no overlap so there is space
                     return true;
@@ -237,7 +273,7 @@ namespace CustomControls
         private bool ClearOfNextVehicle(Vehicle vehicle, Vehicle nextVehicle)
         {
             int vehicleProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
-            int backOfNextVehicle = nextVehicle.Progress - nextVehicle.VehicleHeight;
+            int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleHeightPixels;
 
             // we can't overlap to change stopping distance for situations
             // 1) vehicle ahead is faster or equal, overlap impossible
@@ -245,7 +281,7 @@ namespace CustomControls
             //      if vehicle allows overlap then in theory they must change speed next tick, which
             //      is against the spec
             // so no overlap allowed
-            if (vehicle.Progress + vehicleProjectedStopppingDistancePixels < backOfNextVehicle - (vehicleProjectedStopppingDistancePixels * 0.1)) // add 10% margin to stop cars immediately rejoining n lane after joining n+1
+            if (vehicle.ProgressPixels + vehicleProjectedStopppingDistancePixels < backOfNextVehicle - (vehicleProjectedStopppingDistancePixels * 0.1)) // add 10% margin to stop cars immediately rejoining n lane after joining n+1
             {
                 // no overlap so there is space
                 return true;
@@ -288,13 +324,13 @@ namespace CustomControls
             {
                 double projectedDesiredStopppingDistanceMetres = MainForm.StoppingDistance(newVehicle.DesiredSpeedMetresHour);
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(projectedDesiredStopppingDistanceMetres));
-                int backOfNextVehicle = nextVehicle.Progress - nextVehicle.VehicleHeight;
+                int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleHeightPixels;
 
                 if (nextVehicle.ActualSpeedMetresHour >= newVehicle.DesiredSpeedMetresHour)
                 {
                     // Next vehicle travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away
-                    if ((newVehicle.Progress + projectedDesiredStopppingDistancePixels) > backOfNextVehicle)
+                    if ((newVehicle.ProgressPixels + projectedDesiredStopppingDistancePixels) > backOfNextVehicle)
                     {
                         // Stopping distance overlaps back of next vehicle
                         // Can't spawn
@@ -310,7 +346,7 @@ namespace CustomControls
                     // as soon as this overlap is reached in order for the stopping distance to be at
                     // the back of the next vehicle
                     int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
-                    if ((newVehicle.Progress + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
+                    if ((newVehicle.ProgressPixels + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
                     {
                         // Stopping distance overlaps (back of next vehicle - margin)
                         // Can't spawn
@@ -354,29 +390,10 @@ namespace CustomControls
                     Vehicle vehicle = this.Vehicles[vehicleIndex];
                     int safetyDistanceHeight = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
 
-                    if (MainForm.CheckBoxTrackVehicle.Checked && vehicle.VehicleId == (int)MainForm.NumericVehicleId.Value)
-                    {
-                        if (!vehicle.InSight)
-                        {
-                            MainForm.CheckBoxTrackVehicle.Checked = false;
-                        }
-                        int newPosition = vehicle.Progress - (viewPortWidth / 2);
-                        if (newPosition < 0)
-                        {
-                            newPosition = 0;
-                        }
-                        if (newPosition > MainForm.HorizontalScroll.Maximum)
-                        {
-                            newPosition = MainForm.HorizontalScroll.Maximum;
-                        }
-                        MainForm.HorizontalScroll.Value = newPosition;
-                        MainForm.UpdateControlPanelLocation();
-                    }
-
-                    if ((vehicle.Progress + safetyDistanceHeight) >= viewPortLocation && (vehicle.Progress - vehicle.VehicleHeight) < viewPortLocation + viewPortWidth)
+                    if ((vehicle.ProgressPixels + safetyDistanceHeight) >= viewPortLocation && (vehicle.ProgressPixels - vehicle.VehicleHeightPixels) < viewPortLocation + viewPortWidth)
                     {
 
-                        Rectangle safetyRect = new Rectangle(new Point(vehicle.Progress, MainForm.LaneMarginPixels), new Size(safetyDistanceHeight, vehicle.VehicleWidth));
+                        Rectangle safetyRect = new Rectangle(new Point(vehicle.ProgressPixels, MainForm.LaneMarginPixels), new Size(safetyDistanceHeight, vehicle.VehicleWidthPixels));
                         if (vehicle.ActualSpeedMetresHour == vehicle.DesiredSpeedMetresHour)
                         {
                             pe.Graphics.FillRectangle(translucentYellowBrush, safetyRect);
@@ -387,9 +404,9 @@ namespace CustomControls
                         }
                         pe.Graphics.DrawRectangle(whitePen, safetyRect);
 
-                        Size vehicleSize = new Size(vehicle.VehicleHeight, vehicle.VehicleWidth);
+                        Size vehicleSize = new Size(vehicle.VehicleHeightPixels, vehicle.VehicleWidthPixels);
 
-                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMarginPixels), vehicleSize);
+                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.ProgressPixels - vehicle.VehicleHeightPixels, MainForm.LaneMarginPixels), vehicleSize);
                         switch (vehicle.VehicleType)
                         {
                             case VehicleTypes.Car:
@@ -408,7 +425,7 @@ namespace CustomControls
                         pe.Graphics.DrawRectangle(blackPen, vehicleRect);
                         using (Font drawFont = new Font("Courier New", 8))
                         {
-                            pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.Progress - vehicle.VehicleHeight, MainForm.LaneMarginPixels);
+                            pe.Graphics.DrawString(vehicle.VehicleId.ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.ProgressPixels - vehicle.VehicleHeightPixels, MainForm.LaneMarginPixels);
                         }
                     }
                 }

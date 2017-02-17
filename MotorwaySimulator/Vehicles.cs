@@ -11,25 +11,26 @@ namespace MotorwaySimulator
 {
     public class Vehicle
     {
-        public bool InSight = true;
-        public bool InEffect = true;
+        public bool InSight;
+        public bool InEffect;
+        public TimeSpan TimeAppearance;
+        public TimeSpan TimeDisappearance;
 
         public int VehicleId;
-        public int VehicleWidth;
-        public int VehicleHeight;
+        public double VehicleHeightMetres;
+        public int VehicleWidthPixels;
+        public int VehicleHeightPixels;
         public VehicleTypes VehicleType;
+
+        public double LifetimeMilliseconds;
+
+        public int MaximumLane;
 
         public double DesiredSpeedMetresHour;
         public double DesiredSpeedPixelsHour;
         public double ActualSpeedMetresHour;
-        public int ActualSpeedKilometresHour
-        {
-            get
-            {
-                return (int)Math.Round(DesiredSpeedMetresHour / 1000,0);
-            }
-        }
         public double ActualSpeedPixelsHour;
+        public double AverageSpeedMetresHour;
 
         public bool IsTravellingAtDesiredSpeed
         {
@@ -39,8 +40,38 @@ namespace MotorwaySimulator
             }
         }
 
-        public double ExactProgress;
-        public int Progress;
+        public bool SuccessfulSpawn
+        {
+            get
+            {
+                return ParentLane != null;
+            }
+        }
+
+        public CongestionStates Congestion
+        {
+            get
+            {
+                if (this.DesiredSpeedMetresHour - this.AverageSpeedMetresHour > this.MainForm.SevereCongestionTriggerMetresHour)
+                {
+                    return CongestionStates.Severe;
+                }
+                else if (this.DesiredSpeedMetresHour - this.AverageSpeedMetresHour > this.MainForm.MildCongestionTriggerMetresHour)
+                {
+                    return CongestionStates.Mild;
+                }
+                else
+                {
+                    return CongestionStates.None;
+                }
+            }
+        }
+
+        public double ExactProgressPixels;
+        public int ProgressPixels;
+        public double ExactProgressMetres;
+
+        public double OriginalDistanceOffsetMetres;
 
         public long LastTimerValue;
 
@@ -63,9 +94,9 @@ namespace MotorwaySimulator
             {
                 // vehicle in front
 
-                int backOfNextVehicle = nextVehicle.Progress - nextVehicle.VehicleHeight;
+                int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleHeightPixels;
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(this.DesiredSpeedMetresHour)), 0);
-                if (this.Progress + projectedDesiredStopppingDistancePixels >= backOfNextVehicle)
+                if (this.ProgressPixels + projectedDesiredStopppingDistancePixels >= backOfNextVehicle)
                 {
                     // desired safety distance is overlapping
                     if (nextVehicle.ActualSpeedMetresHour < this.ActualSpeedMetresHour)
@@ -73,7 +104,7 @@ namespace MotorwaySimulator
                         //  next vehicle slower than this vehicle
                         int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
 
-                        if ((this.Progress + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
+                        if ((this.ProgressPixels + projectedDesiredStopppingDistancePixels) >= (backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels))
                         {
                             // Stopping distance overlaps at (back of next vehicle - margin)
                             // Adjust speed to match that of vehicle ahead
@@ -82,7 +113,7 @@ namespace MotorwaySimulator
                         }
                     }
                 }
-                else if (this.Progress + projectedDesiredStopppingDistancePixels < backOfNextVehicle - (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin fix pixeling flashing bug
+                else if (this.ProgressPixels + projectedDesiredStopppingDistancePixels < backOfNextVehicle - (projectedDesiredStopppingDistancePixels * 0.1)) // add 10% margin fix pixeling flashing bug
                 {
                     // stopping distance does not overlap
 
@@ -115,7 +146,7 @@ namespace MotorwaySimulator
             #endregion
 
             #region Change Lane n+1
-            if (this.ParentLane.LaneId != this.MainForm.LaneCount-1 && !this.IsTravellingAtDesiredSpeed)
+            if (this.ParentLane.LaneId != this.MainForm.ActiveLaneCount-1 && !this.IsTravellingAtDesiredSpeed && this.ParentLane.LaneId+1 < this.MaximumLane)
             {
                 // Not in Lane n
                 LaneControl rightLane = this.MainForm.Lanes[this.ParentLane.LaneId + 1];
@@ -137,7 +168,8 @@ namespace MotorwaySimulator
                 long tempTime = MainForm.Timer.ElapsedMilliseconds;
                 long elapsedTime = tempTime - LastTimerValue;
                 LastTimerValue = tempTime;
-                double scaledElapsedTime = elapsedTime * MainForm.TimeScale;
+                double scaledElapsedTime = elapsedTime * this.MainForm.TimeScale;
+                this.LifetimeMilliseconds += scaledElapsedTime;
 
                 //  Try to get into lane n-1 [will need to make sure vehicle does not instantly move back into n after moving into n+1]
                 //  If going slower than desired
@@ -147,12 +179,15 @@ namespace MotorwaySimulator
                 //          Change speed
 
                 #region Move Forward
-                double pixelsMoved = MainForm.PixelHoursToPixelTicks(ActualSpeedPixelsHour, scaledElapsedTime);
-                ExactProgress += pixelsMoved;
-                Progress = (int)Math.Round(ExactProgress,0);
+                double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, scaledElapsedTime);
+                ExactProgressMetres += metresMoved;
+                ExactProgressPixels += MainForm.MetresToPixels(metresMoved);
+                ProgressPixels = (int)Math.Round(ExactProgressPixels,0);
                 #endregion
+
+                this.AverageSpeedMetresHour = (this.ExactProgressMetres + this.OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
             }
-            if (ExactProgress >= MainForm.RoadLengthPixels + this.VehicleHeight)
+            if (ExactProgressMetres >= MainForm.ActiveRoadLengthMetres + this.VehicleHeightMetres)
             {
                 InSight = false;
             }
@@ -161,9 +196,11 @@ namespace MotorwaySimulator
         public void GenerateSize(VehicleTypes vehicleType)
         {
             double lengthVariation = (MainForm.Random.NextDouble() * MainForm.VehicleParameters[vehicleType].LengthVariation * 2) - MainForm.VehicleParameters[vehicleType].LengthVariation;
-
-            this.VehicleWidth = MainForm.VehicleWidthPixels;
-            this.VehicleHeight = (int)Math.Round(MainForm.MetresToPixels(MainForm.VehicleParameters[vehicleType].Length + lengthVariation), 0);
+            double length = MainForm.VehicleParameters[vehicleType].Length + lengthVariation;
+            
+            this.VehicleHeightMetres = length;
+            this.VehicleWidthPixels = MainForm.VehicleWidthPixels;
+            this.VehicleHeightPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
         }
 
         public void GenerateDesiredSpeed(VehicleTypes vehicleType)
@@ -186,18 +223,24 @@ namespace MotorwaySimulator
     {
         public Car (MotorwaySimulatorForm mainForm, int vehicleId)
         {
+            this.InSight = true;
+            this.InEffect = true;
+
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             this.VehicleType = VehicleTypes.Car;
             this.ParentLane = null;
+            this.MaximumLane = mainForm.VehicleParameters[VehicleTypes.Car].MaximumLane;
 
             GenerateDesiredSpeed(VehicleTypes.Car);
             GenerateSize(VehicleTypes.Car);
 
-            double safetyDistanceLength = MainForm.MetresToPixels(mainForm.StoppingDistance(this.DesiredSpeedMetresHour));
-            this.ExactProgress = -safetyDistanceLength;
-            this.Progress = (int)Math.Round(-safetyDistanceLength, 0);
+            double safetyDistanceLength = mainForm.StoppingDistance(this.DesiredSpeedMetresHour);
+            this.ExactProgressMetres = -safetyDistanceLength;
+            this.ExactProgressPixels = MainForm.MetresToPixels(this.ExactProgressMetres);
+            this.ProgressPixels = (int)Math.Round(this.ExactProgressPixels, 0);
+            this.OriginalDistanceOffsetMetres = safetyDistanceLength;
         }
     }
 
@@ -205,18 +248,24 @@ namespace MotorwaySimulator
     {
         public LGV (MotorwaySimulatorForm mainForm, int vehicleId)
         {
+            this.InSight = true;
+            this.InEffect = true;
+
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             this.VehicleType = VehicleTypes.LGV;
             this.ParentLane = null;
+            this.MaximumLane = mainForm.VehicleParameters[VehicleTypes.LGV].MaximumLane;
 
             GenerateDesiredSpeed(VehicleTypes.LGV);
             GenerateSize(VehicleTypes.LGV);
 
-            double safetyDistanceLength = MainForm.MetresToPixels(MainForm.StoppingDistance(this.DesiredSpeedMetresHour));
-            this.ExactProgress = -safetyDistanceLength;
-            this.Progress = (int)Math.Round(-safetyDistanceLength, 0);
+            double safetyDistanceLength = mainForm.StoppingDistance(this.DesiredSpeedMetresHour);
+            this.ExactProgressMetres = -safetyDistanceLength;
+            this.ExactProgressPixels = MainForm.MetresToPixels(this.ExactProgressMetres);
+            this.ProgressPixels = (int)Math.Round(this.ExactProgressPixels, 0);
+            this.OriginalDistanceOffsetMetres = safetyDistanceLength;
         }
     }
 
@@ -224,18 +273,24 @@ namespace MotorwaySimulator
     {
         public HGV (MotorwaySimulatorForm mainForm, int vehicleId)
         {
+            this.InSight = true;
+            this.InEffect = true;
+
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             this.VehicleType = VehicleTypes.HGV;
             this.ParentLane = null;
+            this.MaximumLane = mainForm.VehicleParameters[VehicleTypes.HGV].MaximumLane;
 
             GenerateDesiredSpeed(VehicleTypes.HGV);
             GenerateSize(VehicleTypes.HGV);
 
-            double safetyDistanceLength = MainForm.MetresToPixels(MainForm.StoppingDistance(this.DesiredSpeedMetresHour));
-            this.ExactProgress = -safetyDistanceLength;
-            this.Progress = (int)Math.Round(-safetyDistanceLength, 0);
+            double safetyDistanceLength = mainForm.StoppingDistance(this.DesiredSpeedMetresHour);
+            this.ExactProgressMetres = -safetyDistanceLength;
+            this.ExactProgressPixels = MainForm.MetresToPixels(this.ExactProgressMetres);
+            this.ProgressPixels = (int)Math.Round(this.ExactProgressPixels, 0);
+            this.OriginalDistanceOffsetMetres = safetyDistanceLength;
         }
     }
 
@@ -243,18 +298,24 @@ namespace MotorwaySimulator
     {
         public Bus (MotorwaySimulatorForm mainForm, int vehicleId)
         {
+            this.InSight = true;
+            this.InEffect = true;
+
             this.MainForm = mainForm;
             this.VehicleId = vehicleId;
             this.LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
-            this.VehicleType = VehicleTypes.HGV;
+            this.VehicleType = VehicleTypes.Bus;
             this.ParentLane = null;
+            this.MaximumLane = mainForm.VehicleParameters[VehicleTypes.Bus].MaximumLane;
 
-            GenerateDesiredSpeed(VehicleTypes.HGV);
-            GenerateSize(VehicleTypes.HGV);
+            GenerateDesiredSpeed(VehicleTypes.Bus);
+            GenerateSize(VehicleTypes.Bus);
 
-            double safetyDistanceLength = MainForm.MetresToPixels(MainForm.StoppingDistance(this.DesiredSpeedMetresHour));
-            this.ExactProgress = -safetyDistanceLength;
-            this.Progress = (int)Math.Round(-safetyDistanceLength,0);
+            double safetyDistanceLength = mainForm.StoppingDistance(this.DesiredSpeedMetresHour);
+            this.ExactProgressMetres = -safetyDistanceLength;
+            this.ExactProgressPixels = MainForm.MetresToPixels(this.ExactProgressMetres);
+            this.ProgressPixels = (int)Math.Round(this.ExactProgressPixels, 0);
+            this.OriginalDistanceOffsetMetres = safetyDistanceLength;
         }
     }
 }

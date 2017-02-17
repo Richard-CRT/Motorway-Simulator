@@ -63,9 +63,9 @@ namespace MotorwaySimulator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Symbols_Pause_32xLG {
+        internal static System.Drawing.Bitmap Pause_Icon {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Pause_32xLG", resourceCulture);
+                object obj = ResourceManager.GetObject("Pause_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace MotorwaySimulator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Symbols_Play_32xLG {
+        internal static System.Drawing.Bitmap Play_Icon {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Play_32xLG", resourceCulture);
+                object obj = ResourceManager.GetObject("Play_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace MotorwaySimulator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Symbols_Stop_32xLG {
+        internal static System.Drawing.Bitmap Stop_Icon {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Stop_32xLG", resourceCulture);
+                object obj = ResourceManager.GetObject("Stop_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
