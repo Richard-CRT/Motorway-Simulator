@@ -2020,8 +2020,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Motorway Simulator";
-            this.Load += new System.EventHandler(this.MotorwaySimulator_Load);
-            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FormScrolled);
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.UpdateControlPanelLocation);
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.PanelSettings.ResumeLayout(false);
             this.PanelSettings.PerformLayout();
