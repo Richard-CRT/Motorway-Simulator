@@ -201,13 +201,13 @@ namespace MotorwaySimulator
         /* Debug */
 
         /// <summary>
+        /// Contains the individual spawn instructions for vehicles while in debug mode (list is a system class not created by me, but DebugVehicleSpawnInstruction is a class made by me)
+        /// </summary>
+        public List<DebugVehicleSpawnInstruction> DebugModeInstructions;
+        /// <summary>
         /// Defines whether the simulation is running off hardcoded spawn data (for debugging and testing)
         /// </summary>
         private bool DebugMode;
-        /// <summary>
-        /// Contains the individual spawn instructions for vehicles while in debug mode
-        /// </summary>
-        public List<DebugVehicleSpawnInstruction> DebugModeInstructions;
 
         #endregion
 
