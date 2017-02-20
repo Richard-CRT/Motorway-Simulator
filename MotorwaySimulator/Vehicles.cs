@@ -1,5 +1,8 @@
-﻿using CustomControls;
+﻿/* Included System Namespaces/Libraries */
 using System;
+
+/* My Custom Control Namespace/Library */
+using CustomControls;
 
 namespace MotorwaySimulator
 {

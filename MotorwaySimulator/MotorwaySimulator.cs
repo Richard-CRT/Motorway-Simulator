@@ -1,4 +1,4 @@
-﻿using CustomControls;
+﻿/* Included System Namespaces/Libraries */
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +7,9 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+/* My Custom Control Namespace/Library */
+using CustomControls;
 
 namespace MotorwaySimulator
 {
@@ -107,7 +110,7 @@ namespace MotorwaySimulator
         /// </summary>
         public int ActiveSevereCongestionTriggerMetresHour;
         /// <summary>
-        /// The dictionary containing all the vehicle simulation parameters being used by the simulation
+        /// The dictionary containing all the vehicle simulation parameters being used by the simulation (dictionary is a system object but VehicleTypes and VehicleTemplate are data structures made by me)
         /// </summary>
         public Dictionary<VehicleTypes, VehicleTemplate> VehicleParameters;
 
@@ -146,7 +149,7 @@ namespace MotorwaySimulator
         /* Time */
 
         /// <summary>
-        /// Provides the realtime time measuring capability
+        /// Provides the realtime time measuring capability (stopwatch is a system class)
         /// </summary>
         public Stopwatch Timer;
         /// <summary>
@@ -154,13 +157,13 @@ namespace MotorwaySimulator
         /// </summary>
         public double TimeScale;
         /// <summary>
-        /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
-        /// </summary>
-        private long LastTimerValue;
-        /// <summary>
         /// The scaled time passed since the beginning of the simulation
         /// </summary>
         public double ScaledTimePassed;
+        /// <summary>
+        /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
+        /// </summary>
+        private long LastTimerValue;
 
 
         /* Random */
