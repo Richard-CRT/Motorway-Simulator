@@ -110,7 +110,7 @@ namespace MotorwaySimulator
         /// </summary>
         public int ActiveSevereCongestionTriggerMetresHour;
         /// <summary>
-        /// The dictionary containing all the vehicle simulation parameters being used by the simulation (dictionary is a system object but VehicleTypes and VehicleTemplate are data structures made by me)
+        /// The dictionary containing all the vehicle simulation parameters being used by the simulation (dictionary is a is a system class not created by me but VehicleTypes and VehicleTemplate are data structures made by me)
         /// </summary>
         public Dictionary<VehicleTypes, VehicleTemplate> VehicleParameters;
 
@@ -149,7 +149,7 @@ namespace MotorwaySimulator
         /* Time */
 
         /// <summary>
-        /// Provides the realtime time measuring capability (stopwatch is a system class)
+        /// Provides the realtime time measuring capability (stopwatch is a system class not created by me)
         /// </summary>
         public Stopwatch Timer;
         /// <summary>
@@ -169,19 +169,19 @@ namespace MotorwaySimulator
         /* Random */
 
         /// <summary>
-        /// The random number generator used for all elements of randomness in the simulation
+        /// The random number generator used for all elements of randomness in the simulation (random is a system class not created by me)
         /// </summary>
-        public Random RandomGenerator;
+        public Random;
 
 
         /* Lanes and Vehicles */
 
         /// <summary>
-        /// List of the lane objects in the simulation
+        /// Dynamic list of the lane objects in the simulation (list is a system class not created by me, but LaneControl is a class made by me)
         /// </summary>
         public List<LaneControl> Lanes;
         /// <summary>
-        /// List of all vehicle objects (including failed and finished)
+        /// List of all vehicle objects (including failed and finished) (list is a system class not created by me, but Vehicle is a class made by me)
         /// </summary>
         public List<Vehicle> AllVehicles;
 
