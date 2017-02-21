@@ -223,7 +223,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             Timer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -851,7 +851,7 @@ namespace MotorwaySimulator
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 6);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 300, 112000, 6);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -919,38 +919,27 @@ namespace MotorwaySimulator
                 for (int instructionIndex = 0; instructionIndex < DebugModeInstructions.Count;)
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
-                    if (Timer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
+                    if (ScaledTimePassed >= instruction.SpawnTime)
                     {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
                         switch (instruction.Type)
                         {
                             case VehicleTypes.Car:
-                                vehicle = new Car(this, instruction.VehicleId);
+                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.LGV:
-                                vehicle = new LGV(this, instruction.VehicleId);
+                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.HGV:
-                                vehicle = new HGV(this, instruction.VehicleId);
+                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.Bus:
-                                vehicle = new Bus(this, instruction.VehicleId);
+                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             default:
                                 vehicle = null;
                                 break;
-                        }
-
-                        // Setup the initial values
-                        if (instruction.DesiredSpeedMetresHour != 0)
-                        {
-                            vehicle.DesiredSpeedMetresHour = instruction.DesiredSpeedMetresHour;
-                        }
-                        if (instruction.VehicleLength != 0)
-                        {
-                            vehicle.VehicleLengthMetres = instruction.VehicleLength;
-                            vehicle.VehicleLengthPixels = (int)Math.Round(MetresToPixels(instruction.VehicleLength));
                         }
 
                         // Add vehicle to the specified lane
@@ -1422,9 +1411,9 @@ namespace MotorwaySimulator
         public LaneControl Lane;
 
         /// <summary>
-        /// The time in realtime to spawn the vehicle
+        /// The time in the simulation to spawn the vehicle
         /// </summary>
-        public long RealTimeSpawnTime;
+        public double SpawnTime;
 
         /// <summary>
         /// The desired speed in metres per hour of the vehicle to spawn
@@ -1444,15 +1433,15 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to spawn</param>
         /// <param name="type">The enum type of the vehicle to spawn</param>
         /// <param name="lane">The lane of the vehicle to spawn in</param>
-        /// <param name="realTimeSpawnTime">The time in realtime to spawn the vehicle</param>
-        /// <param name="desiredSpeedMetresHour">The desired speed in metres per hour of the vehicle to spawn</param>
-        /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, int vehicleLength = 0)
+        /// <param name="spawnTime">The time in the simulation to spawn the vehicle</param>
+        /// <param name="desiredSpeedMetresHour">The (optional, default value = 0) desired speed in metres per hour of the vehicle to spawn</param>
+        /// <param name="vehicleLength">The (optional, default value = 0) length of the vehicle to spawn in metres</param>
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, double spawnTime, double desiredSpeedMetresHour = 0, int vehicleLength = 0)
         {
             VehicleId = vehicleId;
             Type = type;
             Lane = lane;
-            RealTimeSpawnTime = realTimeSpawnTime;
+            SpawnTime = spawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
         }

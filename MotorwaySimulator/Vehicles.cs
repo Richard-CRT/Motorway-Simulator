@@ -326,25 +326,22 @@ namespace MotorwaySimulator
         /// The method that generates the size of the vehicle at creation time given the vehicle type
         /// </summary>
         /// <param name="vehicleType">The enum type of the vehicle that is being generated</param>
-        public void GenerateSize(VehicleTypes vehicleType)
+        public double GenerateSize(VehicleTypes vehicleType)
         {
             // Generate the plus or minus speed variation for this vehicle
             double lengthVariation = (MainForm.RandomGenerator.NextDouble() * MainForm.VehicleParameters[vehicleType].LengthVariation * 2) - MainForm.VehicleParameters[vehicleType].LengthVariation;
 
             // Calculate the length of this vehicle
             double length = MainForm.VehicleParameters[vehicleType].Length + lengthVariation;
-            
-            // Assign the length and width of this vehicle
-            VehicleLengthMetres = length;
-            VehicleWidthPixels = MainForm.VehicleWidthPixels;
-            VehicleLengthPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
+
+            return length;
         }
 
         /// <summary>
         /// he method that generates the desired speed of the vehicle at creation time given the vehicle type
         /// </summary>
         /// <param name="vehicleType">The enum type of the vehicle that is being generated</param>
-        public void GenerateDesiredSpeed(VehicleTypes vehicleType)
+        public int GenerateDesiredSpeed(VehicleTypes vehicleType)
         {
             // Generate the plus or minus speed variation for this vehicle
             double speedVariation = (MainForm.RandomGenerator.NextDouble() * MainForm.VehicleParameters[vehicleType].DesiredSpeedVariation * 2) - MainForm.VehicleParameters[vehicleType].DesiredSpeedVariation;
@@ -352,9 +349,7 @@ namespace MotorwaySimulator
             // Calculate the desired speed of this vehicle 
             int speedMetresHour = (int) Math.Round(MainForm.VehicleParameters[vehicleType].DesiredSpeed + speedVariation,0);
 
-            // Assign the desired speed and actual speed of this vehicle
-            DesiredSpeedMetresHour = speedMetresHour;
-            ActualSpeedMetresHour = speedMetresHour;
+            return speedMetresHour;
         }
 
         #endregion
@@ -375,7 +370,9 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public Car (MotorwaySimulatorForm mainForm, int vehicleId)
+        /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
+        /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
+        public Car (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -387,11 +384,36 @@ namespace MotorwaySimulator
             LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             ParentLane = null;
 
-            // Generate the size of the vehicle
-            GenerateSize(VehicleTypes.Car);
+            double length;
+            if (predeterminedVehicleLength == 0)
+            {
+                // Generate the size of the vehicle
+                length = GenerateSize(VehicleTypes.Car);
+            }
+            else
+            {
+                length = predeterminedVehicleLength;
+            }
 
-            // Generate the desired speed of the vehicle
-            GenerateDesiredSpeed(VehicleTypes.Car);
+            // Assign the length and width of this vehicle
+            VehicleLengthMetres = length;
+            VehicleWidthPixels = MainForm.VehicleWidthPixels;
+            VehicleLengthPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
+
+            double speedMetresHour;
+            if (predeterminedDesiredSpeedMetresHour == 0)
+            {
+                // Generate the desired speed of the vehicle
+                speedMetresHour = GenerateDesiredSpeed(VehicleTypes.Car);
+            }
+            else
+            {
+                speedMetresHour = predeterminedDesiredSpeedMetresHour;
+            }
+
+            // Assign the desired speed and actual speed of this vehicle
+            DesiredSpeedMetresHour = speedMetresHour;
+            ActualSpeedMetresHour = speedMetresHour;
 
             // Offset the vehicle so the end of the stopping distance is at the beginning of the road
             double stoppingDistanceLength = mainForm.StoppingDistance(DesiredSpeedMetresHour);
@@ -415,7 +437,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public LGV (MotorwaySimulatorForm mainForm, int vehicleId)
+        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -427,11 +449,32 @@ namespace MotorwaySimulator
             LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             ParentLane = null;
 
-            // Generate the size of the vehicle
-            GenerateSize(VehicleTypes.LGV);
+            double length;
+            if (predeterminedVehicleLength == 0)
+            {
+                // Generate the size of the vehicle
+                length = GenerateSize(VehicleTypes.LGV);
+            }
+            else
+            {
+                length = predeterminedVehicleLength;
+            }
 
-            // Generate the desired speed of the vehicle
-            GenerateDesiredSpeed(VehicleTypes.LGV);
+            // Assign the length and width of this vehicle
+            VehicleLengthMetres = length;
+            VehicleWidthPixels = MainForm.VehicleWidthPixels;
+            VehicleLengthPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
+
+            double speedMetresHour;
+            if (predeterminedDesiredSpeedMetresHour == 0)
+            {
+                // Generate the desired speed of the vehicle
+                speedMetresHour = GenerateDesiredSpeed(VehicleTypes.LGV);
+            }
+            else
+            {
+                speedMetresHour = predeterminedDesiredSpeedMetresHour;
+            }
 
             // Offset the vehicle so the end of the stopping distance is at the beginning of the road
             double stoppingDistanceLength = mainForm.StoppingDistance(DesiredSpeedMetresHour);
@@ -455,7 +498,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public HGV (MotorwaySimulatorForm mainForm, int vehicleId)
+        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -467,11 +510,32 @@ namespace MotorwaySimulator
             LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             ParentLane = null;
 
-            // Generate the size of the vehicle
-            GenerateSize(VehicleTypes.HGV);
+            double length;
+            if (predeterminedVehicleLength == 0)
+            {
+                // Generate the size of the vehicle
+                length = GenerateSize(VehicleTypes.HGV);
+            }
+            else
+            {
+                length = predeterminedVehicleLength;
+            }
 
-            // Generate the desired speed of the vehicle
-            GenerateDesiredSpeed(VehicleTypes.HGV);
+            // Assign the length and width of this vehicle
+            VehicleLengthMetres = length;
+            VehicleWidthPixels = MainForm.VehicleWidthPixels;
+            VehicleLengthPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
+
+            double speedMetresHour;
+            if (predeterminedDesiredSpeedMetresHour == 0)
+            {
+                // Generate the desired speed of the vehicle
+                speedMetresHour = GenerateDesiredSpeed(VehicleTypes.HGV);
+            }
+            else
+            {
+                speedMetresHour = predeterminedDesiredSpeedMetresHour;
+            }
 
             // Offset the vehicle so the end of the stopping distance is at the beginning of the road
             double stoppingDistanceLength = mainForm.StoppingDistance(DesiredSpeedMetresHour);
@@ -495,7 +559,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public Bus (MotorwaySimulatorForm mainForm, int vehicleId)
+        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -507,11 +571,32 @@ namespace MotorwaySimulator
             LastTimerValue = mainForm.Timer.ElapsedMilliseconds;
             ParentLane = null;
 
-            // Generate the size of the vehicle
-            GenerateSize(VehicleTypes.Bus);
+            double length;
+            if (predeterminedVehicleLength == 0)
+            {
+                // Generate the size of the vehicle
+                length = GenerateSize(VehicleTypes.Bus);
+            }
+            else
+            {
+                length = predeterminedVehicleLength;
+            }
 
-            // Generate the desired speed of the vehicle
-            GenerateDesiredSpeed(VehicleTypes.Bus);
+            // Assign the length and width of this vehicle
+            VehicleLengthMetres = length;
+            VehicleWidthPixels = MainForm.VehicleWidthPixels;
+            VehicleLengthPixels = (int)Math.Round(MainForm.MetresToPixels(length), 0);
+
+            double speedMetresHour;
+            if (predeterminedDesiredSpeedMetresHour == 0)
+            {
+                // Generate the desired speed of the vehicle
+                speedMetresHour = GenerateDesiredSpeed(VehicleTypes.Bus);
+            }
+            else
+            {
+                speedMetresHour = predeterminedDesiredSpeedMetresHour;
+            }
 
             // Offset the vehicle so the end of the stopping distance is at the beginning of the road
             double stoppingDistanceLength = mainForm.StoppingDistance(DesiredSpeedMetresHour);
