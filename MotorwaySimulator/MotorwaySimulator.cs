@@ -171,7 +171,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The random number generator used for all elements of randomness in the simulation (random is a system class not created by me)
         /// </summary>
-        public Random;
+        public Random RandomGenerator;
 
 
         /* Lanes and Vehicles */
@@ -722,6 +722,45 @@ namespace MotorwaySimulator
         #endregion
 
         #region Supportive Methods
+
+        /// <summary>
+        /// Given a value of units per hour and time elapsed in milliseconds this method will calculate the units for the tick
+        /// </summary>
+        /// <param name="unitsHour">The units per hour to be converted to per tick</param>
+        /// <param name="tickLength">The lenght of the tick in milliseconds</param>
+        /// <returns>Returns the units per tick</returns>
+        public double PerHourToPerTick(double unitsHour, double tickLength)
+        {
+            if (tickLength > 0)
+            {
+                // The conversion 60 * 60 * 1000 represents hours -> minutes -> seconds -> milliseconds
+                return (unitsHour * tickLength) / (60 * 60 * 1000);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// This method converts from metres to pixels using the MetresToPixelsScalingFactor constant
+        /// </summary>
+        /// <param name="metres">The number of metres to be converted to pixels</param>
+        /// <returns>The number of pixels for each metre</returns>
+        public double MetresToPixels(double metres)
+        {
+            return metres * MotorwaySimulatorForm.MetresToPixelsScalingFactor;
+        }
+
+        /// <summary>
+        /// This method calculates the stopping distance in metres given a speed in metres per hour (using a time period of 1s to stop in) using the StoppingTime constant
+        /// </summary>
+        /// <param name="metresHour">The number of metres per hour to be used in the calculation</param>
+        /// <returns>The stopping distance in metres</returns>
+        public double StoppingDistance(double metresHour)
+        {
+            return (metresHour * MotorwaySimulatorForm.StoppingTime) / (60 * 60);
+        }
 
         /// <summary>
         /// Sums together the spawn probabilities from the form inputs
@@ -1295,45 +1334,6 @@ namespace MotorwaySimulator
                 LaneControl lane = Lanes[laneIndex];
                 lane.UpdateTreeNode();
             }
-        }
-
-        /// <summary>
-        /// Given a value of units per hour and time elapsed in milliseconds this method will calculate the units for the tick
-        /// </summary>
-        /// <param name="unitsHour">The units per hour to be converted to per tick</param>
-        /// <param name="tickLength">The lenght of the tick in milliseconds</param>
-        /// <returns>Returns the units per tick</returns>
-        public double PerHourToPerTick(double unitsHour, double tickLength)
-        {
-            if (tickLength > 0)
-            {
-                // The conversion 60 * 60 * 1000 represents hours -> minutes -> seconds -> milliseconds
-                return (unitsHour * tickLength) / (60 * 60 * 1000);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// This method converts from metres to pixels using the MetresToPixelsScalingFactor constant
-        /// </summary>
-        /// <param name="metres">The number of metres to be converted to pixels</param>
-        /// <returns>The number of pixels for each metre</returns>
-        public double MetresToPixels(double metres)
-        {
-            return metres * MotorwaySimulatorForm.MetresToPixelsScalingFactor;
-        }
-
-        /// <summary>
-        /// This method calculates the stopping distance in metres given a speed in metres per hour (using a time period of 1s to stop in) using the StoppingTime constant
-        /// </summary>
-        /// <param name="metresHour">The number of metres per hour to be used in the calculation</param>
-        /// <returns>The stopping distance in metres</returns>
-        public double StoppingDistance(double metresHour)
-        {
-            return (metresHour * MotorwaySimulatorForm.StoppingTime) / (60 * 60);
         }
 
         #endregion
