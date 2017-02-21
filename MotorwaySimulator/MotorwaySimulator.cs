@@ -189,7 +189,7 @@ namespace MotorwaySimulator
         /* State */
 
         /// <summary>
-        /// Contains the state of the simulation Started, Stopped or Paused
+        /// Contains the state of the simulation Started, Stopped or Paused (see the SimulationStates enumerator)
         /// </summary>
         private SimulationStates SimulationState;
         /// <summary>
@@ -802,10 +802,10 @@ namespace MotorwaySimulator
             {
                 // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Probability
 
-                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
+                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarSpawnProbability.Value/100)) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVSpawnProbability.Value/100)) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVSpawnProbability.Value/100)) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusSpawnProbability.Value/100)) }
             };
 
             ActiveLaneCount = LaneCount;
@@ -1148,7 +1148,7 @@ namespace MotorwaySimulator
                 // Update the vehicle average speed output
                 if (SelectedVehicle.SuccessfulSpawn)
                 {
-                    LabelVehicleAverageSpeed.Text = Math.Round(((SelectedVehicle.ExactProgressMetres+SelectedVehicle.OriginalDistanceOffsetMetres)/1000) / lifetime.TotalHours, 2) + "kph";
+                    LabelVehicleAverageSpeed.Text = Math.Round(SelectedVehicle.AverageSpeedMetresHour/1000, 2) + "kph";
                 }
                 else
                 {

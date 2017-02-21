@@ -21,7 +21,7 @@ namespace MotorwaySimulator
         /// </summary>
         public int VehicleId;
         /// <summary>
-        /// The enum type of the vehicle
+        /// The enum type of the vehicle (see the VehicleTypes enumerator of MotorwaySimulator.cs)
         /// </summary>
         public VehicleTypes VehicleType;
         /// <summary>
@@ -117,7 +117,7 @@ namespace MotorwaySimulator
             }
         }
         /// <summary>
-        /// The congestion state of the vehicle
+        /// The congestion state of the vehicle (see the CongestionStates enumerator of MotorwaySimulator.cs)
         /// </summary>
         public CongestionStates Congestion
         {
@@ -152,19 +152,19 @@ namespace MotorwaySimulator
         /// <summary>
         /// The starting offset so that the vehicle stopping distance starts at the beginning of the road in metres
         /// </summary>
-        public double OriginalDistanceOffsetMetres;
+        protected double OriginalDistanceOffsetMetres;
 
 
         /* Parent Objects */
 
         /// <summary>
-        /// The main form object which allows access to the main form's methods, properties and controls
-        /// </summary>
-        public MotorwaySimulatorForm MainForm;
-        /// <summary>
         /// The object representing the parent lane which allows access to the lane's methods, properties and controls
         /// </summary>
         public LaneControl ParentLane;
+        /// <summary>
+        /// The main form object which allows access to the main form's methods, properties and controls
+        /// </summary>
+        protected MotorwaySimulatorForm MainForm;
 
         #endregion
 
