@@ -213,13 +213,13 @@ namespace MotorwaySimulator
 
         /// <summary>
         /// This is the constructor for the main form and the primary class.
-        /// It initialises the auto-generated form controls, and all variables that need an initial value.
+        /// It initialises the auto-generated form controls (see MotorwaySimulator.Designer.cs), and all variables that need an initial value.
         /// It also updates the labels of the form that are paired to track bars so the value can be seen.
         /// Finally, it calculates the LaneMargin and VehicleWidth in pixels from the constants.
         /// </summary>
         public MotorwaySimulatorForm()
         {
-            // (Auto-generated) Intialises all the form controls in the form (see MotorwaySimulator.Designer.cs)
+            // Intialises all the auto-generated form controls in the form (see MotorwaySimulator.Designer.cs)
             InitializeComponent();
 
             // Initialise variables
