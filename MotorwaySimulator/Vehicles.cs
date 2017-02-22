@@ -152,7 +152,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The starting offset so that the vehicle stopping distance starts at the beginning of the road in metres
         /// </summary>
-        protected double OriginalDistanceOffsetMetres;
+        private double OriginalDistanceOffsetMetres;
 
 
         /* Parent Objects */
@@ -164,7 +164,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The main form object which allows access to the main form's methods, properties and controls
         /// </summary>
-        protected MotorwaySimulatorForm MainForm;
+        private MotorwaySimulatorForm MainForm;
 
         #endregion
 
