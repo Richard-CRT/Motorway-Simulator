@@ -331,7 +331,7 @@ namespace CustomControls
                 int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleLengthPixels;
 
                 // Specification requires vehicles changing to lane N-1 must be able to stay at current speed. If the vehicle from the other lane is allowed to overlap then in theory
-                // it must change speed to match that of the next vehicle during the next tick. That is against the specification, so the vehicle from the other lane cannot overlap
+                // it must slow down to match the speed of the next vehicle during the next tick. That is against the specification, so the vehicle from the other lane cannot overlap
 
                 // Since all vehicles will strive to be in lane N-1, if a vehicle joins lane N+1 to overtake, it will immediately rejoin lane N. To combat this an extra 10% of the
                 // stopping distance space will be required to change lane to N-1
