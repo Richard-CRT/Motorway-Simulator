@@ -139,7 +139,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The last timer value in milliseconds used to calculate delta-time for the vehicle arrival algorithm
         /// </summary>
-        private long LastArrivalTimerValue;
+        private long LastArrivalStopwatchTimerValue;
         /// <summary>
         /// The chosen variation for the next vehicle spawn
         /// </summary>
@@ -151,7 +151,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// Provides the realtime time measuring capability (stopwatch is a system class not created by me)
         /// </summary>
-        public Stopwatch Timer;
+        public Stopwatch StopwatchTimer;
         /// <summary>
         /// The scaling factor for all delta-times in the simulation - Allows for slowing down the simulation realtime
         /// </summary>
@@ -163,7 +163,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
         /// </summary>
-        private long LastTimerValue;
+        private long LastStopwatchTimerValue;
 
 
         /* Random */
@@ -224,7 +224,7 @@ namespace MotorwaySimulator
 
             // Initialise variables
             DebugMode = true;
-            Timer = new Stopwatch();
+            StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
             Lanes = new List<LaneControl>();
@@ -459,7 +459,7 @@ namespace MotorwaySimulator
         private void ButtonPause_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            Timer.Stop();
+            StopwatchTimer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -480,7 +480,7 @@ namespace MotorwaySimulator
         private void ButtonStop_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            Timer.Stop();
+            StopwatchTimer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -541,9 +541,9 @@ namespace MotorwaySimulator
             CheckVehicle();
 
             // Increment the scaled time passed by the scaled elapsed time
-            long tempTime = Timer.ElapsedMilliseconds;
-            long elapsedTime = tempTime - LastTimerValue;
-            LastTimerValue = tempTime;
+            long tempTime = StopwatchTimer.ElapsedMilliseconds;
+            long elapsedTime = tempTime - LastStopwatchTimerValue;
+            LastStopwatchTimerValue = tempTime;
             double scaledElapsedTime = elapsedTime * TimeScale;
             ScaledTimePassed += scaledElapsedTime;
 
@@ -855,10 +855,10 @@ namespace MotorwaySimulator
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
-            LastTimerValue = 0;
-            LastArrivalTimerValue = 0;
+            LastStopwatchTimerValue = 0;
+            LastArrivalStopwatchTimerValue = 0;
             ScaledTimePassed = 0;
-            Timer.Restart();
+            StopwatchTimer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
             Road.Visible = true;
@@ -876,7 +876,7 @@ namespace MotorwaySimulator
         private void ResumeSimulation()
         {
             // Resume the stopwatch
-            Timer.Start();
+            StopwatchTimer.Start();
 
             // Resume the form ticks
             FormTick.Enabled = true;
@@ -964,19 +964,19 @@ namespace MotorwaySimulator
                 }
 
                 // Calculate the delta time since the last check then scale it
-                long tempTime = Timer.ElapsedMilliseconds;
-                long elapsedTime = tempTime - LastArrivalTimerValue;
+                long tempTime = StopwatchTimer.ElapsedMilliseconds;
+                long elapsedTime = tempTime - LastArrivalStopwatchTimerValue;
                 double scaledElapsedTime = elapsedTime * TimeScale;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
-                // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == 0)
+                // Lower the trigger time by 1% since the stopwatch has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
+                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalStopwatchTimerValue == 0)
                 {
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
                     
-                    // Update the last arrival timer value so delta time can be calculated next check
-                    LastArrivalTimerValue = tempTime;
+                    // Update the last arrival StopwatchTimer value so delta time can be calculated next check
+                    LastArrivalStopwatchTimerValue = tempTime;
 
                     // Add a new vehicle
                     AddVehicle();
