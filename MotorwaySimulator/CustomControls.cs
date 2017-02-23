@@ -328,7 +328,7 @@ namespace CustomControls
             if (nextVehicle != null)
             {
                 // Calculate the stopping distance of the vehicle from the other lane
-                int vehicleFromOtherLaneProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+                int vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
 
                 // Calculate the location of the back of the next vehicle
                 int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleLengthPixels;
@@ -344,7 +344,7 @@ namespace CustomControls
                     modifier = 1.1;
                 }
 
-                if (vehicleFromOtherLane.ProgressPixels + (vehicleFromOtherLaneProjectedStopppingDistancePixels * modifier) < backOfNextVehicle)
+                if (vehicleFromOtherLane.ProgressPixels + (vehicleFromOtherLaneProjectedStoppingDistancePixels * modifier) < backOfNextVehicle)
                 {
                     // The stopping distance of the vehicle from the other lane does not overlap with the next vehicle
 
@@ -389,13 +389,13 @@ namespace CustomControls
                 if (previousVehicle.ActualSpeedMetresHour > vehicleFromOtherLane.ActualSpeedMetresHour)
                 {
                     // Calculate the stopping distance of the vehicle from the other lane
-                    int vehicleFromOtherLaneProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+                    int vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
 
                     // The vehicle behind the vehicle from the other lane is travelling faster than the vehicle from the other lane
                     // Therefore the vehicle behind the vehicle from the other lane can slow down, meaning the stopping distance can overlap
 
                     // Calculate the overlap allowed in pixels
-                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = previousVehicleStoppingDistancePixels - vehicleFromOtherLaneProjectedStopppingDistancePixels;
+                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = previousVehicleStoppingDistancePixels - vehicleFromOtherLaneProjectedStoppingDistancePixels;
 
                     if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
                     {
@@ -409,7 +409,7 @@ namespace CustomControls
                         // The stopping distance overlaps by more than the previous vehicle can compensate for
 
                         // Return that the vehicle from the other lane is not clear of the vehicle behind it
-                            return false;
+                        return false;
                     }
                 }
                 else
@@ -456,7 +456,7 @@ namespace CustomControls
                 // There is actually a vehicle on the lane
 
                 // Calculate the stopping distance of the new vehicle
-                int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(newVehicle.DesiredSpeedMetresHour)));
+                int projectedDesiredStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(newVehicle.DesiredSpeedMetresHour)));
 
                 // Calculate the location of the back of the last vehicle on the lane
                 int backOfNextVehicle = lastVehicle.ProgressPixels - lastVehicle.VehicleLengthPixels;
@@ -465,7 +465,7 @@ namespace CustomControls
                 {
                     // Last vehicle on the lan travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away, i.e. no stopping distance overlap is allowed
-                    if (newVehicle.ProgressPixels + projectedDesiredStopppingDistancePixels > backOfNextVehicle)
+                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels > backOfNextVehicle)
                     {
                         // Stopping distance overlaps the back of the last vehicle on the lane
 
@@ -479,9 +479,9 @@ namespace CustomControls
                     // Therefore the vehicle behind the vehicle from the other lane can slow down, meaning the stopping distance can overlap
 
                     // Calculate the overlap allowed in pixels
-                    int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(lastVehicle.ActualSpeedMetresHour)));
+                    int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStoppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(lastVehicle.ActualSpeedMetresHour)));
                     
-                    if (newVehicle.ProgressPixels + projectedDesiredStopppingDistancePixels > backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
+                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels > backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
                     {
                         // The projected stopping distance of the new vehicle overlaps with the last vehicle on the lane
 
