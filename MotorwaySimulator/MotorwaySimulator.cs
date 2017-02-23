@@ -525,9 +525,9 @@ namespace MotorwaySimulator
         /// This is the underlying update structure of the simulation. Everytime the FormTick form control 'ticks' (every 15ms) this function is called.
         /// Firstly it checks to see if a new vehicle should be spawned.
         /// Secondly, it increments the scaled time passed by the scaled elapsed miliseconds since the last tick
-        /// Thirdly, it individually ticks each vehicle's lane handling method in order of progress along the road.
+        /// Thirdly, it individually ticks each vehicle's lane and speed handling method in order of progress along the road.
         /// Then, it individually ticks each vehicle's movement handling method in order of progress along the road.
-        ///     After ticking each vehicle's movement handling method, it checks if the vehicle is having a visible effect on any other vehicles on the road.
+        /// Then, it individually checks if each vehicle is having an effect on any other visible vehicles on the road in order of progress along the road
         /// If the vehicles behind in the lane to the left, right and the same as the current vehicle are out of sight, the vehicle is deemed to be no longer affecting any vehicles and removed from the road and vehicles TreeView.
         ///     A new entry is also created for the vehicle in the finished vehicle TreeView.
         /// Penultimately, the method marks each lane for repainting on the form as the vehicle's positions have changed.
@@ -559,10 +559,13 @@ namespace MotorwaySimulator
             {
                 // Tick the movment handling method of each vehicle by location
                 vehicle.MovementTick();
-                
+            }
+            
+            foreach (Vehicle vehicle in OrderedVehicles)
+            {
                 if (!vehicle.InSight)
                 {
-                    // The vehicle is still in sight
+                    // The vehicle is not in sight
 
                     // Get the object of the vehicle behind the current vehicle in the same lane
                     Vehicle previousVehicle = vehicle.ParentLane.PreviousVehicle(vehicle);
@@ -768,7 +771,7 @@ namespace MotorwaySimulator
         /// <returns>The sum of the spawn probabilities from the form inputs</returns>
         private int GetTotalSpawnProbability()
         {
-            return (int)(NumericCarSpawnProbability.Value + NumericLGVSpawnProbability.Value + NumericHGVSpawnProbability.Value + NumericBusSpawnProbability.Value); // drop the decimal parts as the values should be integers despite the decimal type
+            return (int)(NumericCarSpawnProbability.Value + NumericLGVSpawnProbability.Value + NumericHGVSpawnProbability.Value + NumericBusSpawnProbability.Value);
         }
 
         /// <summary>
