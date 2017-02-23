@@ -395,7 +395,7 @@ namespace CustomControls
                     // Therefore the vehicle behind the vehicle from the other lane can slow down, meaning the stopping distance can overlap
 
                     // Calculate the overlap allowed in pixels
-                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0) - vehicleFromOtherLaneProjectedStopppingDistancePixels;
+                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = previousVehicleStoppingDistancePixels - vehicleFromOtherLaneProjectedStopppingDistancePixels;
 
                     if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
                     {
