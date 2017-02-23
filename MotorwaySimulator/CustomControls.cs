@@ -465,7 +465,7 @@ namespace CustomControls
                 {
                     // Last vehicle on the lan travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away, i.e. no stopping distance overlap is allowed
-                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels > backOfNextVehicle)
+                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels >= backOfNextVehicle)
                     {
                         // Stopping distance overlaps the back of the last vehicle on the lane
 
@@ -481,7 +481,7 @@ namespace CustomControls
                     // Calculate the overlap allowed in pixels
                     int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStoppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(lastVehicle.ActualSpeedMetresHour)));
                     
-                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels > backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
+                    if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
                     {
                         // The projected stopping distance of the new vehicle overlaps with the last vehicle on the lane
 

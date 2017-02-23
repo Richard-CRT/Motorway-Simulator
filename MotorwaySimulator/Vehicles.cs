@@ -193,7 +193,7 @@ namespace MotorwaySimulator
 
                 if (ProgressPixels + projectedActualStoppingDistancePixels >= backOfNextVehicle)
                 {
-                    // The stopping distance of this vehicle at it's current speed overlaps the back of the next vehicle
+                    // The stopping distance of this vehicle at its current speed overlaps the back of the next vehicle
 
                     if (nextVehicle.ActualSpeedMetresHour < ActualSpeedMetresHour)
                     {
@@ -318,7 +318,7 @@ namespace MotorwaySimulator
                 AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
             }
 
-            if (ExactProgressMetres >= MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
+            if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
             {
                 // The vehicle is not within the visible bounds of the road
 
