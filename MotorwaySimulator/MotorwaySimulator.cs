@@ -139,7 +139,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The last timer value in milliseconds used to calculate delta-time for the vehicle arrival algorithm
         /// </summary>
-        private long LastArrivalStopwatchTimerValue;
+        private long LastArrivalTimerValue;
         /// <summary>
         /// The chosen variation for the next vehicle spawn
         /// </summary>
@@ -151,7 +151,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// Provides the realtime time measuring capability (stopwatch is a system class not created by me)
         /// </summary>
-        public Stopwatch StopwatchTimer;
+        public Stopwatch Timer;
         /// <summary>
         /// The scaling factor for all delta-times in the simulation - Allows for slowing down the simulation realtime
         /// </summary>
@@ -163,7 +163,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
         /// </summary>
-        private long LastStopwatchTimerValue;
+        private long LastTimerValue;
 
 
         /* Random */
@@ -189,7 +189,7 @@ namespace MotorwaySimulator
         /* State */
 
         /// <summary>
-        /// Contains the state of the simulation Started, Stopped or Paused (see the SimulationStates enumerator)
+        /// Contains the state of the simulation Started, Stopped or Paused
         /// </summary>
         private SimulationStates SimulationState;
         /// <summary>
@@ -213,18 +213,18 @@ namespace MotorwaySimulator
 
         /// <summary>
         /// This is the constructor for the main form and the primary class.
-        /// It initialises the auto-generated form controls (see MotorwaySimulator.Designer.cs), and all variables that need an initial value.
+        /// It initialises the auto-generated form controls, and all variables that need an initial value.
         /// It also updates the labels of the form that are paired to track bars so the value can be seen.
         /// Finally, it calculates the LaneMargin and VehicleWidth in pixels from the constants.
         /// </summary>
         public MotorwaySimulatorForm()
         {
-            // Intialises all the auto-generated form controls in the form (see MotorwaySimulator.Designer.cs)
+            // (Auto-generated) Intialises all the form controls in the form (see MotorwaySimulator.Designer.cs)
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = true;
-            StopwatchTimer = new Stopwatch();
+            DebugMode = false;
+            Timer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
             Lanes = new List<LaneControl>();
@@ -459,7 +459,7 @@ namespace MotorwaySimulator
         private void ButtonPause_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            StopwatchTimer.Stop();
+            Timer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -480,7 +480,7 @@ namespace MotorwaySimulator
         private void ButtonStop_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            StopwatchTimer.Stop();
+            Timer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -541,9 +541,9 @@ namespace MotorwaySimulator
             CheckVehicle();
 
             // Increment the scaled time passed by the scaled elapsed time
-            long tempTime = StopwatchTimer.ElapsedMilliseconds;
-            long elapsedTime = tempTime - LastStopwatchTimerValue;
-            LastStopwatchTimerValue = tempTime;
+            long tempTime = Timer.ElapsedMilliseconds;
+            long elapsedTime = tempTime - LastTimerValue;
+            LastTimerValue = tempTime;
             double scaledElapsedTime = elapsedTime * TimeScale;
             ScaledTimePassed += scaledElapsedTime;
 
@@ -802,10 +802,10 @@ namespace MotorwaySimulator
             {
                 // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Probability
 
-                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarSpawnProbability.Value/100)) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVSpawnProbability.Value/100)) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVSpawnProbability.Value/100)) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusSpawnProbability.Value/100)) }
+                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
             };
 
             ActiveLaneCount = LaneCount;
@@ -841,7 +841,11 @@ namespace MotorwaySimulator
                 finishedVehiclesLaneNode = new TreeNode("Lane " + (lane.LaneId + 1));
                 Road.Controls.Add(lane);
                 Lanes.Add(lane);
-                TreeViewFinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
+
+
+
+
+                FinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
             
@@ -851,14 +855,14 @@ namespace MotorwaySimulator
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 300, 112000, 6);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 6);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
-            LastStopwatchTimerValue = 0;
-            LastArrivalStopwatchTimerValue = 0;
+            LastTimerValue = 0;
+            LastArrivalTimerValue = 0;
             ScaledTimePassed = 0;
-            StopwatchTimer.Restart();
+            Timer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
             Road.Visible = true;
@@ -876,7 +880,7 @@ namespace MotorwaySimulator
         private void ResumeSimulation()
         {
             // Resume the stopwatch
-            StopwatchTimer.Start();
+            Timer.Start();
 
             // Resume the form ticks
             FormTick.Enabled = true;
@@ -919,27 +923,38 @@ namespace MotorwaySimulator
                 for (int instructionIndex = 0; instructionIndex < DebugModeInstructions.Count;)
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
-                    if (ScaledTimePassed >= instruction.SpawnTime)
+                    if (Timer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
                     {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
                         switch (instruction.Type)
                         {
                             case VehicleTypes.Car:
-                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new Car(this, instruction.VehicleId);
                                 break;
                             case VehicleTypes.LGV:
-                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new LGV(this, instruction.VehicleId);
                                 break;
                             case VehicleTypes.HGV:
-                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new HGV(this, instruction.VehicleId);
                                 break;
                             case VehicleTypes.Bus:
-                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new Bus(this, instruction.VehicleId);
                                 break;
                             default:
                                 vehicle = null;
                                 break;
+                        }
+
+                        // Setup the initial values
+                        if (instruction.DesiredSpeedMetresHour != 0)
+                        {
+                            vehicle.DesiredSpeedMetresHour = instruction.DesiredSpeedMetresHour;
+                        }
+                        if (instruction.VehicleLength != 0)
+                        {
+                            vehicle.VehicleLengthMetres = instruction.VehicleLength;
+                            vehicle.VehicleLengthPixels = (int)Math.Round(MetresToPixels(instruction.VehicleLength));
                         }
 
                         // Add vehicle to the specified lane
@@ -964,19 +979,19 @@ namespace MotorwaySimulator
                 }
 
                 // Calculate the delta time since the last check then scale it
-                long tempTime = StopwatchTimer.ElapsedMilliseconds;
-                long elapsedTime = tempTime - LastArrivalStopwatchTimerValue;
+                long tempTime = Timer.ElapsedMilliseconds;
+                long elapsedTime = tempTime - LastArrivalTimerValue;
                 double scaledElapsedTime = elapsedTime * TimeScale;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
-                // Lower the trigger time by 1% since the stopwatch has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalStopwatchTimerValue == 0)
+                // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
+                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == 0)
                 {
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
                     
-                    // Update the last arrival StopwatchTimer value so delta time can be calculated next check
-                    LastArrivalStopwatchTimerValue = tempTime;
+                    // Update the last arrival timer value so delta time can be calculated next check
+                    LastArrivalTimerValue = tempTime;
 
                     // Add a new vehicle
                     AddVehicle();
@@ -1137,7 +1152,7 @@ namespace MotorwaySimulator
                 // Update the vehicle average speed output
                 if (SelectedVehicle.SuccessfulSpawn)
                 {
-                    LabelVehicleAverageSpeed.Text = Math.Round(SelectedVehicle.AverageSpeedMetresHour/1000, 2) + "kph";
+                    LabelVehicleAverageSpeed.Text = Math.Round(((SelectedVehicle.ExactProgressMetres+SelectedVehicle.OriginalDistanceOffsetMetres)/1000) / lifetime.TotalHours, 2) + "kph";
                 }
                 else
                 {
@@ -1411,9 +1426,9 @@ namespace MotorwaySimulator
         public LaneControl Lane;
 
         /// <summary>
-        /// The time in the simulation to spawn the vehicle
+        /// The time in realtime to spawn the vehicle
         /// </summary>
-        public double SpawnTime;
+        public long RealTimeSpawnTime;
 
         /// <summary>
         /// The desired speed in metres per hour of the vehicle to spawn
@@ -1433,15 +1448,15 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to spawn</param>
         /// <param name="type">The enum type of the vehicle to spawn</param>
         /// <param name="lane">The lane of the vehicle to spawn in</param>
-        /// <param name="spawnTime">The time in the simulation to spawn the vehicle</param>
-        /// <param name="desiredSpeedMetresHour">The (optional, default value = 0) desired speed in metres per hour of the vehicle to spawn</param>
-        /// <param name="vehicleLength">The (optional, default value = 0) length of the vehicle to spawn in metres</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, double spawnTime, double desiredSpeedMetresHour = 0, int vehicleLength = 0)
+        /// <param name="realTimeSpawnTime">The time in realtime to spawn the vehicle</param>
+        /// <param name="desiredSpeedMetresHour">The desired speed in metres per hour of the vehicle to spawn</param>
+        /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, int vehicleLength = 0)
         {
             VehicleId = vehicleId;
             Type = type;
             Lane = lane;
-            SpawnTime = spawnTime;
+            RealTimeSpawnTime = realTimeSpawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
         }

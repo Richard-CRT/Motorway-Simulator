@@ -28,7 +28,7 @@ namespace CustomControls
         /* TreeView */
         
         /// <summary>
-        /// The TreeNode for this lane in the vehicles TreeView on the main form
+        /// The TreeNode for this lane in the vehicles TreeView on the main form (TreeNode is a system class that I have not created)
         /// </summary>
         public TreeNode LaneNode;
 
@@ -36,7 +36,7 @@ namespace CustomControls
         /* Contents of the lane */
 
         /// <summary>
-        /// The list of vehicles on this lane of the road
+        /// The dynamic list of vehicles on this lane of the road
         /// </summary>
         public List<Vehicle> Vehicles;
         /// <summary>
@@ -84,7 +84,10 @@ namespace CustomControls
         #region Methods
 
         /// <summary>
-        /// This method will calculate which vehicles need to be added/removed from this lanes TreeNode in the vehicles TreeView on the main form
+        /// This method will calculate which vehicles need to be added/removed from this lanes TreeNode in the vehicles 
+        /// 
+        /// 
+        /// on the main form
         /// </summary>
         public void UpdateTreeNode()
         {
@@ -203,7 +206,7 @@ namespace CustomControls
                 }
             }
 
-            // Update the old list of vehicles so that the method can compare next tick
+            // Update the old dynamic list of vehicles so that the method can compare next tick
             OldOrderedLaneVehicles = orderedLaneVehicles;
         }
 
@@ -331,7 +334,7 @@ namespace CustomControls
                 int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleLengthPixels;
 
                 // Specification requires vehicles changing to lane N-1 must be able to stay at current speed. If the vehicle from the other lane is allowed to overlap then in theory
-                // it must slow down to match the speed of the next vehicle during the next tick. That is against the specification, so the vehicle from the other lane cannot overlap
+                // it must change speed to match that of the next vehicle during the next tick. That is against the specification, so the vehicle from the other lane cannot overlap
 
                 // Since all vehicles will strive to be in lane N-1, if a vehicle joins lane N+1 to overtake, it will immediately rejoin lane N. To combat this an extra 10% of the
                 // stopping distance space will be required to change lane to N-1
