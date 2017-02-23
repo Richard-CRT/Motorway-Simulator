@@ -151,7 +151,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// Provides the realtime time measuring capability (stopwatch is a system class not created by me)
         /// </summary>
-        public Stopwatch Timer;
+        public Stopwatch StopwatchTimer;
         /// <summary>
         /// The scaling factor for all delta-times in the simulation - Allows for slowing down the simulation realtime
         /// </summary>
@@ -224,7 +224,7 @@ namespace MotorwaySimulator
 
             // Initialise variables
             DebugMode = false;
-            Timer = new Stopwatch();
+            StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
             Lanes = new List<LaneControl>();
@@ -459,7 +459,7 @@ namespace MotorwaySimulator
         private void ButtonPause_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            Timer.Stop();
+            StopwatchTimer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -480,7 +480,7 @@ namespace MotorwaySimulator
         private void ButtonStop_Click(object sender, EventArgs e)
         {
             // Pause the stopwatch
-            Timer.Stop();
+            StopwatchTimer.Stop();
             // Pause the form ticks
             FormTick.Enabled = false;
 
@@ -541,7 +541,7 @@ namespace MotorwaySimulator
             CheckVehicle();
 
             // Increment the scaled time passed by the scaled elapsed time
-            long tempTime = Timer.ElapsedMilliseconds;
+            long tempTime = StopwatchTimer.ElapsedMilliseconds;
             long elapsedTime = tempTime - LastTimerValue;
             LastTimerValue = tempTime;
             double scaledElapsedTime = elapsedTime * TimeScale;
@@ -859,7 +859,7 @@ namespace MotorwaySimulator
             LastTimerValue = 0;
             LastArrivalTimerValue = 0;
             ScaledTimePassed = 0;
-            Timer.Restart();
+            StopwatchTimer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
             Road.Visible = true;
@@ -877,7 +877,7 @@ namespace MotorwaySimulator
         private void ResumeSimulation()
         {
             // Resume the stopwatch
-            Timer.Start();
+            StopwatchTimer.Start();
 
             // Resume the form ticks
             FormTick.Enabled = true;
@@ -920,7 +920,7 @@ namespace MotorwaySimulator
                 for (int instructionIndex = 0; instructionIndex < DebugModeInstructions.Count;)
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
-                    if (Timer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
+                    if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
                     {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
@@ -976,7 +976,7 @@ namespace MotorwaySimulator
                 }
 
                 // Calculate the delta time since the last check then scale it
-                long tempTime = Timer.ElapsedMilliseconds;
+                long tempTime = StopwatchTimer.ElapsedMilliseconds;
                 long elapsedTime = tempTime - LastArrivalTimerValue;
                 double scaledElapsedTime = elapsedTime * TimeScale;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
@@ -1149,7 +1149,7 @@ namespace MotorwaySimulator
                 // Update the vehicle average speed output
                 if (SelectedVehicle.SuccessfulSpawn)
                 {
-                    LabelVehicleAverageSpeed.Text = Math.Round(((SelectedVehicle.ExactProgressMetres+SelectedVehicle.OriginalDistanceOffsetMetres)/1000) / lifetime.TotalHours, 2) + "kph";
+                    LabelVehicleAverageSpeed.Text = Math.Round(SelectedVehicle.AverageSpeedMetresHour / 1000, 2) + "kph";
                 }
                 else
                 {
