@@ -380,6 +380,9 @@ namespace CustomControls
 
             if (previousVehicle != null)
             {
+                // Calculate the stopping distance of the vehicle from the other lane
+                int vehicleFromOtherLaneProjectedStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+
                 // Calculate the stopping distance of the vehicle behind the vehicle from the other lane
                 int previousVehicleStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
 
