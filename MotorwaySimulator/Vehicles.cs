@@ -188,6 +188,9 @@ namespace MotorwaySimulator
                 // Calculate the stopping distance of this vehicle at desired speed
                 int projectedDesiredStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(DesiredSpeedMetresHour)), 0);
 
+                // Calculate the stopping distance of this vehicle at its actual speed
+                int projectedActualStopppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(ActualSpeedMetresHour)), 0);
+
                 // Calculate the back of the vehicle ahead of this vehicle
                 int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleLengthPixels;
 
@@ -201,9 +204,9 @@ namespace MotorwaySimulator
                         // Therefore this vehicle can slow down, meaning the stopping distance can overlap
 
                         // Calculate the overlap allowed in pixels
-                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedDesiredStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
+                        int stoppingDistanceChangeByChangingSpeedsPixels = projectedActualStopppingDistancePixels - (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour)));
 
-                        if (ProgressPixels + projectedDesiredStopppingDistancePixels >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
+                        if (ProgressPixels + projectedActualStopppingDistancePixels >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
                         {
                             // Stopping distance overlaps too far past the allowed overlap
 
