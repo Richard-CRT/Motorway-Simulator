@@ -303,10 +303,10 @@ namespace MotorwaySimulator
 
             #region Move Forward
 
-            // Calculate the metres moved since the last tick
+            // Calculate the exact metres moved since the last tick
             double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, scaledElapsedTime);
                 
-            // Move the vehicle by the metres that is has moved since the last tick
+            // Move the vehicle by the exact metres that it has moved since the last tick
             ExactProgressMetres += metresMoved;
             ProgressPixels = (int)Math.Round(MainForm.MetresToPixels(ExactProgressMetres), 0);
 
