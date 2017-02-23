@@ -363,7 +363,7 @@ namespace CustomControls
             {
                 // There is no vehicle in this lane ahead of the vehicle from the other lane
 
-                // Return that the vehicle from the other lane is clear of the (non-existant) next vehicle in this lane
+                // Return that the vehicle from the other lane is clear of the (non-existent) next vehicle in this lane
                 return true;
             }
         }
@@ -406,10 +406,10 @@ namespace CustomControls
                     }
                     else
                     {
-                        // The stopping distance overlaps by too much
+                        // The stopping distance overlaps by more than the previous vehicle can compensate for
 
                         // Return that the vehicle from the other lane is not clear of the vehicle behind it
-                        return false;
+                            return false;
                     }
                 }
                 else
@@ -436,7 +436,7 @@ namespace CustomControls
             {
                 // There is no vehicle in this lane behind the vehicle from the other lane
 
-                // Return that the vehicle from the other lane is clear of the (non-existant) vehicle behind in this lane
+                // Return that the vehicle from the other lane is clear of the (non-existent) vehicle behind in this lane
                 return true;
             }
         }
