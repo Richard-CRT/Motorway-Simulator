@@ -291,32 +291,29 @@ namespace MotorwaySimulator
         /// </summary>
         public void MovementTick()
         {
-            if (InEffect)
-            {
-                // This vehicle does not have a vehicle behind it in the lane to the left, in the lane it is in or in the lane to right which is within the visible bounds of the road
+            // This vehicle does not have a vehicle behind it in the lane to the left, in the lane it is in or in the lane to right which is within the visible bounds of the road
 
-                // Calculate the delta time since the last check then scale it
-                double tempTime = MainForm.ScaledTimePassed;
-                double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
-                LastStopwatchTimerValue = tempTime;
+            // Calculate the delta time since the last check then scale it
+            double tempTime = MainForm.ScaledTimePassed;
+            double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
+            LastStopwatchTimerValue = tempTime;
 
-                // Incrememnt the lifetime by the scaled elapsed time
-                LifetimeMilliseconds += scaledElapsedTime;
+            // Incrememnt the lifetime by the scaled elapsed time
+            LifetimeMilliseconds += scaledElapsedTime;
 
-                #region Move Forward
+            #region Move Forward
 
-                // Calculate the metres moved since the last tick
-                double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, scaledElapsedTime);
+            // Calculate the metres moved since the last tick
+            double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, scaledElapsedTime);
                 
-                // Move the vehicle by the metres that is has moved since the last tick
-                ExactProgressMetres += metresMoved;
-                ProgressPixels += (int)Math.Round(MainForm.MetresToPixels(metresMoved), 0);
+            // Move the vehicle by the metres that is has moved since the last tick
+            ExactProgressMetres += metresMoved;
+            ProgressPixels += (int)Math.Round(MainForm.MetresToPixels(metresMoved), 0);
 
-                #endregion
+            #endregion
 
-                // Update the average speed from the new lifetime and progress along the road
-                AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
-            }
+            // Update the average speed from the new lifetime and progress along the road
+            AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
 
             if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
             {
