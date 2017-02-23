@@ -221,7 +221,7 @@ namespace MotorwaySimulator
 
                     if (ProgressPixels + (projectedDesiredStoppingDistancePixels * 1.1) < backOfNextVehicle)
                     {
-                        // The stopping distance (plus an extra 10% to avoid quick switching between states) of this vehicle at desired speed does not overlap the back of the next vehicle
+                        // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed does not overlap the back of the next vehicle
 
                         // Go to full desired speed
                         ActualSpeedMetresHour = DesiredSpeedMetresHour;
@@ -298,7 +298,7 @@ namespace MotorwaySimulator
             double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
             LastStopwatchTimerValue = tempTime;
 
-            // Increment the lifetime by the scaled elapsed time
+            // Increment the lifetime of this vehicle by the scaled elapsed time
             LifetimeMilliseconds += scaledElapsedTime;
 
             #region Move Forward
