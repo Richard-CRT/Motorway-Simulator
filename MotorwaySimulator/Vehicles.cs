@@ -73,7 +73,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The last timer value in milliseconds used to calculate delta-time for the movement algorithm
         /// </summary>
-        public long LastStopwatchTimerValue;
+        public double LastStopwatchTimerValue;
 
 
         /* Dimensions */
@@ -232,7 +232,7 @@ namespace MotorwaySimulator
 
             #region Change Lane n-1
 
-            if (ParentLane.LaneId != 0)
+            if (ParentLane.LaneId != 0 && false)
             {
                 // This vehicle is not in the left most lane
 
@@ -256,7 +256,7 @@ namespace MotorwaySimulator
 
             #region Change Lane n+1
 
-            if (ParentLane.LaneId != MainForm.ActiveLaneCount-1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId+1 < MaximumLane)
+            if (ParentLane.LaneId != MainForm.ActiveLaneCount-1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId+1 < MaximumLane && false)
             {
                 // This vehicle is not in the right most lane, is not in its own maximum lane and is not travelling at its desired speed
 
@@ -290,10 +290,9 @@ namespace MotorwaySimulator
                 // This vehicle does not have a vehicle behind it in the lane to the left, in the lane it is in or in the lane to right which is within the visible bounds of the road
 
                 // Calculate the delta time since the last check then scale it
-                long tempTime = MainForm.StopwatchTimer.ElapsedMilliseconds;
-                long elapsedTime = tempTime - LastStopwatchTimerValue;
+                double tempTime = MainForm.ScaledTimePassed;
+                double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
                 LastStopwatchTimerValue = tempTime;
-                double scaledElapsedTime = elapsedTime * MainForm.TimeScale;
 
                 // Incrememnt the lifetime by the scaled elapsed time
                 LifetimeMilliseconds += scaledElapsedTime;

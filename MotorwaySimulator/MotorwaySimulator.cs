@@ -139,7 +139,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The last timer value in milliseconds used to calculate delta-time for the vehicle arrival algorithm
         /// </summary>
-        private long LastArrivalTimerValue;
+        private double LastArrivalTimerValue;
         /// <summary>
         /// The chosen variation for the next vehicle spawn
         /// </summary>
@@ -849,10 +849,10 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 6);
+            instruction = new DebugVehicleSpawnInstruction(42, VehicleTypes.Car, Lanes[0], 0, 100960, 5);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 6);
+            instruction = new DebugVehicleSpawnInstruction(53, VehicleTypes.Car, Lanes[0], 6064, 102140, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -954,6 +954,9 @@ namespace MotorwaySimulator
                             vehicle.VehicleLengthPixels = (int)Math.Round(MetresToPixels(instruction.VehicleLength));
                         }
 
+                        // Record the time of appearance
+                        vehicle.TimeAppearance = ScaledTimePassed;
+
                         // Add vehicle to the specified lane
                         instruction.Lane.AddVehicleToLane(vehicle);
                         DebugModeInstructions.RemoveAt(instructionIndex);
@@ -976,9 +979,8 @@ namespace MotorwaySimulator
                 }
 
                 // Calculate the delta time since the last check then scale it
-                long tempTime = StopwatchTimer.ElapsedMilliseconds;
-                long elapsedTime = tempTime - LastArrivalTimerValue;
-                double scaledElapsedTime = elapsedTime * TimeScale;
+                double tempTime = ScaledTimePassed;
+                double scaledElapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
                 // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
@@ -1435,7 +1437,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The Length of the vehicle to spawn in metres
         /// </summary>
-        public int VehicleLength;
+        public double VehicleLength;
 
         #endregion
 
@@ -1448,7 +1450,7 @@ namespace MotorwaySimulator
         /// <param name="realTimeSpawnTime">The time in realtime to spawn the vehicle</param>
         /// <param name="desiredSpeedMetresHour">The desired speed in metres per hour of the vehicle to spawn</param>
         /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, int vehicleLength = 0)
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0)
         {
             VehicleId = vehicleId;
             Type = type;
