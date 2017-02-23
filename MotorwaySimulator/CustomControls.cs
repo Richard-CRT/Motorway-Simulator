@@ -394,7 +394,7 @@ namespace CustomControls
                     // Calculate the overlap allowed in pixels
                     int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0) - vehicleProjectedStopppingDistancePixels;
 
-                    if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels <= backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                    if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
                     {
                         // The stopping distance overlaps, but only by less than or equal to the overlap allowed
 
