@@ -291,8 +291,6 @@ namespace MotorwaySimulator
         /// </summary>
         public void MovementTick()
         {
-            // This vehicle does not have a vehicle behind it in the lane to the left, in the lane it is in or in the lane to right which is within the visible bounds of the road
-
             // Calculate the delta time since the last check then scale it
             double tempTime = MainForm.ScaledTimePassed;
             double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
