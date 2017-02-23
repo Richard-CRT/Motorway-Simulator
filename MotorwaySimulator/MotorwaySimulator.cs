@@ -841,11 +841,8 @@ namespace MotorwaySimulator
                 finishedVehiclesLaneNode = new TreeNode("Lane " + (lane.LaneId + 1));
                 Road.Controls.Add(lane);
                 Lanes.Add(lane);
-
-
-
-
-                FinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
+                
+                TreeViewFinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
             
