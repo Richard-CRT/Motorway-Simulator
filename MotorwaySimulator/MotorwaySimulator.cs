@@ -981,7 +981,7 @@ namespace MotorwaySimulator
                     ChosenInterArrivalVariationPercentage = (RandomGenerator.NextDouble() * ActiveInterArrivalTimeVariationPercentage * 2) - ActiveInterArrivalTimeVariationPercentage;
                 }
 
-                // Calculate the delta time since the last check then scale it
+                // Calculate the delta simulation time since the last tick
                 double tempTime = ScaledTimePassed;
                 double scaledElapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);

@@ -291,12 +291,12 @@ namespace MotorwaySimulator
         /// </summary>
         public void MovementTick()
         {
-            // Calculate the delta time since the last check then scale it
+            // Calculate the delta simulation time since the last tick
             double tempTime = MainForm.ScaledTimePassed;
             double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
             LastStopwatchTimerValue = tempTime;
 
-            // Incrememnt the lifetime by the scaled elapsed time
+            // Increment the lifetime by the scaled elapsed time
             LifetimeMilliseconds += scaledElapsedTime;
 
             #region Move Forward
