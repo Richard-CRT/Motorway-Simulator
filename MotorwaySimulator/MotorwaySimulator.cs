@@ -829,6 +829,7 @@ namespace MotorwaySimulator
             // Calculate the size of the road
             int newHeight = ActiveLaneCount * laneWidth;
             Height = 512 + 17 + newHeight;
+            MinimumSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
             Road.Width = activeRoadLengthPixels;
             Road.Height = newHeight;
 

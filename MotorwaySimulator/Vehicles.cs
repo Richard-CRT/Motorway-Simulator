@@ -306,7 +306,7 @@ namespace MotorwaySimulator
                 
             // Move the vehicle by the metres that is has moved since the last tick
             ExactProgressMetres += metresMoved;
-            ProgressPixels += (int)Math.Round(MainForm.MetresToPixels(metresMoved), 0);
+            ProgressPixels = (int)Math.Round(MainForm.MetresToPixels(ExactProgressMetres), 0);
 
             #endregion
 
