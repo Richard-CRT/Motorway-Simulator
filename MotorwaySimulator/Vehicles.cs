@@ -219,7 +219,7 @@ namespace MotorwaySimulator
                     // Calculate the stopping distance of this vehicle at desired speed
                     int projectedDesiredStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(DesiredSpeedMetresHour)), 0);
 
-                    if (ProgressPixels + (projectedDesiredStoppingDistancePixels * 1.1) < backOfNextVehicle) // add 10% margin fix pixeling flashing bug
+                    if (ProgressPixels + (projectedDesiredStoppingDistancePixels * 1.1) < backOfNextVehicle)
                     {
                         // The stopping distance (plus an extra 10% to avoid quick switching between states) of this vehicle at desired speed does not overlap the back of the next vehicle
 
