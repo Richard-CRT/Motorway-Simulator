@@ -65,10 +65,6 @@ namespace MotorwaySimulator
         /// The margin between the white line and the side of each vehicle in metres
         /// </summary>
         private const double LaneMarginMetres = 0.8;
-        /// <summary>
-        /// The number of seconds the simulation will allow for the vehicles to to stop in when calculating stopping distance
-        /// </summary>
-        private const double StoppingTime = 1;
 
 
         /* Calculated Constants */
@@ -102,6 +98,10 @@ namespace MotorwaySimulator
         /// </summary>
         public double ActiveInterArrivalTimeVariationPercentage;
         /// <summary>
+        /// The stopping time (i.e. time taken for vehicle to stop for safety reasons) being used by the simulation
+        /// </summary>
+        public double ActiveStoppingTime;
+        /// <summary>
         /// The margin that the average speed of a vehicle must be below it's desired spped to be mildly congested
         /// </summary>
         public int ActiveMildCongestionTriggerMetresHour;
@@ -132,6 +132,10 @@ namespace MotorwaySimulator
         /// The Interarrival time variation set by the TrackBar input
         /// </summary>
         private double InterArrivalTimeVariationPercentage;
+        /// <summary>
+        /// The stopping time (i.e. time taken for vehicle to stop for safety reasons) set by the TrackBar input
+        /// </summary>
+        private double StoppingTime;
 
 
         /* Interarrival Variables */
@@ -233,10 +237,11 @@ namespace MotorwaySimulator
             DebugModeInstructions = new List<DebugVehicleSpawnInstruction>();
 
             // Update labels
+            UpdateRoadLength(null, null);
             UpdateInterArrivalTime(null, null);
             UpdateInterArrivalVariation(null, null);
             UpdateLaneCount(null, null);
-            UpdateRoadLength(null, null);
+            UpdateStoppingTime(null, null);
             UpdateTimescale(null, null);
             ValidateProbabilityChange(null, null);
 
@@ -301,6 +306,19 @@ namespace MotorwaySimulator
             NumericLGVMaximumLane.Maximum = LaneCount;
             NumericHGVMaximumLane.Maximum = LaneCount;
             NumericBusMaximumLane.Maximum = LaneCount;
+        }
+        
+        /// <summary>
+        /// Updates LabelStoppingTime and the StoppingTime variable to the new value whenever TrackBarStoppingTime changes value.
+        /// </summary>
+        /// <param name="sender">(Auto-generated) Object that sends the event</param>
+        /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
+        private void UpdateStoppingTime(object sender, EventArgs e)
+        {
+            // The TrackBar stores increments of 0.1s, so divide by 10 to get seconds
+            // The (double) is required to avoid integer division
+            LabelStoppingTime.Text = Math.Round(TrackBarStoppingTime.Value / (double)10, 1) + "s";
+            StoppingTime = TrackBarStoppingTime.Value / (double)10;
         }
 
         /// <summary>
@@ -762,7 +780,7 @@ namespace MotorwaySimulator
         /// <returns>The stopping distance in metres</returns>
         public double StoppingDistance(double metresHour)
         {
-            return (metresHour * MotorwaySimulatorForm.StoppingTime) / (60 * 60);
+            return (metresHour * ActiveStoppingTime) / (60 * 60);
         }
 
         /// <summary>
@@ -816,13 +834,14 @@ namespace MotorwaySimulator
             ActiveRoadLengthMetres = RoadLengthMetres;
             int activeRoadLengthPixels = (int)Math.Round(MetresToPixels(ActiveRoadLengthMetres), 0);
 
-
             ActiveMildCongestionTriggerMetresHour = (int)NumericMildCongestion.Value * 1000;
             ActiveSevereCongestionTriggerMetresHour = (int)NumericSevereCongestion.Value * 1000;
 
             ActiveInterArrivalTime = InterArrivalTime;
             ActiveInterArrivalTimeVariationPercentage = InterArrivalTimeVariationPercentage;
             ChosenInterArrivalVariationPercentage = -1;
+
+            ActiveStoppingTime = StoppingTime;
 
             int laneWidth = VehicleWidthPixels + (2 * LaneMarginPixels);
 
