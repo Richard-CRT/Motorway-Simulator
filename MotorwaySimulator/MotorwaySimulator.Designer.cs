@@ -387,9 +387,9 @@ namespace MotorwaySimulator
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(362, 249);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(143, 20);
+            this.label1.Size = new System.Drawing.Size(157, 20);
             this.label1.TabIndex = 68;
-            this.label1.Text = "kph from desired";
+            this.label1.Text = "kph below desired";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // NumericMildCongestion
@@ -2018,7 +2018,7 @@ namespace MotorwaySimulator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(0, 512);
+            this.MinimumSize = new System.Drawing.Size(16, 512);
             this.Name = "MotorwaySimulatorForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
