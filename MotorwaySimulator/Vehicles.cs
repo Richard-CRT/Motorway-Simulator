@@ -372,7 +372,7 @@ namespace MotorwaySimulator
             InEffect = true;
             VehicleType = type;
             MaximumLane = mainForm.VehicleParameters[type].MaximumLane;
-            LastStopwatchTimerValue = mainForm.StopwatchTimer.ElapsedMilliseconds;
+            LastStopwatchTimerValue = mainForm.ScaledTimePassed;
             ParentLane = null;
 
             double length;
