@@ -240,7 +240,7 @@ namespace MotorwaySimulator
 
             #region Change Lane n-1
 
-            if (ParentLane.LaneId != 0 && false)
+            if (ParentLane.LaneId != 0)
             {
                 // This vehicle is not in the left most lane
 
@@ -264,7 +264,7 @@ namespace MotorwaySimulator
 
             #region Change Lane n+1
 
-            if (ParentLane.LaneId != MainForm.ActiveLaneCount-1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId+1 < MaximumLane && false)
+            if (ParentLane.LaneId != MainForm.ActiveLaneCount-1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId+1 < MaximumLane)
             {
                 // This vehicle is not in the right most lane, is not in its own maximum lane and is not travelling at its desired speed
 
