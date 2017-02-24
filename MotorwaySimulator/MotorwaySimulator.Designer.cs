@@ -41,9 +41,9 @@ namespace MotorwaySimulator
             this.ButtonPause = new System.Windows.Forms.Button();
             this.TabControlControlPanel = new System.Windows.Forms.TabControl();
             this.TabPageSetup = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.LabelMildTitle = new System.Windows.Forms.Label();
+            this.LabelSevereTitle = new System.Windows.Forms.Label();
+            this.LabelCongestionUnitTitle = new System.Windows.Forms.Label();
             this.NumericMildCongestion = new System.Windows.Forms.NumericUpDown();
             this.NumericSevereCongestion = new System.Windows.Forms.NumericUpDown();
             this.LabelCongestionTitle = new System.Windows.Forms.Label();
@@ -139,7 +139,7 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalFailedSpawnsTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalSuccessfulSpawns = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.LabelAllVehicleDataTitle = new System.Windows.Forms.Label();
             this.ButtonFindVehicle = new System.Windows.Forms.Button();
             this.LabelVehicleCongestion = new System.Windows.Forms.Label();
             this.LabelVehicleCongestionTitle = new System.Windows.Forms.Label();
@@ -296,9 +296,9 @@ namespace MotorwaySimulator
             // TabPageSetup
             // 
             this.TabPageSetup.BackColor = System.Drawing.Color.White;
-            this.TabPageSetup.Controls.Add(this.label3);
-            this.TabPageSetup.Controls.Add(this.label4);
-            this.TabPageSetup.Controls.Add(this.label1);
+            this.TabPageSetup.Controls.Add(this.LabelMildTitle);
+            this.TabPageSetup.Controls.Add(this.LabelSevereTitle);
+            this.TabPageSetup.Controls.Add(this.LabelCongestionUnitTitle);
             this.TabPageSetup.Controls.Add(this.NumericMildCongestion);
             this.TabPageSetup.Controls.Add(this.NumericSevereCongestion);
             this.TabPageSetup.Controls.Add(this.LabelCongestionTitle);
@@ -362,35 +362,35 @@ namespace MotorwaySimulator
             this.TabPageSetup.TabIndex = 0;
             this.TabPageSetup.Text = "Setup";
             // 
-            // label3
+            // LabelMildTitle
             // 
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(220, 223);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 23);
-            this.label3.TabIndex = 70;
-            this.label3.Text = "Mild";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelMildTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelMildTitle.Location = new System.Drawing.Point(220, 223);
+            this.LabelMildTitle.Name = "LabelMildTitle";
+            this.LabelMildTitle.Size = new System.Drawing.Size(65, 23);
+            this.LabelMildTitle.TabIndex = 70;
+            this.LabelMildTitle.Text = "Mild";
+            this.LabelMildTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // LabelSevereTitle
             // 
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label4.Location = new System.Drawing.Point(291, 223);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(65, 23);
-            this.label4.TabIndex = 71;
-            this.label4.Text = "Severe";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelSevereTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelSevereTitle.Location = new System.Drawing.Point(291, 223);
+            this.LabelSevereTitle.Name = "LabelSevereTitle";
+            this.LabelSevereTitle.Size = new System.Drawing.Size(65, 23);
+            this.LabelSevereTitle.TabIndex = 71;
+            this.LabelSevereTitle.Text = "Severe";
+            this.LabelSevereTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
+            // LabelCongestionUnitTitle
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(362, 249);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(157, 20);
-            this.label1.TabIndex = 68;
-            this.label1.Text = "kph below desired";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LabelCongestionUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelCongestionUnitTitle.Location = new System.Drawing.Point(362, 249);
+            this.LabelCongestionUnitTitle.Name = "LabelCongestionUnitTitle";
+            this.LabelCongestionUnitTitle.Size = new System.Drawing.Size(157, 20);
+            this.LabelCongestionUnitTitle.TabIndex = 68;
+            this.LabelCongestionUnitTitle.Text = "kph below desired";
+            this.LabelCongestionUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // NumericMildCongestion
             // 
@@ -1255,7 +1255,7 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalFailedSpawnsTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawns);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawnsTitle);
-            this.TabPageSimulation.Controls.Add(this.label2);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehicleDataTitle);
             this.TabPageSimulation.Controls.Add(this.ButtonFindVehicle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestion);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestionTitle);
@@ -1673,15 +1673,15 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Text = "Successful Spawns:";
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // LabelAllVehicleDataTitle
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label2.Location = new System.Drawing.Point(634, 15);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(483, 22);
-            this.label2.TabIndex = 82;
-            this.label2.Text = "All Vehicle Data";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelAllVehicleDataTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelAllVehicleDataTitle.Location = new System.Drawing.Point(634, 15);
+            this.LabelAllVehicleDataTitle.Name = "LabelAllVehicleDataTitle";
+            this.LabelAllVehicleDataTitle.Size = new System.Drawing.Size(483, 22);
+            this.LabelAllVehicleDataTitle.TabIndex = 82;
+            this.LabelAllVehicleDataTitle.Text = "All Vehicle Data";
+            this.LabelAllVehicleDataTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ButtonFindVehicle
             // 
@@ -2158,16 +2158,16 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelVehicleLifetimeTitle;
         private System.Windows.Forms.Label LabelVehicleID;
         private System.Windows.Forms.Label LabelVehicleIDTitle;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LabelCongestionUnitTitle;
         private System.Windows.Forms.NumericUpDown NumericMildCongestion;
         private System.Windows.Forms.NumericUpDown NumericSevereCongestion;
         private System.Windows.Forms.Label LabelCongestionTitle;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label LabelMildTitle;
+        private System.Windows.Forms.Label LabelSevereTitle;
         private System.Windows.Forms.Label LabelVehicleCongestion;
         private System.Windows.Forms.Label LabelVehicleCongestionTitle;
         private System.Windows.Forms.Button ButtonFindVehicle;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label LabelAllVehicleDataTitle;
         private System.Windows.Forms.Label LabelAllVehiclesHGVPercent;
         private System.Windows.Forms.Label LabelAllVehiclesHGVPercentTitle;
         private System.Windows.Forms.Label LabelAllVehiclesTotalVehicles;
