@@ -41,6 +41,7 @@ namespace MotorwaySimulator
             this.ButtonPause = new System.Windows.Forms.Button();
             this.TabControlControlPanel = new System.Windows.Forms.TabControl();
             this.TabPageSetup = new System.Windows.Forms.TabPage();
+            this.TrackBarLaneCount = new System.Windows.Forms.TrackBar();
             this.LabelStoppingTime = new System.Windows.Forms.Label();
             this.TrackBarStoppingTime = new System.Windows.Forms.TrackBar();
             this.LabelStoppingTimeTitle = new System.Windows.Forms.Label();
@@ -64,7 +65,6 @@ namespace MotorwaySimulator
             this.LabelSpawnProbabilityTitle = new System.Windows.Forms.Label();
             this.NumericBusSpawnProbability = new System.Windows.Forms.NumericUpDown();
             this.LabelLaneCount = new System.Windows.Forms.Label();
-            this.TrackBarLaneCount = new System.Windows.Forms.TrackBar();
             this.LabelLaneCountTitle = new System.Windows.Forms.Label();
             this.LabelDesiredSpeedVarUnit = new System.Windows.Forms.Label();
             this.LabelRoadLengthTitle = new System.Windows.Forms.Label();
@@ -179,6 +179,7 @@ namespace MotorwaySimulator
             this.PanelSettings.SuspendLayout();
             this.TabControlControlPanel.SuspendLayout();
             this.TabPageSetup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarLaneCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarStoppingTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericMildCongestion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericSevereCongestion)).BeginInit();
@@ -190,7 +191,6 @@ namespace MotorwaySimulator
             ((System.ComponentModel.ISupportInitialize)(this.NumericLGVSpawnProbability)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericHGVSpawnProbability)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericBusSpawnProbability)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarLaneCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarLengthVar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarDesiredSpeed)).BeginInit();
@@ -368,6 +368,17 @@ namespace MotorwaySimulator
             this.TabPageSetup.Size = new System.Drawing.Size(1130, 360);
             this.TabPageSetup.TabIndex = 0;
             this.TabPageSetup.Text = "Setup";
+            // 
+            // TrackBarLaneCount
+            // 
+            this.TrackBarLaneCount.LargeChange = 1;
+            this.TrackBarLaneCount.Location = new System.Drawing.Point(283, 203);
+            this.TrackBarLaneCount.Minimum = 1;
+            this.TrackBarLaneCount.Name = "TrackBarLaneCount";
+            this.TrackBarLaneCount.Size = new System.Drawing.Size(283, 45);
+            this.TrackBarLaneCount.TabIndex = 48;
+            this.TrackBarLaneCount.Value = 3;
+            this.TrackBarLaneCount.Scroll += new System.EventHandler(this.UpdateLaneCount);
             // 
             // LabelStoppingTime
             // 
@@ -673,17 +684,6 @@ namespace MotorwaySimulator
             this.LabelLaneCount.Text = "0 lane(s)";
             this.LabelLaneCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // TrackBarLaneCount
-            // 
-            this.TrackBarLaneCount.LargeChange = 1;
-            this.TrackBarLaneCount.Location = new System.Drawing.Point(283, 203);
-            this.TrackBarLaneCount.Minimum = 1;
-            this.TrackBarLaneCount.Name = "TrackBarLaneCount";
-            this.TrackBarLaneCount.Size = new System.Drawing.Size(283, 45);
-            this.TrackBarLaneCount.TabIndex = 48;
-            this.TrackBarLaneCount.Value = 3;
-            this.TrackBarLaneCount.Scroll += new System.EventHandler(this.UpdateLaneCount);
-            // 
             // LabelLaneCountTitle
             // 
             this.LabelLaneCountTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
@@ -771,6 +771,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericCarLength.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelLengthUnitTitle
             // 
@@ -787,7 +788,7 @@ namespace MotorwaySimulator
             this.NumericCarLengthVar.DecimalPlaces = 1;
             this.NumericCarLengthVar.Location = new System.Drawing.Point(773, 138);
             this.NumericCarLengthVar.Maximum = new decimal(new int[] {
-            10,
+            4,
             0,
             0,
             0});
@@ -799,6 +800,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericCarLengthVar.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelCarTitle
             // 
@@ -831,6 +833,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericCarDesiredSpeed.ValueChanged += new System.EventHandler(this.UpdateSpeedVariation);
             // 
             // LableBusTitle
             // 
@@ -846,7 +849,7 @@ namespace MotorwaySimulator
             // 
             this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(773, 190);
             this.NumericCarDesiredSpeedVar.Maximum = new decimal(new int[] {
-            30,
+            112,
             0,
             0,
             0});
@@ -896,6 +899,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
+            this.NumericLGVLength.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelLGVTitle
             // 
@@ -912,10 +916,10 @@ namespace MotorwaySimulator
             this.NumericLGVLengthVar.DecimalPlaces = 1;
             this.NumericLGVLengthVar.Location = new System.Drawing.Point(844, 138);
             this.NumericLGVLengthVar.Maximum = new decimal(new int[] {
-            10,
+            55,
             0,
             0,
-            0});
+            65536});
             this.NumericLGVLengthVar.Name = "NumericLGVLengthVar";
             this.NumericLGVLengthVar.Size = new System.Drawing.Size(61, 20);
             this.NumericLGVLengthVar.TabIndex = 8;
@@ -924,6 +928,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericLGVLengthVar.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // TrackBarInterArrivalVariation
             // 
@@ -942,7 +947,7 @@ namespace MotorwaySimulator
             // 
             this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(844, 164);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            112,
             0,
             0,
             0});
@@ -959,6 +964,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericLGVDesiredSpeed.ValueChanged += new System.EventHandler(this.UpdateSpeedVariation);
             // 
             // LabelInterArrivalVariation
             // 
@@ -1024,6 +1030,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericHGVLength.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelInterArrivalTime
             // 
@@ -1040,7 +1047,7 @@ namespace MotorwaySimulator
             this.NumericHGVLengthVar.DecimalPlaces = 1;
             this.NumericHGVLengthVar.Location = new System.Drawing.Point(915, 138);
             this.NumericHGVLengthVar.Maximum = new decimal(new int[] {
-            10,
+            12,
             0,
             0,
             0});
@@ -1052,6 +1059,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericHGVLengthVar.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // TrackBarInterArrivalTime
             // 
@@ -1070,7 +1078,7 @@ namespace MotorwaySimulator
             // 
             this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(915, 164);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            96,
             0,
             0,
             0});
@@ -1087,6 +1095,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericHGVDesiredSpeed.ValueChanged += new System.EventHandler(this.UpdateSpeedVariation);
             // 
             // LabelInterArrivalTimeTitle
             // 
@@ -1152,6 +1161,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericBusLength.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelDesiredSpeedTitle
             // 
@@ -1168,7 +1178,7 @@ namespace MotorwaySimulator
             this.NumericBusLengthVar.DecimalPlaces = 1;
             this.NumericBusLengthVar.Location = new System.Drawing.Point(986, 138);
             this.NumericBusLengthVar.Maximum = new decimal(new int[] {
-            10,
+            11,
             0,
             0,
             0});
@@ -1180,6 +1190,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericBusLengthVar.ValueChanged += new System.EventHandler(this.UpdateLengthVariation);
             // 
             // LabelLengthVarTitle
             // 
@@ -1195,7 +1206,7 @@ namespace MotorwaySimulator
             // 
             this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(986, 164);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            96,
             0,
             0,
             0});
@@ -1212,6 +1223,7 @@ namespace MotorwaySimulator
             0,
             0,
             0});
+            this.NumericBusDesiredSpeed.ValueChanged += new System.EventHandler(this.UpdateSpeedVariation);
             // 
             // LabelLengthTitle
             // 
@@ -2070,6 +2082,7 @@ namespace MotorwaySimulator
             this.TabControlControlPanel.ResumeLayout(false);
             this.TabPageSetup.ResumeLayout(false);
             this.TabPageSetup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarLaneCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarStoppingTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericMildCongestion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericSevereCongestion)).EndInit();
@@ -2081,7 +2094,6 @@ namespace MotorwaySimulator
             ((System.ComponentModel.ISupportInitialize)(this.NumericLGVSpawnProbability)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericHGVSpawnProbability)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericBusSpawnProbability)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarLaneCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarLengthVar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarDesiredSpeed)).EndInit();

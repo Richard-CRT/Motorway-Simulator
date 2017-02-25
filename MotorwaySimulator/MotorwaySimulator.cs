@@ -293,7 +293,7 @@ namespace MotorwaySimulator
 
         /// <summary>
         /// Updates LabelLaneCount and the LaneCount variable to the new value whenever TrackBarLaneCount changes value.
-        /// Also reduces the maximum of value of each of the 'maximum lane' fields to the new lane count.
+        /// Also updates the maximum of value of each of the 'maximum lane' fields to the new lane count.
         /// </summary>
         /// <param name="sender">(Auto-generated) Object that sends the event</param>
         /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
@@ -335,7 +335,33 @@ namespace MotorwaySimulator
         }
 
         /// <summary>
-        /// This method simply updates the panel control which contains the 'control panel' location to be on screen whenever the form is scrolled
+        /// Updates the maximum value of the length variation Numerical Up Down controls when the length Numerical Up Down controls change.
+        /// </summary>
+        /// <param name="sender">(Auto-generated) Object that sends the event</param>
+        /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
+        private void UpdateLengthVariation(object sender, EventArgs e)
+        {
+            NumericCarLengthVar.Maximum = NumericCarLength.Value;
+            NumericLGVLengthVar.Maximum = NumericLGVLength.Value;
+            NumericHGVLengthVar.Maximum = NumericHGVLength.Value;
+            NumericBusLengthVar.Maximum = NumericBusLength.Value;
+        }
+
+        /// <summary>
+        /// Updates the maximum value of the speed variation Numerical Up Down controls when the speed Numerical Up Down controls change.
+        /// </summary>
+        /// <param name="sender">(Auto-generated) Object that sends the event</param>
+        /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
+        private void UpdateSpeedVariation(object sender, EventArgs e)
+        {
+            NumericCarDesiredSpeedVar.Maximum = NumericCarDesiredSpeed.Value;
+            NumericLGVDesiredSpeedVar.Maximum = NumericLGVDesiredSpeed.Value;
+            NumericHGVDesiredSpeedVar.Maximum = NumericHGVDesiredSpeed.Value;
+            NumericBusDesiredSpeedVar.Maximum = NumericBusDesiredSpeed.Value;
+        }
+
+        /// <summary>
+        /// This method simply updates the panel control which contains the 'control panel' location to be on screen whenever the form is scrolled.
         /// </summary>
         private void UpdateControlPanelLocation(object sender, ScrollEventArgs e)
         {
