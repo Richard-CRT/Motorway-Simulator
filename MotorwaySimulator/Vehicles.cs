@@ -363,7 +363,7 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
         /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
         /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
-        public void GenerateVehicle(VehicleTypes type, MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength, double predeterminedDesiredSpeedMetresHour)
+        public void GenerateVehicle(VehicleTypes type, MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength, double predeterminedDesiredSpeedMetresHour)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -430,7 +430,7 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
         /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
         /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
-        public Car (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
+        public Car (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             GenerateVehicle(VehicleTypes.Car, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour);
         }
@@ -447,7 +447,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
+        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             GenerateVehicle(VehicleTypes.LGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour);
         }
@@ -464,7 +464,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
+        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             GenerateVehicle(VehicleTypes.HGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour);
         }
@@ -481,7 +481,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, int predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
+        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0)
         {
             GenerateVehicle(VehicleTypes.Bus, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour);
         }

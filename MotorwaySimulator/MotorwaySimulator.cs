@@ -227,7 +227,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -872,10 +872,16 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(42, VehicleTypes.Car, Lanes[0], 0, 100960, 5);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 4000, 25000, 4);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(53, VehicleTypes.Car, Lanes[0], 6064, 102140, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 30000, 4);
+            DebugModeInstructions.Add(instruction);
+            // Create an individual spawn instruction
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 25000, 4);
+            DebugModeInstructions.Add(instruction);
+            // Create an individual spawn instruction
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 5000, 100000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -950,16 +956,16 @@ namespace MotorwaySimulator
                         switch (instruction.Type)
                         {
                             case VehicleTypes.Car:
-                                vehicle = new Car(this, instruction.VehicleId);
+                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.LGV:
-                                vehicle = new LGV(this, instruction.VehicleId);
+                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.HGV:
-                                vehicle = new HGV(this, instruction.VehicleId);
+                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             case VehicleTypes.Bus:
-                                vehicle = new Bus(this, instruction.VehicleId);
+                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
                                 break;
                             default:
                                 vehicle = null;
