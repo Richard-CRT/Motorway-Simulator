@@ -404,14 +404,14 @@ namespace CustomControls
                     // Changing lane to the left
 
                     // Calculate the stopping distance of the vehicle from the other lane
-                    speedInQuestion = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour)), 0);
+                    speedInQuestion = vehicleFromOtherLane.DesiredSpeedMetresHour;
                 }
                 else
                 {
                     // Changing lane to the right
 
                     // Calculate the stopping distance of the vehicle from the other lane
-                    speedInQuestion = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+                    speedInQuestion = vehicleFromOtherLane.ActualSpeedMetresHour;
                 }
 
                 if (previousVehicle.ActualSpeedMetresHour > speedInQuestion)
