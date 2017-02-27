@@ -438,9 +438,9 @@ namespace MotorwaySimulator
             this.LabelCongestionUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.LabelCongestionUnitTitle.Location = new System.Drawing.Point(362, 271);
             this.LabelCongestionUnitTitle.Name = "LabelCongestionUnitTitle";
-            this.LabelCongestionUnitTitle.Size = new System.Drawing.Size(157, 20);
+            this.LabelCongestionUnitTitle.Size = new System.Drawing.Size(214, 20);
             this.LabelCongestionUnitTitle.TabIndex = 68;
-            this.LabelCongestionUnitTitle.Text = "kph below desired";
+            this.LabelCongestionUnitTitle.Text = "actual kph below desired";
             this.LabelCongestionUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // NumericMildCongestion

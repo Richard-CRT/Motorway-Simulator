@@ -117,17 +117,18 @@ namespace MotorwaySimulator
             }
         }
         /// <summary>
-        /// The congestion state of the vehicle (see the CongestionStates enumerator of MotorwaySimulator.cs)
+        /// The congestion state of the vehicle (see the CongestionStates enumerator of MotorwaySimulator.cs).
+        /// Calculates the congestion each time it is accessed using a get function.
         /// </summary>
         public CongestionStates Congestion
         {
             get
             {
-                if (DesiredSpeedMetresHour - AverageSpeedMetresHour > MainForm.ActiveSevereCongestionTriggerMetresHour)
+                if (DesiredSpeedMetresHour - ActualSpeedMetresHour >= MainForm.ActiveSevereCongestionTriggerMetresHour)
                 {
                     return CongestionStates.Severe;
                 }
-                else if (DesiredSpeedMetresHour - AverageSpeedMetresHour > MainForm.ActiveMildCongestionTriggerMetresHour)
+                else if (DesiredSpeedMetresHour - ActualSpeedMetresHour >= MainForm.ActiveMildCongestionTriggerMetresHour)
                 {
                     return CongestionStates.Mild;
                 }
