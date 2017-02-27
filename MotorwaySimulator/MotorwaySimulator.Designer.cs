@@ -383,9 +383,9 @@ namespace MotorwaySimulator
             // LabelStoppingTime
             // 
             this.LabelStoppingTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelStoppingTime.Location = new System.Drawing.Point(211, 173);
+            this.LabelStoppingTime.Location = new System.Drawing.Point(230, 173);
             this.LabelStoppingTime.Name = "LabelStoppingTime";
-            this.LabelStoppingTime.Size = new System.Drawing.Size(71, 28);
+            this.LabelStoppingTime.Size = new System.Drawing.Size(52, 28);
             this.LabelStoppingTime.TabIndex = 74;
             this.LabelStoppingTime.Text = "0s";
             this.LabelStoppingTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -406,7 +406,7 @@ namespace MotorwaySimulator
             // LabelStoppingTimeTitle
             // 
             this.LabelStoppingTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelStoppingTimeTitle.Location = new System.Drawing.Point(28, 173);
+            this.LabelStoppingTimeTitle.Location = new System.Drawing.Point(41, 175);
             this.LabelStoppingTimeTitle.Name = "LabelStoppingTimeTitle";
             this.LabelStoppingTimeTitle.Size = new System.Drawing.Size(187, 28);
             this.LabelStoppingTimeTitle.TabIndex = 72;
