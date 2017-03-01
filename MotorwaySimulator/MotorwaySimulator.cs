@@ -227,7 +227,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -898,16 +898,13 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 4000, 25000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 30000, 4);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.HGV, Lanes[1], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 25000, 4);
-            DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 5000, 100000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 500, 112000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -1013,7 +1010,21 @@ namespace MotorwaySimulator
                         vehicle.TimeAppearance = ScaledTimePassed;
 
                         // Add vehicle to the specified lane
-                        instruction.Lane.AddVehicleToLane(vehicle);
+                        bool success = instruction.Lane.AddVehicleToLane(vehicle);
+
+                        if (!success)
+                        {
+                            // Adding the vehicle failed
+
+                            // Create a node for the failed vehicle in the finished vehicle TreeView
+                            TreeNode finishedVehicleNode = new TreeNode("#" + (vehicle.VehicleId + 1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour / 1000, 0) + " kph");
+                            finishedVehicleNode.Tag = vehicle;
+                            TreeViewFinishedVehicles.Nodes[0].Nodes.Add(finishedVehicleNode);
+                        }
+
+                        // Add the vehicle to the list of all vehicles
+                        AllVehicles.Add(vehicle);
+
                         DebugModeInstructions.RemoveAt(instructionIndex);
                     }
                     else
