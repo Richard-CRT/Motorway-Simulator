@@ -1038,9 +1038,10 @@ namespace MotorwaySimulator
                 double scaledElapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
-                // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == 0)
+                // Lower the trigger time by 7ms since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
+                if (scaledElapsedTime >= (randomisedInterArrivalTime - 7) || LastArrivalTimerValue == 0)
                 {
+                    Console.WriteLine(scaledElapsedTime);
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
                     
