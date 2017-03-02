@@ -947,7 +947,7 @@ namespace MotorwaySimulator
             // 
             this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(844, 164);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
-            112,
+            500,
             0,
             0,
             0});
@@ -1078,7 +1078,7 @@ namespace MotorwaySimulator
             // 
             this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(915, 164);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
-            96,
+            500,
             0,
             0,
             0});
@@ -1206,7 +1206,7 @@ namespace MotorwaySimulator
             // 
             this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(986, 164);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
-            96,
+            500,
             0,
             0,
             0});

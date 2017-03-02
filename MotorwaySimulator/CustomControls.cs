@@ -342,21 +342,19 @@ namespace CustomControls
                 if (vehicleFromOtherLane.ParentLane.LaneId > LaneId)
                 {
                     // Changing lane to the left
-                    modifier = 1.1;
 
-                    // Calculate the stopping distance of the vehicle from the other lane at desired speed
+                    // Calculate the stopping distance of the vehicle from the other lane at its desired speed
                     vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour)), 0);
                 }
                 else
                 {
                     // Changing lane to the right
-                    modifier = 1.0;
 
-                    // Calculate the stopping distance of the vehicle from the other lane at desired speed
+                    // Calculate the stopping distance of the vehicle from the other lane at its actual speed
                     vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
                 }
 
-                if (vehicleFromOtherLane.ProgressPixels + (vehicleFromOtherLaneProjectedStoppingDistancePixels * modifier) < backOfNextVehicle)
+                if (vehicleFromOtherLane.ProgressPixels + vehicleFromOtherLaneProjectedStoppingDistancePixels < backOfNextVehicle)
                 {
                     // The stopping distance of the vehicle from the other lane does not overlap with the next vehicle
 
