@@ -894,7 +894,7 @@ namespace MotorwaySimulator
                 TreeViewFinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
-            
+
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
