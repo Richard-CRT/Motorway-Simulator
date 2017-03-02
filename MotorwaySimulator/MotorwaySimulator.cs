@@ -898,16 +898,10 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 4000, 25000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 120000, 4);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 30000, 4);
-            DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 25000, 4);
-            DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 5000, 100000, 4);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
