@@ -901,10 +901,10 @@ namespace MotorwaySimulator
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.HGV, Lanes[1], 0, 96000, 6);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 4);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 500, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 1000, 106000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -1010,21 +1010,7 @@ namespace MotorwaySimulator
                         vehicle.TimeAppearance = ScaledTimePassed;
 
                         // Add vehicle to the specified lane
-                        bool success = instruction.Lane.AddVehicleToLane(vehicle);
-
-                        if (!success)
-                        {
-                            // Adding the vehicle failed
-
-                            // Create a node for the failed vehicle in the finished vehicle TreeView
-                            TreeNode finishedVehicleNode = new TreeNode("#" + (vehicle.VehicleId + 1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour / 1000, 0) + " kph");
-                            finishedVehicleNode.Tag = vehicle;
-                            TreeViewFinishedVehicles.Nodes[0].Nodes.Add(finishedVehicleNode);
-                        }
-
-                        // Add the vehicle to the list of all vehicles
-                        AllVehicles.Add(vehicle);
-
+                        instruction.Lane.AddVehicleToLane(vehicle);
                         DebugModeInstructions.RemoveAt(instructionIndex);
                     }
                     else
@@ -1049,10 +1035,9 @@ namespace MotorwaySimulator
                 double scaledElapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
-                // Lower the trigger time by 7ms since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= (randomisedInterArrivalTime - 7) || LastArrivalTimerValue == 0)
+                // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
+                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == 0)
                 {
-                    Console.WriteLine(scaledElapsedTime);
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
                     
