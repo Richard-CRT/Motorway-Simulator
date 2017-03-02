@@ -227,7 +227,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -898,10 +898,13 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 120000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 6);
             DebugModeInstructions.Add(instruction);
             // Create an individual spawn instruction
             instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 112000, 4);
+            DebugModeInstructions.Add(instruction);
+            // Create an individual spawn instruction
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 1000, 106000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
