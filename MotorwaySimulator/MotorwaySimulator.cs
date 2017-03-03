@@ -898,10 +898,7 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 6);
-            DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[0], 2000, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 103830, 4.5);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation
@@ -1003,9 +1000,6 @@ namespace MotorwaySimulator
                             vehicle.VehicleLengthPixels = (int)Math.Round(MetresToPixels(instruction.VehicleLength));
                         }
 
-                        // Record the time of appearance
-                        vehicle.TimeAppearance = ScaledTimePassed;
-
                         // Add vehicle to the specified lane
                         bool success = instruction.Lane.AddVehicleToLane(vehicle);
 
@@ -1071,9 +1065,6 @@ namespace MotorwaySimulator
 
             int lane = 0;
             bool success = false;
-
-            // Record the time of appearance
-            newVehicle.TimeAppearance = ScaledTimePassed;
 
             // Try to add the vehicle to each lane in succession (starting with the left most lane)
             while (!success && newVehicle.MaximumLane > lane && lane < ActiveLaneCount)

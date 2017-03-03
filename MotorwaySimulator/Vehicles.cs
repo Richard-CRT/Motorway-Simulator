@@ -376,6 +376,9 @@ namespace MotorwaySimulator
             LastStopwatchTimerValue = mainForm.ScaledTimePassed;
             ParentLane = null;
 
+            // Record the time of appearance
+            TimeAppearance = mainForm.ScaledTimePassed;
+
             double length;
             if (predeterminedVehicleLength == 0)
             {
