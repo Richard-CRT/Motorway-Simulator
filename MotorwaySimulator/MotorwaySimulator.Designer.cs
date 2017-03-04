@@ -937,7 +937,7 @@ namespace MotorwaySimulator
             this.TrackBarInterArrivalVariation.Maximum = 1000;
             this.TrackBarInterArrivalVariation.Name = "TrackBarInterArrivalVariation";
             this.TrackBarInterArrivalVariation.Size = new System.Drawing.Size(283, 45);
-            this.TrackBarInterArrivalVariation.SmallChange = 100;
+            this.TrackBarInterArrivalVariation.SmallChange = 10;
             this.TrackBarInterArrivalVariation.TabIndex = 2;
             this.TrackBarInterArrivalVariation.TickFrequency = 50;
             this.TrackBarInterArrivalVariation.Value = 500;
