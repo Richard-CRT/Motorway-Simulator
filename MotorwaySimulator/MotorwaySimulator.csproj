@@ -65,7 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Vehicles.cs" />
+    <Compile Include="Vehicle.cs" />
     <EmbeddedResource Include="MotorwaySimulator.resx">
       <DependentUpon>MotorwaySimulator.cs</DependentUpon>
     </EmbeddedResource>
