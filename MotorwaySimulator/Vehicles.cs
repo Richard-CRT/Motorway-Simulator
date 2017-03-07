@@ -1,9 +1,7 @@
 ﻿/* Included System Namespaces/Libraries */
 using System;
 
-/* My Custom Control Namespace/Library */
-using CustomControls;
-
+// My namespace
 namespace MotorwaySimulator
 {
     /// <summary>

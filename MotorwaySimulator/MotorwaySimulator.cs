@@ -8,9 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-/* My Custom Control Namespace/Library */
-using CustomControls;
-
+// My namespace
 namespace MotorwaySimulator
 {
     /// <summary>
@@ -874,7 +872,9 @@ namespace MotorwaySimulator
             // Calculate the size of the road
             int newHeight = ActiveLaneCount * laneWidth;
             Height = 512 + 17 + newHeight;
-            MinimumSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
+            Size newSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
+            MinimumSize = newSize;
+            Size = newSize;
             Road.Width = activeRoadLengthPixels;
             Road.Height = newHeight;
 
@@ -898,7 +898,13 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 103830, 4.5);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 4);
+            DebugModeInstructions.Add(instruction);
+            // Create an individual spawn instruction
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 500, 106000, 4);
+            DebugModeInstructions.Add(instruction);
+            // Create an individual spawn instruction
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 1500, 112000, 4);
             DebugModeInstructions.Add(instruction);
 
             // Start the simulation

@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomControls.cs">
+    <Compile Include="LaneControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MotorwaySimulator.cs">

@@ -2069,11 +2069,12 @@ namespace MotorwaySimulator
             this.Controls.Add(this.PanelSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(100, 100);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(16, 512);
+            this.MinimumSize = new System.Drawing.Size(1181, 512);
             this.Name = "MotorwaySimulatorForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Motorway Simulator";
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.UpdateControlPanelLocation);
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
