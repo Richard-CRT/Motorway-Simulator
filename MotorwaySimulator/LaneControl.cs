@@ -488,7 +488,7 @@ namespace MotorwaySimulator
 
                 if (lastVehicle.ActualSpeedMetresHour >= newVehicle.DesiredSpeedMetresHour)
                 {
-                    // Last vehicle on the lan travelling faster or equal to than new vehicle wants to travel
+                    // Last vehicle on the lane travelling faster or equal to than new vehicle wants to travel
                     // To spawn stopping distance needs to be at back of vehicle or further away, i.e. no stopping distance overlap is allowed
                     if (newVehicle.ProgressPixels + projectedDesiredStoppingDistancePixels >= backOfNextVehicle)
                     {
