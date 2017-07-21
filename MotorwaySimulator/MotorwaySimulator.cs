@@ -52,14 +52,6 @@ namespace MotorwaySimulator
         /* Constants */
 
         /// <summary>
-        /// Width of each vehicle in metres
-        /// </summary>
-        private const double VehicleWidthMetres = 2;
-        /// <summary>
-        /// Scaling factor from Metres To Pixels
-        /// </summary>
-        private const int MetresToPixelsScalingFactor = 10;
-        /// <summary>
         /// The margin between the white line and the side of each vehicle in metres
         /// </summary>
         private const double LaneMarginMetres = 0.8;
@@ -107,6 +99,14 @@ namespace MotorwaySimulator
         /// The margin that the average speed of a vehicle must be below it's desired spped to be severely congested
         /// </summary>
         public int ActiveSevereCongestionTriggerMetresHour;
+        /// <summary>
+        /// Scaling factor from Metres To Pixels
+        /// </summary>
+        private int ActiveMetresToPixelsScalingFactor;
+        /// <summary>
+        /// Width of each vehicle in metres
+        /// </summary>
+        private double ActiveVehicleWidthMetres;
         /// <summary>
         /// The dictionary containing all the vehicle simulation parameters being used by the simulation (dictionary is a is a system class not created by me but VehicleTypes and VehicleTemplate are data structures made by me)
         /// </summary>
@@ -197,7 +197,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The specific vehicle object that has been selected for data output
         /// </summary>
-        private Vehicle SelectedVehicle;
+        public Vehicle SelectedVehicle;
 
 
         /* Debug */
@@ -243,9 +243,8 @@ namespace MotorwaySimulator
             UpdateTimescale(null, null);
             ValidateProbabilityChange(null, null);
 
-            // Calculate values in pixels from metre constants
-            LaneMarginPixels = (int)Math.Round(MetresToPixels(MotorwaySimulatorForm.LaneMarginMetres), 0);
-            VehicleWidthPixels = (int)Math.Round(MetresToPixels(MotorwaySimulatorForm.VehicleWidthMetres), 0);
+            // Make window fill screen
+            this.Width = Screen.PrimaryScreen.Bounds.Width;
         }
 
         #region Form Event Handlers
@@ -547,7 +546,7 @@ namespace MotorwaySimulator
                 // There is actually a selected vehicle
 
                 // Calculate the new scroll position from the vehicles progress in pixels and the width of the form
-                int newPosition = SelectedVehicle.ProgressPixels - (Width / 8);
+                int newPosition = SelectedVehicle.ProgressPixels;
                 if (newPosition < 0)
                 {
                     newPosition = 0;
@@ -760,6 +759,14 @@ namespace MotorwaySimulator
                 lane.Invalidate(); // Repaint the lane
             }
 
+            if (SelectedVehicle != null && CheckBoxAutoFindVehicle.Checked)
+            {
+                if (SelectedVehicle.ProgressPixels < this.HorizontalScroll.Value || SelectedVehicle.ProgressPixels > this.HorizontalScroll.Value + this.Width)
+                {
+                    ButtonFindVehicle_Click(null, null);
+                }
+            }
+
             // Update the output data of the data tab
             UpdateData();
         }
@@ -794,7 +801,7 @@ namespace MotorwaySimulator
         /// <returns>The number of pixels for each metre</returns>
         public double MetresToPixels(double metres)
         {
-            return metres * MotorwaySimulatorForm.MetresToPixelsScalingFactor;
+            return metres * ActiveMetresToPixelsScalingFactor;
         }
 
         /// <summary>
@@ -842,6 +849,14 @@ namespace MotorwaySimulator
             TreeViewFinishedVehicles.Nodes.Clear();
             Road.Size = new Size(10, 10);
 
+            ActiveMetresToPixelsScalingFactor = (int)NumericMetreToPixelScalingFactor.Value;
+            ActiveVehicleWidthMetres = (int)NumericVehicleWidth.Value;
+
+            // Calculate values in pixels from metre constants
+            LaneMarginPixels = (int)Math.Round(MetresToPixels(MotorwaySimulatorForm.LaneMarginMetres), 0);
+            VehicleWidthPixels = (int)Math.Round(MetresToPixels(ActiveVehicleWidthMetres), 0);
+
+
             // Assign the parameters for use in the simulation from the form inputs
             VehicleParameters = new Dictionary<VehicleTypes, VehicleTemplate>()
             {
@@ -861,6 +876,7 @@ namespace MotorwaySimulator
             ActiveMildCongestionTriggerMetresHour = (int)NumericMildCongestion.Value * 1000;
             ActiveSevereCongestionTriggerMetresHour = (int)NumericSevereCongestion.Value * 1000;
 
+
             ActiveInterArrivalTime = InterArrivalTime;
             ActiveInterArrivalTimeVariationPercentage = InterArrivalTimeVariationPercentage;
             ChosenInterArrivalVariationPercentage = -1;
@@ -872,9 +888,7 @@ namespace MotorwaySimulator
             // Calculate the size of the road
             int newHeight = ActiveLaneCount * laneWidth;
             Height = 512 + 17 + newHeight;
-            Size newSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
-            MinimumSize = newSize;
-            Size = newSize;
+            MinimumSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
             Road.Width = activeRoadLengthPixels;
             Road.Height = newHeight;
 
