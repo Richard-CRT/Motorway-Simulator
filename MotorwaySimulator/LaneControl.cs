@@ -329,7 +329,7 @@ namespace MotorwaySimulator
             {
 
                 // Calculate the location of the back of the next vehicle
-                int backOfNextVehicle = nextVehicle.ProgressPixels - nextVehicle.VehicleLengthPixels;
+                double backOfNextVehicle = nextVehicle.ExactProgressMetres - nextVehicle.VehicleLengthMetres;
 
                 // Specification requires vehicles changing to lane N-1 must be able to travel at their desired speed and vehicles changing to lane N+1 must be able to travel at least at its current speed.
                 // If the vehicle from the other lane is allowed to overlap then in theory it must change speed to match that of the next vehicle during the next tick. That is against the specification,
@@ -337,13 +337,13 @@ namespace MotorwaySimulator
 
                 // Since all vehicles will strive to be in lane N-1, if a vehicle joins lane N+1 to overtake, it will immediately rejoin lane N. To combat this an extra 10% of the
                 // stopping distance space will be required to change lane N to lane N-1
-                int vehicleFromOtherLaneProjectedStoppingDistancePixels;
+                double vehicleFromOtherLaneProjectedStoppingDistanceMetres;
                 if (vehicleFromOtherLane.ParentLane.LaneId > LaneId)
                 {
                     // Changing lane to the left
 
                     // Calculate the stopping distance of the vehicle from the other lane at its desired speed
-                    vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour)), 0);
+                    vehicleFromOtherLaneProjectedStoppingDistanceMetres = MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour);
                 }
                 else
                 {
@@ -351,11 +351,11 @@ namespace MotorwaySimulator
                     // Changing lane to the right
 
                     // Calculate the stopping distance of the vehicle from the other lane at its actual speed
-                    vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
+                    vehicleFromOtherLaneProjectedStoppingDistanceMetres = MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour);
                 }
 
-                // If the stopping distance does not overlap with the back of the vehicle in the next lane with a 10 pixel buffer (since sometimes there's some pixel overlap and it's hard to compensate)
-                if (vehicleFromOtherLane.ProgressPixels + vehicleFromOtherLaneProjectedStoppingDistancePixels <= backOfNextVehicle + 10)
+                // If the stopping distance does not overlap with the back of the vehicle in the next lane with a 1 metre buffer (since sometimes there's some overlap and it's hard to compensate)
+                if (vehicleFromOtherLane.ExactProgressMetres + vehicleFromOtherLaneProjectedStoppingDistanceMetres <= backOfNextVehicle + 1)
                 {
                     // The stopping distance of the vehicle from the other lane does not overlap with the next vehicle
 
@@ -392,10 +392,10 @@ namespace MotorwaySimulator
             if (previousVehicle != null)
             {
                 // Calculate the stopping distance of the vehicle behind the vehicle from the other lane
-                int previousVehicleStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour)), 0);
+                double previousVehicleStoppingDistanceMetres = MainForm.StoppingDistance(previousVehicle.ActualSpeedMetresHour);
 
                 // Calculate the location of the back of the vehicle from the other lane
-                int backOfOtherLaneVehicle = vehicleFromOtherLane.ProgressPixels - vehicleFromOtherLane.VehicleLengthPixels;
+                double backOfOtherLaneVehicle = vehicleFromOtherLane.ExactProgressMetres - vehicleFromOtherLane.VehicleLengthMetres;
                 
                 double speedInQuestion;
                 if (vehicleFromOtherLane.ParentLane.LaneId > LaneId)
@@ -416,15 +416,15 @@ namespace MotorwaySimulator
                 if (previousVehicle.ActualSpeedMetresHour > speedInQuestion)
                 {
                     // Calculate the stopping distance of the vehicle from the other lane
-                    int vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(speedInQuestion)), 0);
+                    double vehicleFromOtherLaneProjectedStoppingDistanceMetres = MainForm.StoppingDistance(speedInQuestion);
 
                     // The vehicle behind the vehicle from the other lane is travelling faster than the vehicle from the other lane
                     // Therefore the vehicle behind the vehicle from the other lane can slow down, meaning the stopping distance can overlap
 
-                    // Calculate the overlap allowed in pixels
-                    int previousVehicleStoppingDistanceChangeByChangingSpeedsPixels = previousVehicleStoppingDistancePixels - vehicleFromOtherLaneProjectedStoppingDistancePixels;
+                    // Calculate the overlap allowed in metres
+                    double previousVehicleStoppingDistanceChangeByChangingSpeedsMetres = previousVehicleStoppingDistanceMetres - vehicleFromOtherLaneProjectedStoppingDistanceMetres;
 
-                    if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsPixels)
+                    if (previousVehicle.ExactProgressMetres + previousVehicleStoppingDistanceMetres < backOfOtherLaneVehicle + previousVehicleStoppingDistanceChangeByChangingSpeedsMetres)
                     {
                         // The stopping distance overlaps, but only by less than the overlap allowed
 
@@ -443,7 +443,7 @@ namespace MotorwaySimulator
                 {
                     // The vehicle behind the vehicle from the other lane is travelling slower than the vehicle from the other lane
                     // Therefore the vehicle behind the vehicle from the other lane cannot slow down, meaning the stopping distance cannot overlap
-                    if (previousVehicle.ProgressPixels + previousVehicleStoppingDistancePixels < backOfOtherLaneVehicle)
+                    if (previousVehicle.ExactProgressMetres + previousVehicleStoppingDistanceMetres < backOfOtherLaneVehicle)
                     {
                         // The stopping distance of the vehicle behind the vehicle from the other lane does not overlap with the vehicle from the other lane
 
