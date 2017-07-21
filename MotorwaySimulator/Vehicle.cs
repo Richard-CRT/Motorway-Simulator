@@ -222,7 +222,7 @@ namespace MotorwaySimulator
                                 ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
                             }
                         }
-                        else
+                        else if (IsTravellingAtDesiredSpeed)
                         {
                             // The vehicle ahead of this vehicle is travelling either at the same speed or faster than this vehicle
                             // Therefore this vehicle needs to stop to wait for the next vehicle to get far enough away
