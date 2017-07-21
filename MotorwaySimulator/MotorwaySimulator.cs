@@ -225,7 +225,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -596,9 +596,9 @@ namespace MotorwaySimulator
                 vehicle.LaneTick();
             }
 
+            // Tick the movement handling method of each vehicle by location
             foreach (Vehicle vehicle in OrderedVehicles)
             {
-                // Tick the movment handling method of each vehicle by location
                 vehicle.MovementTick();
             }
             
@@ -811,7 +811,14 @@ namespace MotorwaySimulator
         /// <returns>The stopping distance in metres</returns>
         public double StoppingDistance(double metresHour)
         {
-            return (metresHour * ActiveStoppingTime) / (60 * 60);
+            double distance = (metresHour * ActiveStoppingTime) / (60 * 60);
+            
+            if (distance < 3)
+            {
+                distance = 3;
+            }
+            
+            return distance;
         }
 
         /// <summary>
@@ -860,12 +867,12 @@ namespace MotorwaySimulator
             // Assign the parameters for use in the simulation from the form inputs
             VehicleParameters = new Dictionary<VehicleTypes, VehicleTemplate>()
             {
-                // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Probability
+                // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Crash Probability, Spawn Probability
 
-                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
+                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarCrashProbability.Value/(decimal)100),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVCrashProbability.Value/(decimal)100),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVCrashProbability.Value/(decimal)100),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusCrashProbability.Value/(decimal)100),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
             };
 
             ActiveLaneCount = LaneCount;
@@ -912,16 +919,15 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.HGV, Lanes[0], 0, 96000, 4);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 16, 100);
             DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 500, 106000, 4);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 96000, 16, 100);
             DebugModeInstructions.Add(instruction);
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 1500, 112000, 4);
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 2000, 96000, 4, -1);
             DebugModeInstructions.Add(instruction);
-
-            // Start the simulation
+            instruction = new DebugVehicleSpawnInstruction(3, VehicleTypes.Car, Lanes[1], 2500, 96000, 4, -1);
+            //instruction = new DebugVehicleSpawnInstruction(3, VehicleTypes.Car, Lanes[1], 3500, 103395, 4, -1);
+            DebugModeInstructions.Add(instruction);
             LastTimerValue = 0;
             LastArrivalTimerValue = 0;
             ScaledTimePassed = 0;
@@ -986,23 +992,24 @@ namespace MotorwaySimulator
                 for (int instructionIndex = 0; instructionIndex < DebugModeInstructions.Count;)
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
-                    if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
-                    {
+                    //if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
+                    if (ScaledTimePassed >= instruction.RealTimeSpawnTime)
+                        {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
                         switch (instruction.Type)
                         {
                             case VehicleTypes.Car:
-                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
                                 break;
                             case VehicleTypes.LGV:
-                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
                                 break;
                             case VehicleTypes.HGV:
-                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
                                 break;
                             case VehicleTypes.Bus:
-                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour);
+                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
                                 break;
                             default:
                                 vehicle = null;
@@ -1241,6 +1248,9 @@ namespace MotorwaySimulator
                 {
                     LabelVehicleCongestion.Text = "---";
                 }
+
+                // Update the vehicle crashed output
+                LabelVehicleCrashed.Text = SelectedVehicle.Crashed.ToString();
             }
 
             int successCount = 0;
@@ -1447,6 +1457,11 @@ namespace MotorwaySimulator
         /// <summary>
         /// Describes the probability (0.00 - 1.00) of that vehicle type spawning
         /// </summary>
+        public double CrashProbability;
+
+        /// <summary>
+        /// Describes the probability (0.00 - 1.00) of that vehicle type spawning
+        /// </summary>
         public double Probability;
 
         /// <summary>
@@ -1465,14 +1480,15 @@ namespace MotorwaySimulator
         /// <param name="desiredSpeedVariation">The plus or minus speed of the vehicle type (mph)</param>
         /// <param name="maximumLane">The maximum lane that the vehicle type can occupy</param>
         /// <param name="probability">The probability of that vehicle type spawning (0.00-1.00)</param>
-        public VehicleTemplate(double length, double lengthVariation, int desiredSpeed, double desiredSpeedVariation, int maximumLane, double probability)
+        public VehicleTemplate(double length, double lengthVariation, int desiredSpeed, double desiredSpeedVariation, int maximumLane, double crashProbability, double spawnProbability)
         {
             Length = length;
             LengthVariation = lengthVariation;
             DesiredSpeed = desiredSpeed;
             DesiredSpeedVariation = desiredSpeedVariation;
             MaximumLane = maximumLane;
-            Probability = probability;
+            CrashProbability = crashProbability;
+            Probability = spawnProbability;
         }
     }
 
@@ -1513,6 +1529,11 @@ namespace MotorwaySimulator
         /// </summary>
         public double VehicleLength;
 
+        /// <summary>
+        /// The location that this vehicle will crash at
+        /// </summary>
+        public double CrashLocation;
+
         #endregion
 
         /// <summary>
@@ -1524,7 +1545,8 @@ namespace MotorwaySimulator
         /// <param name="realTimeSpawnTime">The time in realtime to spawn the vehicle</param>
         /// <param name="desiredSpeedMetresHour">The desired speed in metres per hour of the vehicle to spawn</param>
         /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0)
+        /// <param name="crashLocation">The location for the vehicle to crash</param>
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0, double crashLocation = -1)
         {
             VehicleId = vehicleId;
             Type = type;
@@ -1532,6 +1554,7 @@ namespace MotorwaySimulator
             RealTimeSpawnTime = realTimeSpawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
+            CrashLocation = crashLocation;
         }
     }
 }

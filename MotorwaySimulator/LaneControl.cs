@@ -347,13 +347,15 @@ namespace MotorwaySimulator
                 }
                 else
                 {
+
                     // Changing lane to the right
 
                     // Calculate the stopping distance of the vehicle from the other lane at its actual speed
                     vehicleFromOtherLaneProjectedStoppingDistancePixels = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicleFromOtherLane.ActualSpeedMetresHour)), 0);
                 }
 
-                if (vehicleFromOtherLane.ProgressPixels + vehicleFromOtherLaneProjectedStoppingDistancePixels < backOfNextVehicle)
+                // If the stopping distance does not overlap with the back of the vehicle in the next lane with a 10 pixel buffer (since sometimes there's some pixel overlap and it's hard to compensate)
+                if (vehicleFromOtherLane.ProgressPixels + vehicleFromOtherLaneProjectedStoppingDistancePixels <= backOfNextVehicle + 10)
                 {
                     // The stopping distance of the vehicle from the other lane does not overlap with the next vehicle
 
