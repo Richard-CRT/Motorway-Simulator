@@ -343,7 +343,7 @@ namespace MotorwaySimulator
                     // Changing lane to the left
 
                     // Calculate the stopping distance of the vehicle from the other lane at its desired speed
-                    vehicleFromOtherLaneProjectedStoppingDistanceMetres = MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour);
+                    vehicleFromOtherLaneProjectedStoppingDistanceMetres = MainForm.StoppingDistance(vehicleFromOtherLane.DesiredSpeedMetresHour) * 1.1;
                 }
                 else
                 {
