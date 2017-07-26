@@ -115,6 +115,8 @@ namespace MotorwaySimulator
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
             this.TabPageSimulation = new System.Windows.Forms.TabPage();
+            this.LabelAllVehiclesLifetime = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesLifetimeTitle = new System.Windows.Forms.Label();
             this.LabelVehicleCrashed = new System.Windows.Forms.Label();
             this.LabelVehicleCrashedTitle = new System.Windows.Forms.Label();
             this.CheckBoxAutoFindVehicle = new System.Windows.Forms.CheckBox();
@@ -156,7 +158,7 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalFailedSpawnsTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalSuccessfulSpawns = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle = new System.Windows.Forms.Label();
-            this.LabelAllVehicleDataTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesDataTitle = new System.Windows.Forms.Label();
             this.ButtonFindVehicle = new System.Windows.Forms.Button();
             this.LabelVehicleCongestion = new System.Windows.Forms.Label();
             this.LabelVehicleCongestionTitle = new System.Windows.Forms.Label();
@@ -1473,6 +1475,8 @@ namespace MotorwaySimulator
             // TabPageSimulation
             // 
             this.TabPageSimulation.BackColor = System.Drawing.Color.White;
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetime);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetimeTitle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashed);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashedTitle);
             this.TabPageSimulation.Controls.Add(this.CheckBoxAutoFindVehicle);
@@ -1514,7 +1518,7 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalFailedSpawnsTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawns);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawnsTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehicleDataTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesDataTitle);
             this.TabPageSimulation.Controls.Add(this.ButtonFindVehicle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestion);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestionTitle);
@@ -1551,6 +1555,26 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Size = new System.Drawing.Size(1130, 360);
             this.TabPageSimulation.TabIndex = 1;
             this.TabPageSimulation.Text = "Data";
+            // 
+            // LabelAllVehiclesLifetime
+            // 
+            this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(969, 172);
+            this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
+            this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(148, 28);
+            this.LabelAllVehiclesLifetime.TabIndex = 125;
+            this.LabelAllVehiclesLifetime.Text = "---";
+            this.LabelAllVehiclesLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelAllVehiclesLifetimeTitle
+            // 
+            this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(883, 172);
+            this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
+            this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(96, 28);
+            this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
+            this.LabelAllVehiclesLifetimeTitle.Text = "Total Lifetime: ";
+            this.LabelAllVehiclesLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LabelVehicleCrashed
             // 
@@ -1962,15 +1986,15 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Text = "Successful Spawns:";
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // LabelAllVehicleDataTitle
+            // LabelAllVehiclesDataTitle
             // 
-            this.LabelAllVehicleDataTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelAllVehicleDataTitle.Location = new System.Drawing.Point(634, 15);
-            this.LabelAllVehicleDataTitle.Name = "LabelAllVehicleDataTitle";
-            this.LabelAllVehicleDataTitle.Size = new System.Drawing.Size(483, 22);
-            this.LabelAllVehicleDataTitle.TabIndex = 82;
-            this.LabelAllVehicleDataTitle.Text = "All Vehicle Data";
-            this.LabelAllVehicleDataTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelAllVehiclesDataTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelAllVehiclesDataTitle.Location = new System.Drawing.Point(634, 15);
+            this.LabelAllVehiclesDataTitle.Name = "LabelAllVehiclesDataTitle";
+            this.LabelAllVehiclesDataTitle.Size = new System.Drawing.Size(483, 22);
+            this.LabelAllVehiclesDataTitle.TabIndex = 82;
+            this.LabelAllVehiclesDataTitle.Text = "All Vehicle Data";
+            this.LabelAllVehiclesDataTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ButtonFindVehicle
             // 
@@ -2464,7 +2488,7 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelVehicleCongestion;
         private System.Windows.Forms.Label LabelVehicleCongestionTitle;
         private System.Windows.Forms.Button ButtonFindVehicle;
-        private System.Windows.Forms.Label LabelAllVehicleDataTitle;
+        private System.Windows.Forms.Label LabelAllVehiclesDataTitle;
         private System.Windows.Forms.Label LabelAllVehiclesHGVPercent;
         private System.Windows.Forms.Label LabelAllVehiclesHGVPercentTitle;
         private System.Windows.Forms.Label LabelAllVehiclesTotalVehicles;
@@ -2520,6 +2544,8 @@ namespace MotorwaySimulator
         private System.Windows.Forms.NumericUpDown NumericBusCrashProbability;
         private System.Windows.Forms.Label LabelVehicleCrashed;
         private System.Windows.Forms.Label LabelVehicleCrashedTitle;
+        private System.Windows.Forms.Label LabelAllVehiclesLifetime;
+        private System.Windows.Forms.Label LabelAllVehiclesLifetimeTitle;
     }
 }
 

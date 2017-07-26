@@ -225,7 +225,7 @@ namespace MotorwaySimulator
             InitializeComponent();
 
             // Initialise variables
-            DebugMode = true;
+            DebugMode = false;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -926,11 +926,11 @@ namespace MotorwaySimulator
             instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 96000, 100, -1);
             DebugModeInstructions.Add(instruction);
 
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[2], 0, 96000, 3.5, -1);
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[2], 0, 96000, 3.5, 80);
             DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(3, VehicleTypes.Car, Lanes[2], 2000, 96000, 3.5, -1);
+            instruction = new DebugVehicleSpawnInstruction(3, VehicleTypes.Car, Lanes[2], 1500, 96000, 3.5, -1);
             DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(4, VehicleTypes.Car, Lanes[2], 4000, 96000, 3.5, -1);
+            instruction = new DebugVehicleSpawnInstruction(4, VehicleTypes.Car, Lanes[2], 3000, 96000, 3.5, -1);
             DebugModeInstructions.Add(instruction);
 
 
@@ -1415,6 +1415,10 @@ namespace MotorwaySimulator
                 LabelAllVehiclesMildlyCongestedPercent.Text = "---";
                 LabelAllVehiclesSeverelyCongestedPercent.Text = "---";
             }
+
+            // Update the simulation lifetime output
+            TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
+            LabelAllVehiclesLifetime.Text = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "h " + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "m " + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "s " + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
         }
 
         /// <summary>
