@@ -256,29 +256,6 @@ namespace MotorwaySimulator
 
                 #endregion
 
-                #region Change Lane n-1
-
-                if (ParentLane.LaneId != 0)
-                {
-                    // This vehicle is not in the left most lane
-
-                    // Get the object of the lane to the left of the lane this vehicle is in
-                    LaneControl leftLane = MainForm.Lanes[ParentLane.LaneId - 1];
-
-                    // Calculate if there is space in the lane to the left
-                    bool spaceInLane = leftLane.SpaceInLane(this);
-                    if (spaceInLane)
-                    {
-                        // There is space in the lane to the left
-
-                        // Switch lane to the left
-                        leftLane.Vehicles.Add(this);
-                        ParentLane.Vehicles.Remove(this);
-                        ParentLane = leftLane;
-                    }
-                }
-
-                #endregion
 
                 #region Change Lane n+1
 
@@ -299,6 +276,30 @@ namespace MotorwaySimulator
                         rightLane.Vehicles.Add(this);
                         ParentLane.Vehicles.Remove(this);
                         ParentLane = rightLane;
+                    }
+                }
+
+                #endregion
+
+                #region Change Lane n-1
+
+                if (ParentLane.LaneId != 0)
+                {
+                    // This vehicle is not in the left most lane
+
+                    // Get the object of the lane to the left of the lane this vehicle is in
+                    LaneControl leftLane = MainForm.Lanes[ParentLane.LaneId - 1];
+
+                    // Calculate if there is space in the lane to the left
+                    bool spaceInLane = leftLane.SpaceInLane(this);
+                    if (spaceInLane)
+                    {
+                        // There is space in the lane to the left
+
+                        // Switch lane to the left
+                        leftLane.Vehicles.Add(this);
+                        ParentLane.Vehicles.Remove(this);
+                        ParentLane = leftLane;
                     }
                 }
 
