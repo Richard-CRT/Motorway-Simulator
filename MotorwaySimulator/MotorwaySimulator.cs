@@ -946,7 +946,7 @@ namespace MotorwaySimulator
             ChosenInterArrivalVariationPercentage = -1;
 
             ActiveStoppingTime = StoppingTime;
-            .
+
             int laneWidth = VehicleWidthPixels + (2 * LaneMarginPixels);
 
             // Calculate the size of the road
