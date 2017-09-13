@@ -138,17 +138,24 @@ namespace MotorwaySimulator
             foreach (TreeNode treeNode in LaneNode.Nodes)
             {
                 Vehicle vehicle = (Vehicle)treeNode.Tag;
-                switch (vehicle.Congestion)
+                if (vehicle.Crashed)
                 {
-                    case CongestionStates.None:
-                        treeNode.BackColor = Color.LimeGreen;
-                        break;
-                    case CongestionStates.Mild:
-                        treeNode.BackColor = Color.Red;
-                        break;
-                    case CongestionStates.Severe:
-                        treeNode.BackColor = Color.DarkRed;
-                        break;
+                    treeNode.BackColor = Color.Black;
+                }
+                else
+                {
+                    switch (vehicle.Congestion)
+                    {
+                        case CongestionStates.None:
+                            treeNode.BackColor = Color.LimeGreen;
+                            break;
+                        case CongestionStates.Mild:
+                            treeNode.BackColor = Color.Red;
+                            break;
+                        case CongestionStates.Severe:
+                            treeNode.BackColor = Color.DarkRed;
+                            break;
+                    }
                 }
             }
 

@@ -39,6 +39,10 @@ namespace MotorwaySimulator
         /// </summary>
         public bool InEffect;
         /// <summary>
+        /// Describes whether this vehicle is a lane camper
+        /// </summary>
+        public bool Camper;
+        /// <summary>
         /// Describes whether this vehicle has crashed and will not be able to move anymore
         /// </summary>
         public bool Crashed;
@@ -255,11 +259,10 @@ namespace MotorwaySimulator
                 }
 
                 #endregion
-
-
+                
                 #region Change Lane n+1
 
-                if (ParentLane.LaneId != MainForm.ActiveLaneCount - 1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId + 1 < MaximumLane)
+                if (ParentLane.LaneId != MainForm.ActiveLaneCount - 1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId + 1 < MaximumLane && !Camper)
                 {
                     // This vehicle is not in the right most lane, is not in its own maximum lane and is not travelling at its desired speed
 
@@ -283,7 +286,7 @@ namespace MotorwaySimulator
 
                 #region Change Lane n-1
 
-                if (ParentLane.LaneId != 0)
+                if (ParentLane.LaneId != 0 && !Camper)
                 {
                     // This vehicle is not in the left most lane
 
@@ -391,7 +394,7 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
         /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
         /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
-        public void GenerateVehicle(VehicleTypes type, MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength, double predeterminedDesiredSpeedMetresHour, double predeterminedCrashLocation)
+        public void GenerateVehicle(VehicleTypes type, MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength, double predeterminedDesiredSpeedMetresHour, double predeterminedCrashLocation, bool predeterminedCamper)
         {
             // Instantiate the variables from the parameters and those that need initial values
             MainForm = mainForm;
@@ -403,6 +406,7 @@ namespace MotorwaySimulator
             LastStopwatchTimerValue = mainForm.ScaledTimePassed;
             ParentLane = null;
             CrashLocationMetres = predeterminedCrashLocation;
+            Camper = predeterminedCamper;
 
             // Record the time of appearance
             TimeAppearance = mainForm.ScaledTimePassed;
@@ -417,10 +421,26 @@ namespace MotorwaySimulator
             {
                 length = predeterminedVehicleLength;
             }
+
+            int crashingCount = 0;
+            foreach (Vehicle vehicle in MainForm.AllVehicles)
+            {
+                if (vehicle.CrashLocationMetres != -1 && vehicle.SuccessfulSpawn)
+                {
+                    crashingCount++;
+                }
+            }
             
             double rand = MainForm.RandomGenerator.NextDouble();
             
-            if (rand < MainForm.VehicleParameters[type].CrashProbability)
+            if (rand < MainForm.VehicleParameters[type].CamperProbability)
+            {
+                Camper = true;
+            }
+
+            rand = MainForm.RandomGenerator.NextDouble();
+
+            if (crashingCount < MainForm.ActiveMaxCrashCount && rand < MainForm.VehicleParameters[type].CrashProbability)
             {
                 rand = MainForm.RandomGenerator.NextDouble();
                 // It will crash
@@ -471,9 +491,9 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
         /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
         /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
-        public Car (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1)
+        public Car (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
-            GenerateVehicle(VehicleTypes.Car, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation);
+            GenerateVehicle(VehicleTypes.Car, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
     }
 
@@ -488,9 +508,9 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1)
+        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
-            GenerateVehicle(VehicleTypes.LGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation);
+            GenerateVehicle(VehicleTypes.LGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
     }
 
@@ -505,9 +525,9 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1)
+        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
-            GenerateVehicle(VehicleTypes.HGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation);
+            GenerateVehicle(VehicleTypes.HGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
     }
 
@@ -522,9 +542,9 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1)
+        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
-            GenerateVehicle(VehicleTypes.Bus, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation);
+            GenerateVehicle(VehicleTypes.Bus, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
     }
 }

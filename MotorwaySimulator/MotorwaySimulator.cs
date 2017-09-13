@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -100,6 +101,10 @@ namespace MotorwaySimulator
         /// </summary>
         public int ActiveSevereCongestionTriggerMetresHour;
         /// <summary>
+        /// Max crash count
+        /// </summary>
+        public int ActiveMaxCrashCount;
+        /// <summary>
         /// Scaling factor from Metres To Pixels
         /// </summary>
         private int ActiveMetresToPixelsScalingFactor;
@@ -107,6 +112,18 @@ namespace MotorwaySimulator
         /// Width of each vehicle in metres
         /// </summary>
         private double ActiveVehicleWidthMetres;
+        /// <summary>
+        /// Simulation run time enabled?
+        /// </summary>
+        private bool ActiveRunDurationEnabled;
+        /// <summary>
+        /// Duration of the simulation
+        /// </summary>
+        private int ActiveRunDuration;
+        /// <summary>
+        /// Time at start of simulation
+        /// </summary>
+        private DateTime ActiveRunStartTime;
         /// <summary>
         /// The dictionary containing all the vehicle simulation parameters being used by the simulation (dictionary is a is a system class not created by me but VehicleTypes and VehicleTemplate are data structures made by me)
         /// </summary>
@@ -511,6 +528,8 @@ namespace MotorwaySimulator
             ButtonStop.Enabled = true;
             ButtonPause.Enabled = false;
             ButtonStart.Enabled = true;
+            CheckBoxRunForDuration.Enabled = true;
+            DateTimeRunDuration.Enabled = true;
         }
 
         /// <summary>
@@ -532,6 +551,13 @@ namespace MotorwaySimulator
             ButtonStop.Enabled = false;
             ButtonPause.Enabled = false;
             ButtonStart.Enabled = true;
+            CheckBoxRunForDuration.Enabled = true;
+            DateTimeRunDuration.Enabled = true;
+
+            if (CheckBoxSaveOnStop.Checked)
+            {
+                SaveData();
+            }
         }
 
         /// <summary>
@@ -587,6 +613,11 @@ namespace MotorwaySimulator
             LastTimerValue = tempTime;
             double scaledElapsedTime = elapsedTime * TimeScale;
             ScaledTimePassed += scaledElapsedTime;
+
+            if (ActiveRunDurationEnabled && ScaledTimePassed >= ActiveRunDuration)
+            {
+                ButtonStop_Click(null, null);
+            }
 
             Vehicle[] OrderedVehicles = AllActiveVehiclesOrderByLocation();
 
@@ -771,6 +802,22 @@ namespace MotorwaySimulator
             UpdateData();
         }
 
+        private void CheckBoxRunForDuration_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox CheckBoxRunForDuration = sender as CheckBox;
+            if (CheckBoxRunForDuration != null && SimulationState == SimulationStates.Stopped)
+            {
+                if (CheckBoxRunForDuration.Checked)
+                {
+                    DateTimeRunDuration.Enabled = true;
+                }
+                else
+                {
+                    DateTimeRunDuration.Enabled = false;
+                }
+            }
+        }
+
         #endregion
 
         #region Supportive Methods
@@ -856,6 +903,15 @@ namespace MotorwaySimulator
             TreeViewFinishedVehicles.Nodes.Clear();
             Road.Size = new Size(10, 10);
 
+            ActiveRunStartTime = DateTime.UtcNow;
+
+            ActiveRunDurationEnabled = CheckBoxRunForDuration.Checked;
+            if (ActiveRunDurationEnabled)
+            {
+                DateTime value = DateTimeRunDuration.Value;
+                ActiveRunDuration = 1000 * ((value.Hour * 3600) + (value.Minute * 60) + value.Second);
+            }
+
             ActiveMetresToPixelsScalingFactor = (int)NumericMetreToPixelScalingFactor.Value;
             ActiveVehicleWidthMetres = (int)NumericVehicleWidth.Value;
 
@@ -867,12 +923,12 @@ namespace MotorwaySimulator
             // Assign the parameters for use in the simulation from the form inputs
             VehicleParameters = new Dictionary<VehicleTypes, VehicleTemplate>()
             {
-                // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Crash Probability, Spawn Probability
+                // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Camper Probability, Crash Probability, Spawn Probability
 
-                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarCrashProbability.Value/(decimal)100),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVCrashProbability.Value/(decimal)100),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVCrashProbability.Value/(decimal)100),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusCrashProbability.Value/(decimal)100),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
+                { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarCamperProbability.Value/(decimal)100),  (double)(NumericCarCrashProbability.Value/(decimal)100),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVCamperProbability.Value/(decimal)100),  (double)(NumericLGVCrashProbability.Value/(decimal)100),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVCamperProbability.Value/(decimal)100),  (double)(NumericHGVCrashProbability.Value/(decimal)100),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusCamperProbability.Value/(decimal)100),  (double)(NumericBusCrashProbability.Value/(decimal)100),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
             };
 
             ActiveLaneCount = LaneCount;
@@ -880,22 +936,23 @@ namespace MotorwaySimulator
             ActiveRoadLengthMetres = RoadLengthMetres;
             int activeRoadLengthPixels = (int)Math.Round(MetresToPixels(ActiveRoadLengthMetres), 0);
 
+            ActiveMaxCrashCount = (int)NumericMaxCrashCount.Value;
+
             ActiveMildCongestionTriggerMetresHour = (int)NumericMildCongestion.Value * 1000;
             ActiveSevereCongestionTriggerMetresHour = (int)NumericSevereCongestion.Value * 1000;
-
 
             ActiveInterArrivalTime = InterArrivalTime;
             ActiveInterArrivalTimeVariationPercentage = InterArrivalTimeVariationPercentage;
             ChosenInterArrivalVariationPercentage = -1;
 
             ActiveStoppingTime = StoppingTime;
-
+            .
             int laneWidth = VehicleWidthPixels + (2 * LaneMarginPixels);
 
             // Calculate the size of the road
             int newHeight = ActiveLaneCount * laneWidth;
-            Height = 512 + 17 + newHeight;
-            MinimumSize = new Size(MinimumSize.Width, 512 + 17 + newHeight);
+            MinimumSize = new Size(MinimumSize.Width, 530 + 17 + newHeight);
+            Height = 530 + 17 + newHeight;
             Road.Width = activeRoadLengthPixels;
             Road.Height = newHeight;
 
@@ -936,7 +993,7 @@ namespace MotorwaySimulator
 
 
             LastTimerValue = 0;
-            LastArrivalTimerValue = 0;
+            LastArrivalTimerValue = -1;
             ScaledTimePassed = 0;
             StopwatchTimer.Restart();
             FormTick.Enabled = true;
@@ -948,6 +1005,8 @@ namespace MotorwaySimulator
             ButtonStop.Enabled = true;
             ButtonPause.Enabled = true;
             ButtonFindVehicle.Enabled = false;
+            CheckBoxRunForDuration.Enabled = false;
+            DateTimeRunDuration.Enabled = false;
         }
 
         /// <summary>
@@ -955,6 +1014,13 @@ namespace MotorwaySimulator
         /// </summary>
         private void ResumeSimulation()
         {
+            ActiveRunDurationEnabled = CheckBoxRunForDuration.Checked;
+            if (ActiveRunDurationEnabled)
+            {
+                DateTime value = DateTimeRunDuration.Value;
+                ActiveRunDuration = 1000 * ((value.Hour * 3600) + (value.Minute * 60) + value.Second);
+            }
+
             // Resume the stopwatch
             StopwatchTimer.Start();
 
@@ -968,6 +1034,7 @@ namespace MotorwaySimulator
             ButtonStart.Enabled = false;
             ButtonStop.Enabled = true;
             ButtonPause.Enabled = true;
+            CheckBoxRunForDuration.Enabled = false;
         }
 
         /// <summary>
@@ -1007,16 +1074,16 @@ namespace MotorwaySimulator
                         switch (instruction.Type)
                         {
                             case VehicleTypes.Car:
-                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
+                                vehicle = new Car(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation, instruction.Camper);
                                 break;
                             case VehicleTypes.LGV:
-                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
+                                vehicle = new LGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation, instruction.Camper);
                                 break;
                             case VehicleTypes.HGV:
-                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
+                                vehicle = new HGV(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation, instruction.Camper);
                                 break;
                             case VehicleTypes.Bus:
-                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation);
+                                vehicle = new Bus(this, instruction.VehicleId, instruction.VehicleLength, instruction.DesiredSpeedMetresHour, instruction.CrashLocation, instruction.Camper);
                                 break;
                             default:
                                 vehicle = null;
@@ -1075,7 +1142,7 @@ namespace MotorwaySimulator
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
                 
                 // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == 0)
+                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == -1)
                 {
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
@@ -1268,6 +1335,11 @@ namespace MotorwaySimulator
             int hGVCount = 0;
             int busCount = 0;
 
+            int carCrashes = 0;
+            int lGVCrashes = 0;
+            int hGVCrashes = 0;
+            int busCrashes = 0;
+
             int notCongestedCount = 0;
             int mildyCongestedCount = 0;
             int severelyCongestedCount = 0;
@@ -1286,6 +1358,25 @@ namespace MotorwaySimulator
                 if (vehicle.SuccessfulSpawn)
                 {
                     successCount++;
+
+                    if (vehicle.Crashed)
+                    {
+                        switch(vehicle.VehicleType)
+                        {
+                            case VehicleTypes.Car:
+                                carCrashes++;
+                                break;
+                            case VehicleTypes.LGV:
+                                lGVCrashes++;
+                                break;
+                            case VehicleTypes.HGV:
+                                hGVCrashes++;
+                                break;
+                            case VehicleTypes.Bus:
+                                busCrashes++;
+                                break;
+                        }
+                    }
 
                     switch (vehicle.Congestion)
                     {
@@ -1344,6 +1435,19 @@ namespace MotorwaySimulator
 
             // Update the all vehicle total buses output
             LabelAllVehiclesTotalBus.Text = busCount.ToString();
+
+
+            // Update the Car Crashes count
+            LabelAllVehiclesCarCrashes.Text = carCrashes.ToString();
+
+            // Update the LGV Crashes count
+            LabelAllVehiclesLGVCrashes.Text = lGVCrashes.ToString();
+
+            // Update the HGV Crashes count
+            LabelAllVehiclesHGVCrashes.Text = hGVCrashes.ToString();
+
+            // Update the Bus Crashes count
+            LabelAllVehiclesBusCrashes.Text = busCrashes.ToString();
 
 
             // Update the all vehicle total not congested output
@@ -1421,6 +1525,106 @@ namespace MotorwaySimulator
             LabelAllVehiclesLifetime.Text = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "h " + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "m " + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "s " + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
         }
 
+        private void SaveData()
+        {
+            string filename = ActiveRunStartTime.ToString("yyyy-MM-dd-T-HH-mm-ss-fff");
+            string path = Path.Combine("Data", filename);
+            Directory.CreateDirectory("Data");
+            using (StreamWriter inDataFile = new StreamWriter(path + "-INPUT.csv"))
+            {
+                string header = "RunDurationEnabled(Boolean)," +
+                    "RunDuration(Milliseconds)," +
+                    "RoadLength(Metres)," +
+                    "InterarrivalTimeBase(Seconds)," +
+                    "InterarrivalVariation(±%)," +
+                    "StoppingTime(Seconds)," +
+                    "LaneCount(Lanes)," +
+                    "VehicleWidth(Metres)," +
+                    "MaxCrashCount(Crashes)," +
+                    "MetreToPixelScalingFactor," +
+                    "CongestionMildTripPoint(MPH)," +
+                    "CongestionSevereTripPoint(MPH)," +
+                    "LengthBaseCar(m)," +
+                    "LengthBaseLGV(m)," +
+                    "LengthBaseHGV(m)," +
+                    "LengthBaseBus(m)," +
+                    "LengthVariationCar(±m)," +
+                    "LengthVariationLGV(±m)," +
+                    "LengthVariationHGV(±m)," +
+                    "LengthVariationBus(±m)," +
+                    "SpeedBaseCar(KPH)," +
+                    "SpeedBaseLGV(KPH)," +
+                    "SpeedBaseHGV(KPH)," +
+                    "SpeedBaseBus(KPH)," +
+                    "SpeedVariationCar(±MPH)," +
+                    "SpeedVariationLGV(±MPH)," +
+                    "SpeedVariationHGV(±MPH)," +
+                    "SpeedVariationBus(±MPH)," +
+                    "MaximumLaneCar(#)," +
+                    "MaximumLaneLGV(#)," +
+                    "MaximumLaneHGV(#)," +
+                    "MaximumLaneBus(#)," +
+                    "CrashProbabilityCar(%)," +
+                    "CrashProbabilityLGV(%)," +
+                    "CrashProbabilityHGV(%)," +
+                    "CrashProbabilityBus(%)," +
+                    "SpawnProbabilityCar(%)," +
+                    "SpawnProbabilityLGV(%)," +
+                    "SpawnProbabilityHGV(%)," +
+                    "SpawnProbabilityBus(%)";
+                string data = ActiveRunDurationEnabled + "," +
+                    ActiveRunDuration + "," +
+                    ActiveRoadLengthMetres + "," +
+                    ActiveInterArrivalTime + "," +
+                    ActiveInterArrivalTimeVariationPercentage + "," +
+                    ActiveStoppingTime + "," +
+                    ActiveLaneCount + "," +
+                    ActiveVehicleWidthMetres + "," +
+                    ActiveMaxCrashCount + "," +
+                    ActiveMetresToPixelsScalingFactor + "," +
+                    ActiveMildCongestionTriggerMetresHour + "," +
+                    ActiveSevereCongestionTriggerMetresHour + "," +
+                    VehicleParameters[VehicleTypes.Car].Length + "," +
+                    VehicleParameters[VehicleTypes.LGV].Length + "," +
+                    VehicleParameters[VehicleTypes.HGV].Length + "," +
+                    VehicleParameters[VehicleTypes.Bus].Length + "," +
+                    VehicleParameters[VehicleTypes.Car].LengthVariation + "," +
+                    VehicleParameters[VehicleTypes.LGV].LengthVariation + "," +
+                    VehicleParameters[VehicleTypes.HGV].LengthVariation + "," +
+                    VehicleParameters[VehicleTypes.Bus].LengthVariation + "," +
+                    VehicleParameters[VehicleTypes.Car].DesiredSpeed + "," +
+                    VehicleParameters[VehicleTypes.LGV].DesiredSpeed + "," +
+                    VehicleParameters[VehicleTypes.HGV].DesiredSpeed + "," +
+                    VehicleParameters[VehicleTypes.Bus].DesiredSpeed + "," +
+                    VehicleParameters[VehicleTypes.Car].DesiredSpeedVariation + "," +
+                    VehicleParameters[VehicleTypes.LGV].DesiredSpeedVariation + "," +
+                    VehicleParameters[VehicleTypes.HGV].DesiredSpeedVariation + "," +
+                    VehicleParameters[VehicleTypes.Bus].DesiredSpeedVariation + "," +
+                    VehicleParameters[VehicleTypes.Car].MaximumLane + "," +
+                    VehicleParameters[VehicleTypes.LGV].MaximumLane + "," +
+                    VehicleParameters[VehicleTypes.HGV].MaximumLane + "," +
+                    VehicleParameters[VehicleTypes.Bus].MaximumLane + "," +
+                    VehicleParameters[VehicleTypes.Car].CrashProbability + "," +
+                    VehicleParameters[VehicleTypes.LGV].CrashProbability + "," +
+                    VehicleParameters[VehicleTypes.HGV].CrashProbability + "," +
+                    VehicleParameters[VehicleTypes.Bus].CrashProbability + "," +
+                    VehicleParameters[VehicleTypes.Car].Probability + "," +
+                    VehicleParameters[VehicleTypes.LGV].Probability + "," +
+                    VehicleParameters[VehicleTypes.HGV].Probability + "," +
+                    VehicleParameters[VehicleTypes.Bus].Probability;
+                inDataFile.WriteLine(header);
+                inDataFile.WriteLine(data);
+            }
+            using (StreamWriter outOverallDataFile = new StreamWriter(path + "-OVERALL-OUTPUT.csv"))
+            {
+                //dataFile.WriteLine(data);
+            }
+            using (StreamWriter outVehicleDataFile = new StreamWriter(path + "-VEHICLE-OUTPUT.csv"))
+            {
+                //dataFile.WriteLine(data);
+            }
+        }
+
         /// <summary>
         /// Prompts each lane to update its specific lane node on the vehicles TreeView
         /// </summary>
@@ -1466,7 +1670,12 @@ namespace MotorwaySimulator
         public double DesiredSpeedVariation;
 
         /// <summary>
-        /// Describes the probability (0.00 - 1.00) of that vehicle type spawning
+        /// Describes the probability (0.00 - 1.00) of that vehicle type camping
+        /// </summary>
+        public double CamperProbability;
+
+        /// <summary>
+        /// Describes the probability (0.00 - 1.00) of that vehicle type crashing
         /// </summary>
         public double CrashProbability;
 
@@ -1491,14 +1700,14 @@ namespace MotorwaySimulator
         /// <param name="desiredSpeedVariation">The plus or minus speed of the vehicle type (mph)</param>
         /// <param name="maximumLane">The maximum lane that the vehicle type can occupy</param>
         /// <param name="probability">The probability of that vehicle type spawning (0.00-1.00)</param>
-        public VehicleTemplate(double length, double lengthVariation, int desiredSpeed, double desiredSpeedVariation, int maximumLane, double crashProbability, double spawnProbability)
+        public VehicleTemplate(double length, double lengthVariation, int desiredSpeed, double desiredSpeedVariation, int maximumLane, double camperProbability, double crashProbability, double spawnProbability)
         {
             Length = length;
             LengthVariation = lengthVariation;
             DesiredSpeed = desiredSpeed;
             DesiredSpeedVariation = desiredSpeedVariation;
             MaximumLane = maximumLane;
-            CrashProbability = crashProbability;
+            CamperProbability = camperProbability;
             Probability = spawnProbability;
         }
     }
@@ -1545,6 +1754,11 @@ namespace MotorwaySimulator
         /// </summary>
         public double CrashLocation;
 
+        /// <summary>
+        /// If this vehicle is lane camper
+        /// </summary>
+        public bool Camper;
+
         #endregion
 
         /// <summary>
@@ -1557,7 +1771,8 @@ namespace MotorwaySimulator
         /// <param name="desiredSpeedMetresHour">The desired speed in metres per hour of the vehicle to spawn</param>
         /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
         /// <param name="crashLocation">The location for the vehicle to crash</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0, double crashLocation = -1)
+        /// <param name="camper">If this vehicle is lane camper</param>
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0, double crashLocation = -1, bool camper = false)
         {
             VehicleId = vehicleId;
             Type = type;
@@ -1565,7 +1780,7 @@ namespace MotorwaySimulator
             RealTimeSpawnTime = realTimeSpawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
-            CrashLocation = crashLocation;
+            Camper = camper;
         }
     }
 }
