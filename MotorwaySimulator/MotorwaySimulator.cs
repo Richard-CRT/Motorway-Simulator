@@ -1880,8 +1880,8 @@ namespace MotorwaySimulator
         private void SaveData()
         {
             string filename = ActiveRunStartTime.ToString("yyyy-MM-dd-T-HH-mm-ss-fff");
-            string path = Path.Combine("Data", filename);
-            Directory.CreateDirectory("Data");
+            string path = Path.Combine("data", filename);
+            Directory.CreateDirectory("data");
             using (StreamWriter inDataFile = new StreamWriter(path + "-INPUT.csv"))
             {
                 string header = "Run Duration Enabled (Boolean)," +
