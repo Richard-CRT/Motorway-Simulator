@@ -44,6 +44,12 @@ namespace MotorwaySimulator
             this.ButtonPause = new System.Windows.Forms.Button();
             this.TabControlControlPanel = new System.Windows.Forms.TabControl();
             this.TabPageSetup = new System.Windows.Forms.TabPage();
+            this.LabelCamperProbabilityUnitTitle = new System.Windows.Forms.Label();
+            this.NumericCarCamperProbability = new System.Windows.Forms.NumericUpDown();
+            this.NumericLGVCamperProbability = new System.Windows.Forms.NumericUpDown();
+            this.NumericHGVCamperProbability = new System.Windows.Forms.NumericUpDown();
+            this.LabelCamperProbabilityTitle = new System.Windows.Forms.Label();
+            this.NumericBusCamperProbability = new System.Windows.Forms.NumericUpDown();
             this.NumericMaxCrashCount = new System.Windows.Forms.NumericUpDown();
             this.LabelMaxCrashCount = new System.Windows.Forms.Label();
             this.LabelCrashProbabilityUnitTitle = new System.Windows.Forms.Label();
@@ -120,22 +126,20 @@ namespace MotorwaySimulator
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
             this.TabPageSimulation = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
+            this.LableVehicleDataTitle = new System.Windows.Forms.Label();
+            this.ButtonSaveData = new System.Windows.Forms.Button();
+            this.LabelVehicleLane = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesTotalCampers = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalCampersTitle = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesNotCongestedPercentTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesNotCongestedPercent = new System.Windows.Forms.Label();
             this.LabelAllVehiclesLGVCampers = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesMildlyCongestedPercentTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesLGVCampersTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesMildlyCongestedPercent = new System.Windows.Forms.Label();
             this.LabelAllVehiclesHGVCampers = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesHGVCampersTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesSeverelyCongestedPercent = new System.Windows.Forms.Label();
             this.LabelAllVehiclesCarCampers = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesLifetimeTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesCarCampersTitle = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesLifetime = new System.Windows.Forms.Label();
             this.LabelAllVehiclesBusCampers = new System.Windows.Forms.Label();
             this.LabelAllVehiclesBusCampersTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesDataTitle = new System.Windows.Forms.Label();
@@ -155,8 +159,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesCarCrashesTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesBusCrashes = new System.Windows.Forms.Label();
             this.LabelAllVehiclesBusCrashesTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleCrashed = new System.Windows.Forms.Label();
-            this.LabelVehicleCrashedTitle = new System.Windows.Forms.Label();
             this.CheckBoxAutoFindVehicle = new System.Windows.Forms.CheckBox();
             this.LabelAllVehiclesTotalSeverelyCongested = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalMildlyCongested = new System.Windows.Forms.Label();
@@ -185,47 +187,54 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalSuccessfulSpawns = new System.Windows.Forms.Label();
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle = new System.Windows.Forms.Label();
             this.ButtonFindVehicle = new System.Windows.Forms.Button();
-            this.LabelVehicleCongestion = new System.Windows.Forms.Label();
-            this.LabelVehicleCongestionTitle = new System.Windows.Forms.Label();
             this.LabelVehicleID = new System.Windows.Forms.Label();
             this.LabelVehicleIDTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleLifetime = new System.Windows.Forms.Label();
-            this.LabelVehicleLifetimeTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleAverageSpeed = new System.Windows.Forms.Label();
-            this.LabelVehicleAverageSpeedTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleProgress = new System.Windows.Forms.Label();
-            this.LabelVehicleProgressTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleDespawnTime = new System.Windows.Forms.Label();
-            this.LabelVehicleDespawnTimeTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleSpawnTime = new System.Windows.Forms.Label();
-            this.LabelVehicleSpawnTimeTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleSuccessfulSpawn = new System.Windows.Forms.Label();
-            this.LabelVehicleSuccessfulSpawnTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleActualSpeed = new System.Windows.Forms.Label();
-            this.LabelVehicleActualSpeedTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleDesiredSpeed = new System.Windows.Forms.Label();
-            this.LabelVehicleDesiredSpeedTitle = new System.Windows.Forms.Label();
-            this.LabelVehicleLength = new System.Windows.Forms.Label();
-            this.LabelVehicleLengthTitle = new System.Windows.Forms.Label();
             this.LabelVehicleType = new System.Windows.Forms.Label();
-            this.LabelVehicleTypeTitle = new System.Windows.Forms.Label();
-            this.LableVehicleDataTitle = new System.Windows.Forms.Label();
             this.LabelFinishedVehiclesTitle = new System.Windows.Forms.Label();
             this.TreeViewFinishedVehicles = new System.Windows.Forms.TreeView();
             this.LabelVehiclesTitle = new System.Windows.Forms.Label();
             this.TreeViewVehicles = new System.Windows.Forms.TreeView();
+            this.LabelVehicleSuccessfulSpawn = new System.Windows.Forms.Label();
+            this.LabelVehicleSpawnTime = new System.Windows.Forms.Label();
+            this.LabelVehicleDespawnTime = new System.Windows.Forms.Label();
+            this.LabelVehicleLifetime = new System.Windows.Forms.Label();
+            this.LabelVehicleProgress = new System.Windows.Forms.Label();
+            this.LabelVehicleProgressTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleCamper = new System.Windows.Forms.Label();
+            this.LabelVehicleCamperTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesNotCongestedPercentTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesMildlyCongestedPercentTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesLifetimeTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesLifetime = new System.Windows.Forms.Label();
+            this.LabelVehicleDesiredSpeed = new System.Windows.Forms.Label();
+            this.LabelVehicleDesiredSpeedTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleActualSpeed = new System.Windows.Forms.Label();
+            this.LabelVehicleActualSpeedTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleAverageSpeed = new System.Windows.Forms.Label();
+            this.LabelVehicleAverageSpeedTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleCongestion = new System.Windows.Forms.Label();
+            this.LabelVehicleCongestionTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleCrashed = new System.Windows.Forms.Label();
+            this.LabelVehicleCrashedTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleLaneTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleLength = new System.Windows.Forms.Label();
+            this.LabelVehicleTypeTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleLengthTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleSuccessfulSpawnTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleSpawnTimeTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleDespawnTimeTitle = new System.Windows.Forms.Label();
+            this.LabelVehicleLifetimeTitle = new System.Windows.Forms.Label();
             this.ButtonStop = new System.Windows.Forms.Button();
             this.ButtonStart = new System.Windows.Forms.Button();
-            this.LabelCamperProbabilityUnitTitle = new System.Windows.Forms.Label();
-            this.NumericCarCamperProbability = new System.Windows.Forms.NumericUpDown();
-            this.NumericLGVCamperProbability = new System.Windows.Forms.NumericUpDown();
-            this.NumericHGVCamperProbability = new System.Windows.Forms.NumericUpDown();
-            this.LabelCamperProbabilityTitle = new System.Windows.Forms.Label();
-            this.NumericBusCamperProbability = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
             this.PanelSettings.SuspendLayout();
             this.TabControlControlPanel.SuspendLayout();
             this.TabPageSetup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericCarCamperProbability)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCamperProbability)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericHGVCamperProbability)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericBusCamperProbability)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericMaxCrashCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarCrashProbability)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCrashProbability)).BeginInit();
@@ -265,10 +274,6 @@ namespace MotorwaySimulator
             ((System.ComponentModel.ISupportInitialize)(this.NumericBusDesiredSpeedVar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadLength)).BeginInit();
             this.TabPageSimulation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericCarCamperProbability)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCamperProbability)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericHGVCamperProbability)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericBusCamperProbability)).BeginInit();
             this.SuspendLayout();
             // 
             // FormTick
@@ -482,6 +487,98 @@ namespace MotorwaySimulator
             this.TabPageSetup.TabIndex = 0;
             this.TabPageSetup.Text = "Setup";
             // 
+            // LabelCamperProbabilityUnitTitle
+            // 
+            this.LabelCamperProbabilityUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelCamperProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 215);
+            this.LabelCamperProbabilityUnitTitle.Name = "LabelCamperProbabilityUnitTitle";
+            this.LabelCamperProbabilityUnitTitle.Size = new System.Drawing.Size(54, 20);
+            this.LabelCamperProbabilityUnitTitle.TabIndex = 93;
+            this.LabelCamperProbabilityUnitTitle.Text = "%";
+            this.LabelCamperProbabilityUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // NumericCarCamperProbability
+            // 
+            this.NumericCarCamperProbability.DecimalPlaces = 1;
+            this.NumericCarCamperProbability.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumericCarCamperProbability.Location = new System.Drawing.Point(773, 215);
+            this.NumericCarCamperProbability.Name = "NumericCarCamperProbability";
+            this.NumericCarCamperProbability.Size = new System.Drawing.Size(61, 20);
+            this.NumericCarCamperProbability.TabIndex = 88;
+            this.NumericCarCamperProbability.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // NumericLGVCamperProbability
+            // 
+            this.NumericLGVCamperProbability.DecimalPlaces = 1;
+            this.NumericLGVCamperProbability.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumericLGVCamperProbability.Location = new System.Drawing.Point(844, 215);
+            this.NumericLGVCamperProbability.Name = "NumericLGVCamperProbability";
+            this.NumericLGVCamperProbability.Size = new System.Drawing.Size(61, 20);
+            this.NumericLGVCamperProbability.TabIndex = 89;
+            this.NumericLGVCamperProbability.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // NumericHGVCamperProbability
+            // 
+            this.NumericHGVCamperProbability.DecimalPlaces = 1;
+            this.NumericHGVCamperProbability.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumericHGVCamperProbability.Location = new System.Drawing.Point(915, 215);
+            this.NumericHGVCamperProbability.Name = "NumericHGVCamperProbability";
+            this.NumericHGVCamperProbability.Size = new System.Drawing.Size(61, 20);
+            this.NumericHGVCamperProbability.TabIndex = 90;
+            this.NumericHGVCamperProbability.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // LabelCamperProbabilityTitle
+            // 
+            this.LabelCamperProbabilityTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelCamperProbabilityTitle.Location = new System.Drawing.Point(595, 215);
+            this.LabelCamperProbabilityTitle.Name = "LabelCamperProbabilityTitle";
+            this.LabelCamperProbabilityTitle.Size = new System.Drawing.Size(169, 20);
+            this.LabelCamperProbabilityTitle.TabIndex = 92;
+            this.LabelCamperProbabilityTitle.Text = "Camper Probability";
+            this.LabelCamperProbabilityTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // NumericBusCamperProbability
+            // 
+            this.NumericBusCamperProbability.DecimalPlaces = 1;
+            this.NumericBusCamperProbability.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumericBusCamperProbability.Location = new System.Drawing.Point(986, 215);
+            this.NumericBusCamperProbability.Name = "NumericBusCamperProbability";
+            this.NumericBusCamperProbability.Size = new System.Drawing.Size(61, 20);
+            this.NumericBusCamperProbability.TabIndex = 91;
+            this.NumericBusCamperProbability.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // NumericMaxCrashCount
             // 
             this.NumericMaxCrashCount.Location = new System.Drawing.Point(241, 207);
@@ -507,7 +604,7 @@ namespace MotorwaySimulator
             // LabelCrashProbabilityUnitTitle
             // 
             this.LabelCrashProbabilityUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelCrashProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 261);
+            this.LabelCrashProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 243);
             this.LabelCrashProbabilityUnitTitle.Name = "LabelCrashProbabilityUnitTitle";
             this.LabelCrashProbabilityUnitTitle.Size = new System.Drawing.Size(54, 20);
             this.LabelCrashProbabilityUnitTitle.TabIndex = 85;
@@ -522,7 +619,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericCarCrashProbability.Location = new System.Drawing.Point(773, 261);
+            this.NumericCarCrashProbability.Location = new System.Drawing.Point(773, 243);
             this.NumericCarCrashProbability.Name = "NumericCarCrashProbability";
             this.NumericCarCrashProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericCarCrashProbability.TabIndex = 80;
@@ -540,7 +637,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericLGVCrashProbability.Location = new System.Drawing.Point(844, 261);
+            this.NumericLGVCrashProbability.Location = new System.Drawing.Point(844, 243);
             this.NumericLGVCrashProbability.Name = "NumericLGVCrashProbability";
             this.NumericLGVCrashProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericLGVCrashProbability.TabIndex = 81;
@@ -558,7 +655,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericHGVCrashProbability.Location = new System.Drawing.Point(915, 261);
+            this.NumericHGVCrashProbability.Location = new System.Drawing.Point(915, 243);
             this.NumericHGVCrashProbability.Name = "NumericHGVCrashProbability";
             this.NumericHGVCrashProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericHGVCrashProbability.TabIndex = 82;
@@ -571,7 +668,7 @@ namespace MotorwaySimulator
             // LabelCrashProbabilityTitle
             // 
             this.LabelCrashProbabilityTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelCrashProbabilityTitle.Location = new System.Drawing.Point(595, 261);
+            this.LabelCrashProbabilityTitle.Location = new System.Drawing.Point(595, 243);
             this.LabelCrashProbabilityTitle.Name = "LabelCrashProbabilityTitle";
             this.LabelCrashProbabilityTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelCrashProbabilityTitle.TabIndex = 84;
@@ -586,7 +683,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericBusCrashProbability.Location = new System.Drawing.Point(986, 261);
+            this.NumericBusCrashProbability.Location = new System.Drawing.Point(986, 243);
             this.NumericBusCrashProbability.Name = "NumericBusCrashProbability";
             this.NumericBusCrashProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericBusCrashProbability.TabIndex = 83;
@@ -798,7 +895,7 @@ namespace MotorwaySimulator
             // LabelMaximumLaneUnitTitle
             // 
             this.LabelMaximumLaneUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelMaximumLaneUnitTitle.Location = new System.Drawing.Point(1048, 206);
+            this.LabelMaximumLaneUnitTitle.Location = new System.Drawing.Point(1048, 188);
             this.LabelMaximumLaneUnitTitle.Name = "LabelMaximumLaneUnitTitle";
             this.LabelMaximumLaneUnitTitle.Size = new System.Drawing.Size(54, 20);
             this.LabelMaximumLaneUnitTitle.TabIndex = 63;
@@ -807,7 +904,7 @@ namespace MotorwaySimulator
             // 
             // NumericCarMaximumLane
             // 
-            this.NumericCarMaximumLane.Location = new System.Drawing.Point(773, 206);
+            this.NumericCarMaximumLane.Location = new System.Drawing.Point(773, 188);
             this.NumericCarMaximumLane.Maximum = new decimal(new int[] {
             3,
             0,
@@ -829,7 +926,7 @@ namespace MotorwaySimulator
             // 
             // NumericLGVMaximumLane
             // 
-            this.NumericLGVMaximumLane.Location = new System.Drawing.Point(844, 206);
+            this.NumericLGVMaximumLane.Location = new System.Drawing.Point(844, 188);
             this.NumericLGVMaximumLane.Maximum = new decimal(new int[] {
             3,
             0,
@@ -851,7 +948,7 @@ namespace MotorwaySimulator
             // 
             // NumericHGVMaximumLane
             // 
-            this.NumericHGVMaximumLane.Location = new System.Drawing.Point(915, 206);
+            this.NumericHGVMaximumLane.Location = new System.Drawing.Point(915, 188);
             this.NumericHGVMaximumLane.Maximum = new decimal(new int[] {
             3,
             0,
@@ -874,7 +971,7 @@ namespace MotorwaySimulator
             // LabelMaximumLaneTitle
             // 
             this.LabelMaximumLaneTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelMaximumLaneTitle.Location = new System.Drawing.Point(595, 206);
+            this.LabelMaximumLaneTitle.Location = new System.Drawing.Point(595, 188);
             this.LabelMaximumLaneTitle.Name = "LabelMaximumLaneTitle";
             this.LabelMaximumLaneTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelMaximumLaneTitle.TabIndex = 62;
@@ -883,7 +980,7 @@ namespace MotorwaySimulator
             // 
             // NumericBusMaximumLane
             // 
-            this.NumericBusMaximumLane.Location = new System.Drawing.Point(986, 206);
+            this.NumericBusMaximumLane.Location = new System.Drawing.Point(986, 188);
             this.NumericBusMaximumLane.Maximum = new decimal(new int[] {
             3,
             0,
@@ -901,7 +998,7 @@ namespace MotorwaySimulator
             // LabelSpawnProbabilityUnassigned
             // 
             this.LabelSpawnProbabilityUnassigned.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelSpawnProbabilityUnassigned.Location = new System.Drawing.Point(650, 309);
+            this.LabelSpawnProbabilityUnassigned.Location = new System.Drawing.Point(650, 291);
             this.LabelSpawnProbabilityUnassigned.Name = "LabelSpawnProbabilityUnassigned";
             this.LabelSpawnProbabilityUnassigned.Size = new System.Drawing.Size(114, 28);
             this.LabelSpawnProbabilityUnassigned.TabIndex = 56;
@@ -911,7 +1008,7 @@ namespace MotorwaySimulator
             // LabelSpawnProbabilityUnitTitle
             // 
             this.LabelSpawnProbabilityUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelSpawnProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 289);
+            this.LabelSpawnProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 271);
             this.LabelSpawnProbabilityUnitTitle.Name = "LabelSpawnProbabilityUnitTitle";
             this.LabelSpawnProbabilityUnitTitle.Size = new System.Drawing.Size(25, 20);
             this.LabelSpawnProbabilityUnitTitle.TabIndex = 54;
@@ -920,7 +1017,7 @@ namespace MotorwaySimulator
             // 
             // NumericCarSpawnProbability
             // 
-            this.NumericCarSpawnProbability.Location = new System.Drawing.Point(773, 289);
+            this.NumericCarSpawnProbability.Location = new System.Drawing.Point(773, 271);
             this.NumericCarSpawnProbability.Name = "NumericCarSpawnProbability";
             this.NumericCarSpawnProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericCarSpawnProbability.TabIndex = 50;
@@ -933,7 +1030,7 @@ namespace MotorwaySimulator
             // 
             // NumericLGVSpawnProbability
             // 
-            this.NumericLGVSpawnProbability.Location = new System.Drawing.Point(844, 289);
+            this.NumericLGVSpawnProbability.Location = new System.Drawing.Point(844, 271);
             this.NumericLGVSpawnProbability.Name = "NumericLGVSpawnProbability";
             this.NumericLGVSpawnProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericLGVSpawnProbability.TabIndex = 51;
@@ -946,7 +1043,7 @@ namespace MotorwaySimulator
             // 
             // NumericHGVSpawnProbability
             // 
-            this.NumericHGVSpawnProbability.Location = new System.Drawing.Point(915, 289);
+            this.NumericHGVSpawnProbability.Location = new System.Drawing.Point(915, 271);
             this.NumericHGVSpawnProbability.Name = "NumericHGVSpawnProbability";
             this.NumericHGVSpawnProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericHGVSpawnProbability.TabIndex = 52;
@@ -961,7 +1058,7 @@ namespace MotorwaySimulator
             // 
             this.LabelSpawnProbabilityTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.LabelSpawnProbabilityTitle.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.LabelSpawnProbabilityTitle.Location = new System.Drawing.Point(599, 289);
+            this.LabelSpawnProbabilityTitle.Location = new System.Drawing.Point(599, 271);
             this.LabelSpawnProbabilityTitle.Name = "LabelSpawnProbabilityTitle";
             this.LabelSpawnProbabilityTitle.Size = new System.Drawing.Size(165, 20);
             this.LabelSpawnProbabilityTitle.TabIndex = 55;
@@ -970,7 +1067,7 @@ namespace MotorwaySimulator
             // 
             // NumericBusSpawnProbability
             // 
-            this.NumericBusSpawnProbability.Location = new System.Drawing.Point(986, 289);
+            this.NumericBusSpawnProbability.Location = new System.Drawing.Point(986, 271);
             this.NumericBusSpawnProbability.Name = "NumericBusSpawnProbability";
             this.NumericBusSpawnProbability.Size = new System.Drawing.Size(61, 20);
             this.NumericBusSpawnProbability.TabIndex = 53;
@@ -1004,7 +1101,7 @@ namespace MotorwaySimulator
             // LabelDesiredSpeedVarUnit
             // 
             this.LabelDesiredSpeedVarUnit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedVarUnit.Location = new System.Drawing.Point(1048, 179);
+            this.LabelDesiredSpeedVarUnit.Location = new System.Drawing.Point(1048, 161);
             this.LabelDesiredSpeedVarUnit.Name = "LabelDesiredSpeedVarUnit";
             this.LabelDesiredSpeedVarUnit.Size = new System.Drawing.Size(40, 20);
             this.LabelDesiredSpeedVarUnit.TabIndex = 22;
@@ -1024,7 +1121,7 @@ namespace MotorwaySimulator
             // LabelDesiredSpeedUnitTitle
             // 
             this.LabelDesiredSpeedUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedUnitTitle.Location = new System.Drawing.Point(1048, 153);
+            this.LabelDesiredSpeedUnitTitle.Location = new System.Drawing.Point(1048, 135);
             this.LabelDesiredSpeedUnitTitle.Name = "LabelDesiredSpeedUnitTitle";
             this.LabelDesiredSpeedUnitTitle.Size = new System.Drawing.Size(40, 20);
             this.LabelDesiredSpeedUnitTitle.TabIndex = 21;
@@ -1044,7 +1141,7 @@ namespace MotorwaySimulator
             // LabelLengthVariationUnitTitle
             // 
             this.LabelLengthVariationUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthVariationUnitTitle.Location = new System.Drawing.Point(1048, 127);
+            this.LabelLengthVariationUnitTitle.Location = new System.Drawing.Point(1048, 109);
             this.LabelLengthVariationUnitTitle.Name = "LabelLengthVariationUnitTitle";
             this.LabelLengthVariationUnitTitle.Size = new System.Drawing.Size(40, 20);
             this.LabelLengthVariationUnitTitle.TabIndex = 20;
@@ -1059,7 +1156,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericCarLength.Location = new System.Drawing.Point(773, 101);
+            this.NumericCarLength.Location = new System.Drawing.Point(773, 83);
             this.NumericCarLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1083,7 +1180,7 @@ namespace MotorwaySimulator
             // LabelLengthUnitTitle
             // 
             this.LabelLengthUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthUnitTitle.Location = new System.Drawing.Point(1048, 101);
+            this.LabelLengthUnitTitle.Location = new System.Drawing.Point(1048, 83);
             this.LabelLengthUnitTitle.Name = "LabelLengthUnitTitle";
             this.LabelLengthUnitTitle.Size = new System.Drawing.Size(40, 20);
             this.LabelLengthUnitTitle.TabIndex = 19;
@@ -1093,7 +1190,7 @@ namespace MotorwaySimulator
             // NumericCarLengthVar
             // 
             this.NumericCarLengthVar.DecimalPlaces = 1;
-            this.NumericCarLengthVar.Location = new System.Drawing.Point(773, 127);
+            this.NumericCarLengthVar.Location = new System.Drawing.Point(773, 109);
             this.NumericCarLengthVar.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1112,7 +1209,7 @@ namespace MotorwaySimulator
             // LabelCarTitle
             // 
             this.LabelCarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelCarTitle.Location = new System.Drawing.Point(769, 75);
+            this.LabelCarTitle.Location = new System.Drawing.Point(769, 57);
             this.LabelCarTitle.Name = "LabelCarTitle";
             this.LabelCarTitle.Size = new System.Drawing.Size(65, 23);
             this.LabelCarTitle.TabIndex = 8;
@@ -1121,7 +1218,7 @@ namespace MotorwaySimulator
             // 
             // NumericCarDesiredSpeed
             // 
-            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(773, 153);
+            this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(773, 135);
             this.NumericCarDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1145,7 +1242,7 @@ namespace MotorwaySimulator
             // LableBusTitle
             // 
             this.LableBusTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LableBusTitle.Location = new System.Drawing.Point(982, 75);
+            this.LableBusTitle.Location = new System.Drawing.Point(982, 57);
             this.LableBusTitle.Name = "LableBusTitle";
             this.LableBusTitle.Size = new System.Drawing.Size(65, 23);
             this.LableBusTitle.TabIndex = 25;
@@ -1154,7 +1251,7 @@ namespace MotorwaySimulator
             // 
             // NumericCarDesiredSpeedVar
             // 
-            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(773, 179);
+            this.NumericCarDesiredSpeedVar.Location = new System.Drawing.Point(773, 161);
             this.NumericCarDesiredSpeedVar.Maximum = new decimal(new int[] {
             112,
             0,
@@ -1172,7 +1269,7 @@ namespace MotorwaySimulator
             // LabelHGVTitle
             // 
             this.LabelHGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelHGVTitle.Location = new System.Drawing.Point(911, 75);
+            this.LabelHGVTitle.Location = new System.Drawing.Point(911, 57);
             this.LabelHGVTitle.Name = "LabelHGVTitle";
             this.LabelHGVTitle.Size = new System.Drawing.Size(65, 23);
             this.LabelHGVTitle.TabIndex = 20;
@@ -1187,7 +1284,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericLGVLength.Location = new System.Drawing.Point(844, 101);
+            this.NumericLGVLength.Location = new System.Drawing.Point(844, 83);
             this.NumericLGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1211,7 +1308,7 @@ namespace MotorwaySimulator
             // LabelLGVTitle
             // 
             this.LabelLGVTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLGVTitle.Location = new System.Drawing.Point(840, 75);
+            this.LabelLGVTitle.Location = new System.Drawing.Point(840, 57);
             this.LabelLGVTitle.Name = "LabelLGVTitle";
             this.LabelLGVTitle.Size = new System.Drawing.Size(65, 23);
             this.LabelLGVTitle.TabIndex = 15;
@@ -1221,7 +1318,7 @@ namespace MotorwaySimulator
             // NumericLGVLengthVar
             // 
             this.NumericLGVLengthVar.DecimalPlaces = 1;
-            this.NumericLGVLengthVar.Location = new System.Drawing.Point(844, 127);
+            this.NumericLGVLengthVar.Location = new System.Drawing.Point(844, 109);
             this.NumericLGVLengthVar.Maximum = new decimal(new int[] {
             55,
             0,
@@ -1252,7 +1349,7 @@ namespace MotorwaySimulator
             // 
             // NumericLGVDesiredSpeed
             // 
-            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(844, 153);
+            this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(844, 135);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1285,7 +1382,7 @@ namespace MotorwaySimulator
             // 
             // NumericLGVDesiredSpeedVar
             // 
-            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(844, 179);
+            this.NumericLGVDesiredSpeedVar.Location = new System.Drawing.Point(844, 161);
             this.NumericLGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -1318,7 +1415,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericHGVLength.Location = new System.Drawing.Point(915, 101);
+            this.NumericHGVLength.Location = new System.Drawing.Point(915, 83);
             this.NumericHGVLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1352,7 +1449,7 @@ namespace MotorwaySimulator
             // NumericHGVLengthVar
             // 
             this.NumericHGVLengthVar.DecimalPlaces = 1;
-            this.NumericHGVLengthVar.Location = new System.Drawing.Point(915, 127);
+            this.NumericHGVLengthVar.Location = new System.Drawing.Point(915, 109);
             this.NumericHGVLengthVar.Maximum = new decimal(new int[] {
             12,
             0,
@@ -1383,7 +1480,7 @@ namespace MotorwaySimulator
             // 
             // NumericHGVDesiredSpeed
             // 
-            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(915, 153);
+            this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(915, 135);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1416,7 +1513,7 @@ namespace MotorwaySimulator
             // 
             // NumericHGVDesiredSpeedVar
             // 
-            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(915, 179);
+            this.NumericHGVDesiredSpeedVar.Location = new System.Drawing.Point(915, 161);
             this.NumericHGVDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -1434,7 +1531,7 @@ namespace MotorwaySimulator
             // LabelDesiredSpeedVarTitle
             // 
             this.LabelDesiredSpeedVarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedVarTitle.Location = new System.Drawing.Point(595, 179);
+            this.LabelDesiredSpeedVarTitle.Location = new System.Drawing.Point(595, 161);
             this.LabelDesiredSpeedVarTitle.Name = "LabelDesiredSpeedVarTitle";
             this.LabelDesiredSpeedVarTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelDesiredSpeedVarTitle.TabIndex = 36;
@@ -1449,7 +1546,7 @@ namespace MotorwaySimulator
             0,
             0,
             65536});
-            this.NumericBusLength.Location = new System.Drawing.Point(986, 101);
+            this.NumericBusLength.Location = new System.Drawing.Point(986, 83);
             this.NumericBusLength.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1473,7 +1570,7 @@ namespace MotorwaySimulator
             // LabelDesiredSpeedTitle
             // 
             this.LabelDesiredSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelDesiredSpeedTitle.Location = new System.Drawing.Point(595, 153);
+            this.LabelDesiredSpeedTitle.Location = new System.Drawing.Point(595, 135);
             this.LabelDesiredSpeedTitle.Name = "LabelDesiredSpeedTitle";
             this.LabelDesiredSpeedTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelDesiredSpeedTitle.TabIndex = 35;
@@ -1483,7 +1580,7 @@ namespace MotorwaySimulator
             // NumericBusLengthVar
             // 
             this.NumericBusLengthVar.DecimalPlaces = 1;
-            this.NumericBusLengthVar.Location = new System.Drawing.Point(986, 127);
+            this.NumericBusLengthVar.Location = new System.Drawing.Point(986, 109);
             this.NumericBusLengthVar.Maximum = new decimal(new int[] {
             11,
             0,
@@ -1502,7 +1599,7 @@ namespace MotorwaySimulator
             // LabelLengthVarTitle
             // 
             this.LabelLengthVarTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthVarTitle.Location = new System.Drawing.Point(595, 127);
+            this.LabelLengthVarTitle.Location = new System.Drawing.Point(595, 109);
             this.LabelLengthVarTitle.Name = "LabelLengthVarTitle";
             this.LabelLengthVarTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelLengthVarTitle.TabIndex = 34;
@@ -1511,7 +1608,7 @@ namespace MotorwaySimulator
             // 
             // NumericBusDesiredSpeed
             // 
-            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(986, 153);
+            this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(986, 135);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1535,7 +1632,7 @@ namespace MotorwaySimulator
             // LabelLengthTitle
             // 
             this.LabelLengthTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLengthTitle.Location = new System.Drawing.Point(595, 101);
+            this.LabelLengthTitle.Location = new System.Drawing.Point(595, 83);
             this.LabelLengthTitle.Name = "LabelLengthTitle";
             this.LabelLengthTitle.Size = new System.Drawing.Size(169, 20);
             this.LabelLengthTitle.TabIndex = 33;
@@ -1544,7 +1641,7 @@ namespace MotorwaySimulator
             // 
             // NumericBusDesiredSpeedVar
             // 
-            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(986, 179);
+            this.NumericBusDesiredSpeedVar.Location = new System.Drawing.Point(986, 161);
             this.NumericBusDesiredSpeedVar.Maximum = new decimal(new int[] {
             30,
             0,
@@ -1576,22 +1673,20 @@ namespace MotorwaySimulator
             // TabPageSimulation
             // 
             this.TabPageSimulation.BackColor = System.Drawing.Color.White;
-            this.TabPageSimulation.Controls.Add(this.label1);
+            this.TabPageSimulation.Controls.Add(this.LableVehicleDataTitle);
+            this.TabPageSimulation.Controls.Add(this.ButtonSaveData);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLane);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalCampers);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalCampersTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesNotCongestedPercentTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesNotCongestedPercent);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLGVCampers);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesMildlyCongestedPercentTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLGVCampersTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesMildlyCongestedPercent);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesHGVCampers);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesSeverelyCongestedPercentTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesHGVCampersTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesSeverelyCongestedPercent);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesCarCampers);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetimeTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesCarCampersTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetime);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesBusCampers);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesBusCampersTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesDataTitle);
@@ -1611,8 +1706,6 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesCarCrashesTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesBusCrashes);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesBusCrashesTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashed);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashedTitle);
             this.TabPageSimulation.Controls.Add(this.CheckBoxAutoFindVehicle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSeverelyCongested);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalMildlyCongested);
@@ -1641,35 +1734,44 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawns);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesTotalSuccessfulSpawnsTitle);
             this.TabPageSimulation.Controls.Add(this.ButtonFindVehicle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestion);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestionTitle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleID);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleIDTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleLifetime);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleLifetimeTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleAverageSpeed);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleAverageSpeedTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleProgress);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleProgressTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleDespawnTime);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleDespawnTimeTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleSpawnTime);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleSpawnTimeTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleSuccessfulSpawn);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleSuccessfulSpawnTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleActualSpeed);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleActualSpeedTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeed);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeedTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleLength);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleLengthTitle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleType);
-            this.TabPageSimulation.Controls.Add(this.LabelVehicleTypeTitle);
-            this.TabPageSimulation.Controls.Add(this.LableVehicleDataTitle);
             this.TabPageSimulation.Controls.Add(this.LabelFinishedVehiclesTitle);
             this.TabPageSimulation.Controls.Add(this.TreeViewFinishedVehicles);
             this.TabPageSimulation.Controls.Add(this.LabelVehiclesTitle);
             this.TabPageSimulation.Controls.Add(this.TreeViewVehicles);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleSuccessfulSpawn);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleSpawnTime);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleDespawnTime);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLifetime);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleProgress);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleProgressTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCamper);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCamperTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesNotCongestedPercentTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesMildlyCongestedPercentTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesSeverelyCongestedPercentTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetimeTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetime);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeed);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeedTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleActualSpeed);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleActualSpeedTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleAverageSpeed);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleAverageSpeedTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestion);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCongestionTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashed);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleCrashedTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLaneTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLength);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleTypeTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLengthTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleSuccessfulSpawnTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleSpawnTimeTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleDespawnTimeTitle);
+            this.TabPageSimulation.Controls.Add(this.LabelVehicleLifetimeTitle);
             this.TabPageSimulation.Location = new System.Drawing.Point(4, 22);
             this.TabPageSimulation.Name = "TabPageSimulation";
             this.TabPageSimulation.Padding = new System.Windows.Forms.Padding(3);
@@ -1677,16 +1779,46 @@ namespace MotorwaySimulator
             this.TabPageSimulation.TabIndex = 1;
             this.TabPageSimulation.Text = "Data";
             // 
-            // label1
+            // LableVehicleDataTitle
             // 
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(1003, 216);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 28);
-            this.label1.TabIndex = 145;
-            this.label1.Text = "0";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.LableVehicleDataTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LableVehicleDataTitle.Location = new System.Drawing.Point(371, 15);
+            this.LableVehicleDataTitle.Name = "LableVehicleDataTitle";
+            this.LableVehicleDataTitle.Size = new System.Drawing.Size(231, 22);
+            this.LableVehicleDataTitle.TabIndex = 52;
+            this.LableVehicleDataTitle.Text = "Selected Vehicle Data";
+            this.LableVehicleDataTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ButtonSaveData
+            // 
+            this.ButtonSaveData.Location = new System.Drawing.Point(994, 14);
+            this.ButtonSaveData.Name = "ButtonSaveData";
+            this.ButtonSaveData.Size = new System.Drawing.Size(119, 23);
+            this.ButtonSaveData.TabIndex = 150;
+            this.ButtonSaveData.Text = "Save Data";
+            this.ButtonSaveData.UseVisualStyleBackColor = true;
+            this.ButtonSaveData.Click += new System.EventHandler(this.ButtonSaveData_Click);
+            // 
+            // LabelVehicleLane
+            // 
+            this.LabelVehicleLane.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLane.Location = new System.Drawing.Point(418, 184);
+            this.LabelVehicleLane.Name = "LabelVehicleLane";
+            this.LabelVehicleLane.Size = new System.Drawing.Size(184, 28);
+            this.LabelVehicleLane.TabIndex = 149;
+            this.LabelVehicleLane.Text = "---";
+            this.LabelVehicleLane.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelAllVehiclesTotalCampers
+            // 
+            this.LabelAllVehiclesTotalCampers.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesTotalCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesTotalCampers.Location = new System.Drawing.Point(1003, 216);
+            this.LabelAllVehiclesTotalCampers.Name = "LabelAllVehiclesTotalCampers";
+            this.LabelAllVehiclesTotalCampers.Size = new System.Drawing.Size(115, 28);
+            this.LabelAllVehiclesTotalCampers.TabIndex = 145;
+            this.LabelAllVehiclesTotalCampers.Text = "0";
+            this.LabelAllVehiclesTotalCampers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelAllVehiclesTotalCampersTitle
             // 
@@ -1698,17 +1830,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesTotalCampersTitle.TabIndex = 144;
             this.LabelAllVehiclesTotalCampersTitle.Text = "Total Campers:";
             this.LabelAllVehiclesTotalCampersTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelAllVehiclesNotCongestedPercentTitle
-            // 
-            this.LabelAllVehiclesNotCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesNotCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesNotCongestedPercentTitle.Location = new System.Drawing.Point(631, 276);
-            this.LabelAllVehiclesNotCongestedPercentTitle.Name = "LabelAllVehiclesNotCongestedPercentTitle";
-            this.LabelAllVehiclesNotCongestedPercentTitle.Size = new System.Drawing.Size(126, 28);
-            this.LabelAllVehiclesNotCongestedPercentTitle.TabIndex = 109;
-            this.LabelAllVehiclesNotCongestedPercentTitle.Text = "Not Congested (%):";
-            this.LabelAllVehiclesNotCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LabelAllVehiclesNotCongestedPercent
             // 
@@ -1731,17 +1852,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesLGVCampers.TabIndex = 143;
             this.LabelAllVehiclesLGVCampers.Text = "0";
             this.LabelAllVehiclesLGVCampers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelAllVehiclesMildlyCongestedPercentTitle
-            // 
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.Location = new System.Drawing.Point(631, 295);
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.Name = "LabelAllVehiclesMildlyCongestedPercentTitle";
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.Size = new System.Drawing.Size(139, 28);
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.TabIndex = 111;
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.Text = "Mildly Congested (%):";
-            this.LabelAllVehiclesMildlyCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LabelAllVehiclesLGVCampersTitle
             // 
@@ -1776,17 +1886,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesHGVCampers.Text = "0";
             this.LabelAllVehiclesHGVCampers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // LabelAllVehiclesSeverelyCongestedPercentTitle
-            // 
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Location = new System.Drawing.Point(631, 314);
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Name = "LabelAllVehiclesSeverelyCongestedPercentTitle";
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Size = new System.Drawing.Size(161, 28);
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.TabIndex = 113;
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Text = "Severely Congested (%):";
-            this.LabelAllVehiclesSeverelyCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // LabelAllVehiclesHGVCampersTitle
             // 
             this.LabelAllVehiclesHGVCampersTitle.BackColor = System.Drawing.Color.Transparent;
@@ -1802,7 +1901,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesSeverelyCongestedPercent.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesSeverelyCongestedPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesSeverelyCongestedPercent.Location = new System.Drawing.Point(788, 314);
+            this.LabelAllVehiclesSeverelyCongestedPercent.Location = new System.Drawing.Point(788, 315);
             this.LabelAllVehiclesSeverelyCongestedPercent.Name = "LabelAllVehiclesSeverelyCongestedPercent";
             this.LabelAllVehiclesSeverelyCongestedPercent.Size = new System.Drawing.Size(77, 28);
             this.LabelAllVehiclesSeverelyCongestedPercent.TabIndex = 114;
@@ -1820,17 +1919,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesCarCampers.Text = "0";
             this.LabelAllVehiclesCarCampers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // LabelAllVehiclesLifetimeTitle
-            // 
-            this.LabelAllVehiclesLifetimeTitle.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(883, 315);
-            this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
-            this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(96, 28);
-            this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
-            this.LabelAllVehiclesLifetimeTitle.Text = "Total Lifetime: ";
-            this.LabelAllVehiclesLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // LabelAllVehiclesCarCampersTitle
             // 
             this.LabelAllVehiclesCarCampersTitle.BackColor = System.Drawing.Color.Transparent;
@@ -1841,17 +1929,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesCarCampersTitle.TabIndex = 138;
             this.LabelAllVehiclesCarCampersTitle.Text = "Car Campers:";
             this.LabelAllVehiclesCarCampersTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelAllVehiclesLifetime
-            // 
-            this.LabelAllVehiclesLifetime.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(969, 315);
-            this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
-            this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(148, 28);
-            this.LabelAllVehiclesLifetime.TabIndex = 125;
-            this.LabelAllVehiclesLifetime.Text = "---";
-            this.LabelAllVehiclesLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelAllVehiclesBusCampers
             // 
@@ -2060,26 +2137,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesBusCrashesTitle.TabIndex = 126;
             this.LabelAllVehiclesBusCrashesTitle.Text = "Bus Crashes:";
             this.LabelAllVehiclesBusCrashesTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleCrashed
-            // 
-            this.LabelVehicleCrashed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleCrashed.Location = new System.Drawing.Point(446, 291);
-            this.LabelVehicleCrashed.Name = "LabelVehicleCrashed";
-            this.LabelVehicleCrashed.Size = new System.Drawing.Size(156, 28);
-            this.LabelVehicleCrashed.TabIndex = 123;
-            this.LabelVehicleCrashed.Text = "---";
-            this.LabelVehicleCrashed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleCrashedTitle
-            // 
-            this.LabelVehicleCrashedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleCrashedTitle.Location = new System.Drawing.Point(368, 291);
-            this.LabelVehicleCrashedTitle.Name = "LabelVehicleCrashedTitle";
-            this.LabelVehicleCrashedTitle.Size = new System.Drawing.Size(114, 28);
-            this.LabelVehicleCrashedTitle.TabIndex = 122;
-            this.LabelVehicleCrashedTitle.Text = "Crashed:";
-            this.LabelVehicleCrashedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CheckBoxAutoFindVehicle
             // 
@@ -2388,30 +2445,10 @@ namespace MotorwaySimulator
             this.ButtonFindVehicle.UseVisualStyleBackColor = true;
             this.ButtonFindVehicle.Click += new System.EventHandler(this.ButtonFindVehicle_Click);
             // 
-            // LabelVehicleCongestion
-            // 
-            this.LabelVehicleCongestion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleCongestion.Location = new System.Drawing.Point(446, 269);
-            this.LabelVehicleCongestion.Name = "LabelVehicleCongestion";
-            this.LabelVehicleCongestion.Size = new System.Drawing.Size(156, 28);
-            this.LabelVehicleCongestion.TabIndex = 80;
-            this.LabelVehicleCongestion.Text = "---";
-            this.LabelVehicleCongestion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleCongestionTitle
-            // 
-            this.LabelVehicleCongestionTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleCongestionTitle.Location = new System.Drawing.Point(368, 269);
-            this.LabelVehicleCongestionTitle.Name = "LabelVehicleCongestionTitle";
-            this.LabelVehicleCongestionTitle.Size = new System.Drawing.Size(114, 28);
-            this.LabelVehicleCongestionTitle.TabIndex = 79;
-            this.LabelVehicleCongestionTitle.Text = "Congestion:";
-            this.LabelVehicleCongestionTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // LabelVehicleID
             // 
             this.LabelVehicleID.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleID.Location = new System.Drawing.Point(389, 36);
+            this.LabelVehicleID.Location = new System.Drawing.Point(389, 32);
             this.LabelVehicleID.Name = "LabelVehicleID";
             this.LabelVehicleID.Size = new System.Drawing.Size(213, 28);
             this.LabelVehicleID.TabIndex = 78;
@@ -2421,222 +2458,22 @@ namespace MotorwaySimulator
             // LabelVehicleIDTitle
             // 
             this.LabelVehicleIDTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleIDTitle.Location = new System.Drawing.Point(368, 36);
+            this.LabelVehicleIDTitle.Location = new System.Drawing.Point(368, 32);
             this.LabelVehicleIDTitle.Name = "LabelVehicleIDTitle";
             this.LabelVehicleIDTitle.Size = new System.Drawing.Size(47, 28);
             this.LabelVehicleIDTitle.TabIndex = 77;
             this.LabelVehicleIDTitle.Text = "ID:";
             this.LabelVehicleIDTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // LabelVehicleLifetime
-            // 
-            this.LabelVehicleLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleLifetime.Location = new System.Drawing.Point(421, 166);
-            this.LabelVehicleLifetime.Name = "LabelVehicleLifetime";
-            this.LabelVehicleLifetime.Size = new System.Drawing.Size(181, 28);
-            this.LabelVehicleLifetime.TabIndex = 76;
-            this.LabelVehicleLifetime.Text = "---";
-            this.LabelVehicleLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleLifetimeTitle
-            // 
-            this.LabelVehicleLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleLifetimeTitle.Location = new System.Drawing.Point(368, 166);
-            this.LabelVehicleLifetimeTitle.Name = "LabelVehicleLifetimeTitle";
-            this.LabelVehicleLifetimeTitle.Size = new System.Drawing.Size(117, 28);
-            this.LabelVehicleLifetimeTitle.TabIndex = 75;
-            this.LabelVehicleLifetimeTitle.Text = "Lifetime:";
-            this.LabelVehicleLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleAverageSpeed
-            // 
-            this.LabelVehicleAverageSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleAverageSpeed.Location = new System.Drawing.Point(472, 247);
-            this.LabelVehicleAverageSpeed.Name = "LabelVehicleAverageSpeed";
-            this.LabelVehicleAverageSpeed.Size = new System.Drawing.Size(130, 28);
-            this.LabelVehicleAverageSpeed.TabIndex = 74;
-            this.LabelVehicleAverageSpeed.Text = "---";
-            this.LabelVehicleAverageSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleAverageSpeedTitle
-            // 
-            this.LabelVehicleAverageSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleAverageSpeedTitle.Location = new System.Drawing.Point(368, 247);
-            this.LabelVehicleAverageSpeedTitle.Name = "LabelVehicleAverageSpeedTitle";
-            this.LabelVehicleAverageSpeedTitle.Size = new System.Drawing.Size(114, 28);
-            this.LabelVehicleAverageSpeedTitle.TabIndex = 73;
-            this.LabelVehicleAverageSpeedTitle.Text = "Average Speed:";
-            this.LabelVehicleAverageSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleProgress
-            // 
-            this.LabelVehicleProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleProgress.Location = new System.Drawing.Point(442, 186);
-            this.LabelVehicleProgress.Name = "LabelVehicleProgress";
-            this.LabelVehicleProgress.Size = new System.Drawing.Size(160, 28);
-            this.LabelVehicleProgress.TabIndex = 72;
-            this.LabelVehicleProgress.Text = "---";
-            this.LabelVehicleProgress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleProgressTitle
-            // 
-            this.LabelVehicleProgressTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleProgressTitle.Location = new System.Drawing.Point(368, 186);
-            this.LabelVehicleProgressTitle.Name = "LabelVehicleProgressTitle";
-            this.LabelVehicleProgressTitle.Size = new System.Drawing.Size(68, 28);
-            this.LabelVehicleProgressTitle.TabIndex = 71;
-            this.LabelVehicleProgressTitle.Text = "Progress:";
-            this.LabelVehicleProgressTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleDespawnTime
-            // 
-            this.LabelVehicleDespawnTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleDespawnTime.Location = new System.Drawing.Point(469, 144);
-            this.LabelVehicleDespawnTime.Name = "LabelVehicleDespawnTime";
-            this.LabelVehicleDespawnTime.Size = new System.Drawing.Size(133, 28);
-            this.LabelVehicleDespawnTime.TabIndex = 70;
-            this.LabelVehicleDespawnTime.Text = "---";
-            this.LabelVehicleDespawnTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleDespawnTimeTitle
-            // 
-            this.LabelVehicleDespawnTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleDespawnTimeTitle.Location = new System.Drawing.Point(368, 144);
-            this.LabelVehicleDespawnTimeTitle.Name = "LabelVehicleDespawnTimeTitle";
-            this.LabelVehicleDespawnTimeTitle.Size = new System.Drawing.Size(117, 28);
-            this.LabelVehicleDespawnTimeTitle.TabIndex = 69;
-            this.LabelVehicleDespawnTimeTitle.Text = "Despawn Time:";
-            this.LabelVehicleDespawnTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleSpawnTime
-            // 
-            this.LabelVehicleSpawnTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleSpawnTime.Location = new System.Drawing.Point(458, 121);
-            this.LabelVehicleSpawnTime.Name = "LabelVehicleSpawnTime";
-            this.LabelVehicleSpawnTime.Size = new System.Drawing.Size(144, 28);
-            this.LabelVehicleSpawnTime.TabIndex = 68;
-            this.LabelVehicleSpawnTime.Text = "---";
-            this.LabelVehicleSpawnTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleSpawnTimeTitle
-            // 
-            this.LabelVehicleSpawnTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleSpawnTimeTitle.Location = new System.Drawing.Point(368, 121);
-            this.LabelVehicleSpawnTimeTitle.Name = "LabelVehicleSpawnTimeTitle";
-            this.LabelVehicleSpawnTimeTitle.Size = new System.Drawing.Size(95, 28);
-            this.LabelVehicleSpawnTimeTitle.TabIndex = 67;
-            this.LabelVehicleSpawnTimeTitle.Text = "Spawn Time:";
-            this.LabelVehicleSpawnTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleSuccessfulSpawn
-            // 
-            this.LabelVehicleSuccessfulSpawn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleSuccessfulSpawn.Location = new System.Drawing.Point(491, 99);
-            this.LabelVehicleSuccessfulSpawn.Name = "LabelVehicleSuccessfulSpawn";
-            this.LabelVehicleSuccessfulSpawn.Size = new System.Drawing.Size(111, 28);
-            this.LabelVehicleSuccessfulSpawn.TabIndex = 66;
-            this.LabelVehicleSuccessfulSpawn.Text = "---";
-            this.LabelVehicleSuccessfulSpawn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleSuccessfulSpawnTitle
-            // 
-            this.LabelVehicleSuccessfulSpawnTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleSuccessfulSpawnTitle.Location = new System.Drawing.Point(368, 99);
-            this.LabelVehicleSuccessfulSpawnTitle.Name = "LabelVehicleSuccessfulSpawnTitle";
-            this.LabelVehicleSuccessfulSpawnTitle.Size = new System.Drawing.Size(125, 28);
-            this.LabelVehicleSuccessfulSpawnTitle.TabIndex = 65;
-            this.LabelVehicleSuccessfulSpawnTitle.Text = "Successful Spawn:";
-            this.LabelVehicleSuccessfulSpawnTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleActualSpeed
-            // 
-            this.LabelVehicleActualSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleActualSpeed.Location = new System.Drawing.Point(466, 226);
-            this.LabelVehicleActualSpeed.Name = "LabelVehicleActualSpeed";
-            this.LabelVehicleActualSpeed.Size = new System.Drawing.Size(136, 28);
-            this.LabelVehicleActualSpeed.TabIndex = 64;
-            this.LabelVehicleActualSpeed.Text = "---";
-            this.LabelVehicleActualSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleActualSpeedTitle
-            // 
-            this.LabelVehicleActualSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleActualSpeedTitle.Location = new System.Drawing.Point(368, 227);
-            this.LabelVehicleActualSpeedTitle.Name = "LabelVehicleActualSpeedTitle";
-            this.LabelVehicleActualSpeedTitle.Size = new System.Drawing.Size(114, 28);
-            this.LabelVehicleActualSpeedTitle.TabIndex = 63;
-            this.LabelVehicleActualSpeedTitle.Text = "Actual Speed:";
-            this.LabelVehicleActualSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleDesiredSpeed
-            // 
-            this.LabelVehicleDesiredSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleDesiredSpeed.Location = new System.Drawing.Point(466, 205);
-            this.LabelVehicleDesiredSpeed.Name = "LabelVehicleDesiredSpeed";
-            this.LabelVehicleDesiredSpeed.Size = new System.Drawing.Size(136, 28);
-            this.LabelVehicleDesiredSpeed.TabIndex = 62;
-            this.LabelVehicleDesiredSpeed.Text = "---";
-            this.LabelVehicleDesiredSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleDesiredSpeedTitle
-            // 
-            this.LabelVehicleDesiredSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleDesiredSpeedTitle.Location = new System.Drawing.Point(368, 206);
-            this.LabelVehicleDesiredSpeedTitle.Name = "LabelVehicleDesiredSpeedTitle";
-            this.LabelVehicleDesiredSpeedTitle.Size = new System.Drawing.Size(114, 28);
-            this.LabelVehicleDesiredSpeedTitle.TabIndex = 61;
-            this.LabelVehicleDesiredSpeedTitle.Text = "Desired Speed:";
-            this.LabelVehicleDesiredSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelVehicleLength
-            // 
-            this.LabelVehicleLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleLength.Location = new System.Drawing.Point(415, 77);
-            this.LabelVehicleLength.Name = "LabelVehicleLength";
-            this.LabelVehicleLength.Size = new System.Drawing.Size(187, 28);
-            this.LabelVehicleLength.TabIndex = 60;
-            this.LabelVehicleLength.Text = "---";
-            this.LabelVehicleLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleLengthTitle
-            // 
-            this.LabelVehicleLengthTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleLengthTitle.Location = new System.Drawing.Point(368, 77);
-            this.LabelVehicleLengthTitle.Name = "LabelVehicleLengthTitle";
-            this.LabelVehicleLengthTitle.Size = new System.Drawing.Size(57, 28);
-            this.LabelVehicleLengthTitle.TabIndex = 59;
-            this.LabelVehicleLengthTitle.Text = "Length:";
-            this.LabelVehicleLengthTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // LabelVehicleType
             // 
             this.LabelVehicleType.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleType.Location = new System.Drawing.Point(418, 55);
+            this.LabelVehicleType.Location = new System.Drawing.Point(418, 51);
             this.LabelVehicleType.Name = "LabelVehicleType";
             this.LabelVehicleType.Size = new System.Drawing.Size(184, 28);
             this.LabelVehicleType.TabIndex = 58;
             this.LabelVehicleType.Text = "---";
             this.LabelVehicleType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // LabelVehicleTypeTitle
-            // 
-            this.LabelVehicleTypeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVehicleTypeTitle.Location = new System.Drawing.Point(368, 55);
-            this.LabelVehicleTypeTitle.Name = "LabelVehicleTypeTitle";
-            this.LabelVehicleTypeTitle.Size = new System.Drawing.Size(47, 28);
-            this.LabelVehicleTypeTitle.TabIndex = 57;
-            this.LabelVehicleTypeTitle.Text = "Type:";
-            this.LabelVehicleTypeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LableVehicleDataTitle
-            // 
-            this.LableVehicleDataTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LableVehicleDataTitle.Location = new System.Drawing.Point(371, 15);
-            this.LableVehicleDataTitle.Name = "LableVehicleDataTitle";
-            this.LableVehicleDataTitle.Size = new System.Drawing.Size(231, 22);
-            this.LableVehicleDataTitle.TabIndex = 52;
-            this.LableVehicleDataTitle.Text = "Selected Vehicle Data";
-            this.LableVehicleDataTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // LabelFinishedVehiclesTitle
             // 
@@ -2674,6 +2511,321 @@ namespace MotorwaySimulator
             this.TreeViewVehicles.TabIndex = 8;
             this.TreeViewVehicles.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeNodeVehicleSelected);
             // 
+            // LabelVehicleSuccessfulSpawn
+            // 
+            this.LabelVehicleSuccessfulSpawn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleSuccessfulSpawn.Location = new System.Drawing.Point(491, 89);
+            this.LabelVehicleSuccessfulSpawn.Name = "LabelVehicleSuccessfulSpawn";
+            this.LabelVehicleSuccessfulSpawn.Size = new System.Drawing.Size(111, 28);
+            this.LabelVehicleSuccessfulSpawn.TabIndex = 66;
+            this.LabelVehicleSuccessfulSpawn.Text = "---";
+            this.LabelVehicleSuccessfulSpawn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleSpawnTime
+            // 
+            this.LabelVehicleSpawnTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleSpawnTime.Location = new System.Drawing.Point(458, 108);
+            this.LabelVehicleSpawnTime.Name = "LabelVehicleSpawnTime";
+            this.LabelVehicleSpawnTime.Size = new System.Drawing.Size(144, 28);
+            this.LabelVehicleSpawnTime.TabIndex = 68;
+            this.LabelVehicleSpawnTime.Text = "---";
+            this.LabelVehicleSpawnTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleDespawnTime
+            // 
+            this.LabelVehicleDespawnTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleDespawnTime.Location = new System.Drawing.Point(469, 127);
+            this.LabelVehicleDespawnTime.Name = "LabelVehicleDespawnTime";
+            this.LabelVehicleDespawnTime.Size = new System.Drawing.Size(133, 28);
+            this.LabelVehicleDespawnTime.TabIndex = 70;
+            this.LabelVehicleDespawnTime.Text = "---";
+            this.LabelVehicleDespawnTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleLifetime
+            // 
+            this.LabelVehicleLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLifetime.Location = new System.Drawing.Point(421, 146);
+            this.LabelVehicleLifetime.Name = "LabelVehicleLifetime";
+            this.LabelVehicleLifetime.Size = new System.Drawing.Size(181, 28);
+            this.LabelVehicleLifetime.TabIndex = 76;
+            this.LabelVehicleLifetime.Text = "---";
+            this.LabelVehicleLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleProgress
+            // 
+            this.LabelVehicleProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleProgress.Location = new System.Drawing.Point(442, 165);
+            this.LabelVehicleProgress.Name = "LabelVehicleProgress";
+            this.LabelVehicleProgress.Size = new System.Drawing.Size(160, 28);
+            this.LabelVehicleProgress.TabIndex = 72;
+            this.LabelVehicleProgress.Text = "---";
+            this.LabelVehicleProgress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleProgressTitle
+            // 
+            this.LabelVehicleProgressTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleProgressTitle.Location = new System.Drawing.Point(368, 165);
+            this.LabelVehicleProgressTitle.Name = "LabelVehicleProgressTitle";
+            this.LabelVehicleProgressTitle.Size = new System.Drawing.Size(68, 28);
+            this.LabelVehicleProgressTitle.TabIndex = 71;
+            this.LabelVehicleProgressTitle.Text = "Progress:";
+            this.LabelVehicleProgressTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleCamper
+            // 
+            this.LabelVehicleCamper.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCamper.Location = new System.Drawing.Point(461, 203);
+            this.LabelVehicleCamper.Name = "LabelVehicleCamper";
+            this.LabelVehicleCamper.Size = new System.Drawing.Size(141, 28);
+            this.LabelVehicleCamper.TabIndex = 147;
+            this.LabelVehicleCamper.Text = "---";
+            this.LabelVehicleCamper.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleCamperTitle
+            // 
+            this.LabelVehicleCamperTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCamperTitle.Location = new System.Drawing.Point(368, 203);
+            this.LabelVehicleCamperTitle.Name = "LabelVehicleCamperTitle";
+            this.LabelVehicleCamperTitle.Size = new System.Drawing.Size(95, 28);
+            this.LabelVehicleCamperTitle.TabIndex = 146;
+            this.LabelVehicleCamperTitle.Text = "Lane Camper:";
+            this.LabelVehicleCamperTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesNotCongestedPercentTitle
+            // 
+            this.LabelAllVehiclesNotCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesNotCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesNotCongestedPercentTitle.Location = new System.Drawing.Point(631, 275);
+            this.LabelAllVehiclesNotCongestedPercentTitle.Name = "LabelAllVehiclesNotCongestedPercentTitle";
+            this.LabelAllVehiclesNotCongestedPercentTitle.Size = new System.Drawing.Size(126, 28);
+            this.LabelAllVehiclesNotCongestedPercentTitle.TabIndex = 109;
+            this.LabelAllVehiclesNotCongestedPercentTitle.Text = "Not Congested (%):";
+            this.LabelAllVehiclesNotCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesMildlyCongestedPercentTitle
+            // 
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.Location = new System.Drawing.Point(631, 295);
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.Name = "LabelAllVehiclesMildlyCongestedPercentTitle";
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.Size = new System.Drawing.Size(139, 28);
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.TabIndex = 111;
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.Text = "Mildly Congested (%):";
+            this.LabelAllVehiclesMildlyCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesSeverelyCongestedPercentTitle
+            // 
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Location = new System.Drawing.Point(631, 314);
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Name = "LabelAllVehiclesSeverelyCongestedPercentTitle";
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Size = new System.Drawing.Size(161, 28);
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.TabIndex = 113;
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.Text = "Severely Congested (%):";
+            this.LabelAllVehiclesSeverelyCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesLifetimeTitle
+            // 
+            this.LabelAllVehiclesLifetimeTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(883, 314);
+            this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
+            this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(96, 28);
+            this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
+            this.LabelAllVehiclesLifetimeTitle.Text = "Total Lifetime: ";
+            this.LabelAllVehiclesLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesLifetime
+            // 
+            this.LabelAllVehiclesLifetime.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(969, 314);
+            this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
+            this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(148, 28);
+            this.LabelAllVehiclesLifetime.TabIndex = 125;
+            this.LabelAllVehiclesLifetime.Text = "---";
+            this.LabelAllVehiclesLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleDesiredSpeed
+            // 
+            this.LabelVehicleDesiredSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleDesiredSpeed.Location = new System.Drawing.Point(466, 222);
+            this.LabelVehicleDesiredSpeed.Name = "LabelVehicleDesiredSpeed";
+            this.LabelVehicleDesiredSpeed.Size = new System.Drawing.Size(136, 28);
+            this.LabelVehicleDesiredSpeed.TabIndex = 62;
+            this.LabelVehicleDesiredSpeed.Text = "---";
+            this.LabelVehicleDesiredSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleDesiredSpeedTitle
+            // 
+            this.LabelVehicleDesiredSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleDesiredSpeedTitle.Location = new System.Drawing.Point(368, 223);
+            this.LabelVehicleDesiredSpeedTitle.Name = "LabelVehicleDesiredSpeedTitle";
+            this.LabelVehicleDesiredSpeedTitle.Size = new System.Drawing.Size(114, 28);
+            this.LabelVehicleDesiredSpeedTitle.TabIndex = 61;
+            this.LabelVehicleDesiredSpeedTitle.Text = "Desired Speed:";
+            this.LabelVehicleDesiredSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleActualSpeed
+            // 
+            this.LabelVehicleActualSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleActualSpeed.Location = new System.Drawing.Point(466, 241);
+            this.LabelVehicleActualSpeed.Name = "LabelVehicleActualSpeed";
+            this.LabelVehicleActualSpeed.Size = new System.Drawing.Size(136, 28);
+            this.LabelVehicleActualSpeed.TabIndex = 64;
+            this.LabelVehicleActualSpeed.Text = "---";
+            this.LabelVehicleActualSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleActualSpeedTitle
+            // 
+            this.LabelVehicleActualSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleActualSpeedTitle.Location = new System.Drawing.Point(368, 242);
+            this.LabelVehicleActualSpeedTitle.Name = "LabelVehicleActualSpeedTitle";
+            this.LabelVehicleActualSpeedTitle.Size = new System.Drawing.Size(114, 28);
+            this.LabelVehicleActualSpeedTitle.TabIndex = 63;
+            this.LabelVehicleActualSpeedTitle.Text = "Actual Speed:";
+            this.LabelVehicleActualSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleAverageSpeed
+            // 
+            this.LabelVehicleAverageSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleAverageSpeed.Location = new System.Drawing.Point(472, 261);
+            this.LabelVehicleAverageSpeed.Name = "LabelVehicleAverageSpeed";
+            this.LabelVehicleAverageSpeed.Size = new System.Drawing.Size(130, 28);
+            this.LabelVehicleAverageSpeed.TabIndex = 74;
+            this.LabelVehicleAverageSpeed.Text = "---";
+            this.LabelVehicleAverageSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleAverageSpeedTitle
+            // 
+            this.LabelVehicleAverageSpeedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleAverageSpeedTitle.Location = new System.Drawing.Point(368, 261);
+            this.LabelVehicleAverageSpeedTitle.Name = "LabelVehicleAverageSpeedTitle";
+            this.LabelVehicleAverageSpeedTitle.Size = new System.Drawing.Size(114, 28);
+            this.LabelVehicleAverageSpeedTitle.TabIndex = 73;
+            this.LabelVehicleAverageSpeedTitle.Text = "Average Speed:";
+            this.LabelVehicleAverageSpeedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleCongestion
+            // 
+            this.LabelVehicleCongestion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCongestion.Location = new System.Drawing.Point(446, 280);
+            this.LabelVehicleCongestion.Name = "LabelVehicleCongestion";
+            this.LabelVehicleCongestion.Size = new System.Drawing.Size(156, 28);
+            this.LabelVehicleCongestion.TabIndex = 80;
+            this.LabelVehicleCongestion.Text = "---";
+            this.LabelVehicleCongestion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleCongestionTitle
+            // 
+            this.LabelVehicleCongestionTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCongestionTitle.Location = new System.Drawing.Point(368, 280);
+            this.LabelVehicleCongestionTitle.Name = "LabelVehicleCongestionTitle";
+            this.LabelVehicleCongestionTitle.Size = new System.Drawing.Size(114, 28);
+            this.LabelVehicleCongestionTitle.TabIndex = 79;
+            this.LabelVehicleCongestionTitle.Text = "Congestion:";
+            this.LabelVehicleCongestionTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleCrashed
+            // 
+            this.LabelVehicleCrashed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCrashed.Location = new System.Drawing.Point(446, 299);
+            this.LabelVehicleCrashed.Name = "LabelVehicleCrashed";
+            this.LabelVehicleCrashed.Size = new System.Drawing.Size(156, 28);
+            this.LabelVehicleCrashed.TabIndex = 123;
+            this.LabelVehicleCrashed.Text = "---";
+            this.LabelVehicleCrashed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleCrashedTitle
+            // 
+            this.LabelVehicleCrashedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleCrashedTitle.Location = new System.Drawing.Point(368, 299);
+            this.LabelVehicleCrashedTitle.Name = "LabelVehicleCrashedTitle";
+            this.LabelVehicleCrashedTitle.Size = new System.Drawing.Size(72, 28);
+            this.LabelVehicleCrashedTitle.TabIndex = 122;
+            this.LabelVehicleCrashedTitle.Text = "Crashed:";
+            this.LabelVehicleCrashedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleLaneTitle
+            // 
+            this.LabelVehicleLaneTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLaneTitle.Location = new System.Drawing.Point(368, 184);
+            this.LabelVehicleLaneTitle.Name = "LabelVehicleLaneTitle";
+            this.LabelVehicleLaneTitle.Size = new System.Drawing.Size(47, 28);
+            this.LabelVehicleLaneTitle.TabIndex = 148;
+            this.LabelVehicleLaneTitle.Text = "Lane:";
+            this.LabelVehicleLaneTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleLength
+            // 
+            this.LabelVehicleLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLength.Location = new System.Drawing.Point(415, 70);
+            this.LabelVehicleLength.Name = "LabelVehicleLength";
+            this.LabelVehicleLength.Size = new System.Drawing.Size(187, 28);
+            this.LabelVehicleLength.TabIndex = 60;
+            this.LabelVehicleLength.Text = "---";
+            this.LabelVehicleLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelVehicleTypeTitle
+            // 
+            this.LabelVehicleTypeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleTypeTitle.Location = new System.Drawing.Point(368, 51);
+            this.LabelVehicleTypeTitle.Name = "LabelVehicleTypeTitle";
+            this.LabelVehicleTypeTitle.Size = new System.Drawing.Size(47, 28);
+            this.LabelVehicleTypeTitle.TabIndex = 57;
+            this.LabelVehicleTypeTitle.Text = "Type:";
+            this.LabelVehicleTypeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleLengthTitle
+            // 
+            this.LabelVehicleLengthTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLengthTitle.Location = new System.Drawing.Point(368, 70);
+            this.LabelVehicleLengthTitle.Name = "LabelVehicleLengthTitle";
+            this.LabelVehicleLengthTitle.Size = new System.Drawing.Size(57, 28);
+            this.LabelVehicleLengthTitle.TabIndex = 59;
+            this.LabelVehicleLengthTitle.Text = "Length:";
+            this.LabelVehicleLengthTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleSuccessfulSpawnTitle
+            // 
+            this.LabelVehicleSuccessfulSpawnTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleSuccessfulSpawnTitle.Location = new System.Drawing.Point(368, 89);
+            this.LabelVehicleSuccessfulSpawnTitle.Name = "LabelVehicleSuccessfulSpawnTitle";
+            this.LabelVehicleSuccessfulSpawnTitle.Size = new System.Drawing.Size(125, 28);
+            this.LabelVehicleSuccessfulSpawnTitle.TabIndex = 65;
+            this.LabelVehicleSuccessfulSpawnTitle.Text = "Successful Spawn:";
+            this.LabelVehicleSuccessfulSpawnTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleSpawnTimeTitle
+            // 
+            this.LabelVehicleSpawnTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleSpawnTimeTitle.Location = new System.Drawing.Point(368, 108);
+            this.LabelVehicleSpawnTimeTitle.Name = "LabelVehicleSpawnTimeTitle";
+            this.LabelVehicleSpawnTimeTitle.Size = new System.Drawing.Size(95, 28);
+            this.LabelVehicleSpawnTimeTitle.TabIndex = 67;
+            this.LabelVehicleSpawnTimeTitle.Text = "Spawn Time:";
+            this.LabelVehicleSpawnTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleDespawnTimeTitle
+            // 
+            this.LabelVehicleDespawnTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleDespawnTimeTitle.Location = new System.Drawing.Point(368, 127);
+            this.LabelVehicleDespawnTimeTitle.Name = "LabelVehicleDespawnTimeTitle";
+            this.LabelVehicleDespawnTimeTitle.Size = new System.Drawing.Size(117, 28);
+            this.LabelVehicleDespawnTimeTitle.TabIndex = 69;
+            this.LabelVehicleDespawnTimeTitle.Text = "Despawn Time:";
+            this.LabelVehicleDespawnTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelVehicleLifetimeTitle
+            // 
+            this.LabelVehicleLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVehicleLifetimeTitle.Location = new System.Drawing.Point(368, 146);
+            this.LabelVehicleLifetimeTitle.Name = "LabelVehicleLifetimeTitle";
+            this.LabelVehicleLifetimeTitle.Size = new System.Drawing.Size(117, 28);
+            this.LabelVehicleLifetimeTitle.TabIndex = 75;
+            this.LabelVehicleLifetimeTitle.Text = "Lifetime:";
+            this.LabelVehicleLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // ButtonStop
             // 
             this.ButtonStop.BackColor = System.Drawing.Color.Transparent;
@@ -2698,98 +2850,6 @@ namespace MotorwaySimulator
             this.ButtonStart.TabIndex = 0;
             this.ButtonStart.UseVisualStyleBackColor = false;
             this.ButtonStart.Click += new System.EventHandler(this.ButtonStart_Click);
-            // 
-            // LabelCamperProbabilityUnitTitle
-            // 
-            this.LabelCamperProbabilityUnitTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelCamperProbabilityUnitTitle.Location = new System.Drawing.Point(1048, 233);
-            this.LabelCamperProbabilityUnitTitle.Name = "LabelCamperProbabilityUnitTitle";
-            this.LabelCamperProbabilityUnitTitle.Size = new System.Drawing.Size(54, 20);
-            this.LabelCamperProbabilityUnitTitle.TabIndex = 93;
-            this.LabelCamperProbabilityUnitTitle.Text = "%";
-            this.LabelCamperProbabilityUnitTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // NumericCarCamperProbability
-            // 
-            this.NumericCarCamperProbability.DecimalPlaces = 1;
-            this.NumericCarCamperProbability.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.NumericCarCamperProbability.Location = new System.Drawing.Point(773, 233);
-            this.NumericCarCamperProbability.Name = "NumericCarCamperProbability";
-            this.NumericCarCamperProbability.Size = new System.Drawing.Size(61, 20);
-            this.NumericCarCamperProbability.TabIndex = 88;
-            this.NumericCarCamperProbability.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // NumericLGVCamperProbability
-            // 
-            this.NumericLGVCamperProbability.DecimalPlaces = 1;
-            this.NumericLGVCamperProbability.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.NumericLGVCamperProbability.Location = new System.Drawing.Point(844, 233);
-            this.NumericLGVCamperProbability.Name = "NumericLGVCamperProbability";
-            this.NumericLGVCamperProbability.Size = new System.Drawing.Size(61, 20);
-            this.NumericLGVCamperProbability.TabIndex = 89;
-            this.NumericLGVCamperProbability.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // NumericHGVCamperProbability
-            // 
-            this.NumericHGVCamperProbability.DecimalPlaces = 1;
-            this.NumericHGVCamperProbability.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.NumericHGVCamperProbability.Location = new System.Drawing.Point(915, 233);
-            this.NumericHGVCamperProbability.Name = "NumericHGVCamperProbability";
-            this.NumericHGVCamperProbability.Size = new System.Drawing.Size(61, 20);
-            this.NumericHGVCamperProbability.TabIndex = 90;
-            this.NumericHGVCamperProbability.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // LabelCamperProbabilityTitle
-            // 
-            this.LabelCamperProbabilityTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelCamperProbabilityTitle.Location = new System.Drawing.Point(595, 233);
-            this.LabelCamperProbabilityTitle.Name = "LabelCamperProbabilityTitle";
-            this.LabelCamperProbabilityTitle.Size = new System.Drawing.Size(169, 20);
-            this.LabelCamperProbabilityTitle.TabIndex = 92;
-            this.LabelCamperProbabilityTitle.Text = "Camper Probability";
-            this.LabelCamperProbabilityTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // NumericBusCamperProbability
-            // 
-            this.NumericBusCamperProbability.DecimalPlaces = 1;
-            this.NumericBusCamperProbability.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.NumericBusCamperProbability.Location = new System.Drawing.Point(986, 233);
-            this.NumericBusCamperProbability.Name = "NumericBusCamperProbability";
-            this.NumericBusCamperProbability.Size = new System.Drawing.Size(61, 20);
-            this.NumericBusCamperProbability.TabIndex = 91;
-            this.NumericBusCamperProbability.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // MotorwaySimulatorForm
             // 
@@ -2816,6 +2876,10 @@ namespace MotorwaySimulator
             this.TabControlControlPanel.ResumeLayout(false);
             this.TabPageSetup.ResumeLayout(false);
             this.TabPageSetup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericCarCamperProbability)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCamperProbability)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericHGVCamperProbability)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericBusCamperProbability)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericMaxCrashCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericCarCrashProbability)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCrashProbability)).EndInit();
@@ -2856,10 +2920,6 @@ namespace MotorwaySimulator
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadLength)).EndInit();
             this.TabPageSimulation.ResumeLayout(false);
             this.TabPageSimulation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericCarCamperProbability)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericLGVCamperProbability)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericHGVCamperProbability)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumericBusCamperProbability)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3039,7 +3099,7 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelAllVehiclesCarCrashesTitle;
         private System.Windows.Forms.Label LabelAllVehiclesBusCrashes;
         private System.Windows.Forms.Label LabelAllVehiclesBusCrashesTitle;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LabelAllVehiclesTotalCampers;
         private System.Windows.Forms.Label LabelAllVehiclesTotalCampersTitle;
         private System.Windows.Forms.Label LabelAllVehiclesLGVCampers;
         private System.Windows.Forms.Label LabelAllVehiclesLGVCampersTitle;
@@ -3055,6 +3115,11 @@ namespace MotorwaySimulator
         private System.Windows.Forms.NumericUpDown NumericHGVCamperProbability;
         private System.Windows.Forms.Label LabelCamperProbabilityTitle;
         private System.Windows.Forms.NumericUpDown NumericBusCamperProbability;
+        private System.Windows.Forms.Label LabelVehicleCamper;
+        private System.Windows.Forms.Label LabelVehicleCamperTitle;
+        private System.Windows.Forms.Label LabelVehicleLane;
+        private System.Windows.Forms.Label LabelVehicleLaneTitle;
+        private System.Windows.Forms.Button ButtonSaveData;
     }
 }
 

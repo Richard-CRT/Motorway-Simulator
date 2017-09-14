@@ -119,7 +119,11 @@ namespace MotorwaySimulator
         /// <summary>
         /// Duration of the simulation
         /// </summary>
-        private int ActiveRunDuration;
+        private DateTime ActiveRunDuration;
+        /// <summary>
+        /// Duration of the simulation in Milliseconds
+        /// </summary>
+        private int ActiveRunDurationMilliseconds;
         /// <summary>
         /// Time at start of simulation
         /// </summary>
@@ -321,7 +325,7 @@ namespace MotorwaySimulator
             NumericHGVMaximumLane.Maximum = LaneCount;
             NumericBusMaximumLane.Maximum = LaneCount;
         }
-        
+
         /// <summary>
         /// Updates LabelStoppingTime and the StoppingTime variable to the new value whenever TrackBarStoppingTime changes value.
         /// </summary>
@@ -486,6 +490,7 @@ namespace MotorwaySimulator
                     {
                         // All 100% have been assigned to spawn probabilities
                         NewSimulation();
+                        UpdateControlPanelLocation(null, null);
                     }
                     else
                     {
@@ -589,6 +594,16 @@ namespace MotorwaySimulator
         }
 
         /// <summary>
+        /// Save the data for the current simulation to a file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonSaveData_Click(object sender, EventArgs e)
+        {
+            SaveData();
+        }
+
+        /// <summary>
         /// This is the underlying update structure of the simulation. Everytime the FormTick form control 'ticks' (every 15ms) this function is called.
         /// Firstly it checks to see if a new vehicle should be spawned.
         /// Secondly, it increments the scaled time passed by the scaled elapsed miliseconds since the last tick
@@ -614,7 +629,7 @@ namespace MotorwaySimulator
             double scaledElapsedTime = elapsedTime * TimeScale;
             ScaledTimePassed += scaledElapsedTime;
 
-            if (ActiveRunDurationEnabled && ScaledTimePassed >= ActiveRunDuration)
+            if (ActiveRunDurationEnabled && ScaledTimePassed >= ActiveRunDurationMilliseconds)
             {
                 ButtonStop_Click(null, null);
             }
@@ -632,7 +647,7 @@ namespace MotorwaySimulator
             {
                 vehicle.MovementTick();
             }
-            
+
             foreach (Vehicle vehicle in OrderedVehicles)
             {
                 if (!vehicle.InSight)
@@ -859,12 +874,12 @@ namespace MotorwaySimulator
         public double StoppingDistance(double metresHour)
         {
             double distance = (metresHour * ActiveStoppingTime) / (60 * 60);
-            
+
             if (distance < 3)
             {
                 distance = 3;
             }
-            
+
             return distance;
         }
 
@@ -908,8 +923,8 @@ namespace MotorwaySimulator
             ActiveRunDurationEnabled = CheckBoxRunForDuration.Checked;
             if (ActiveRunDurationEnabled)
             {
-                DateTime value = DateTimeRunDuration.Value;
-                ActiveRunDuration = 1000 * ((value.Hour * 3600) + (value.Minute * 60) + value.Second);
+                ActiveRunDuration = DateTimeRunDuration.Value;
+                ActiveRunDurationMilliseconds = 1000 * ((ActiveRunDuration.Hour * 3600) + (ActiveRunDuration.Minute * 60) + ActiveRunDuration.Second);
             }
 
             ActiveMetresToPixelsScalingFactor = (int)NumericMetreToPixelScalingFactor.Value;
@@ -968,7 +983,7 @@ namespace MotorwaySimulator
                 finishedVehiclesLaneNode = new TreeNode("Lane " + (lane.LaneId + 1));
                 Road.Controls.Add(lane);
                 Lanes.Add(lane);
-                
+
                 TreeViewFinishedVehicles.Nodes.Add(finishedVehiclesLaneNode);
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
@@ -976,7 +991,7 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
 
-            
+
             // Create an individual spawn instruction
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 100, -1);
             DebugModeInstructions.Add(instruction);
@@ -1017,8 +1032,8 @@ namespace MotorwaySimulator
             ActiveRunDurationEnabled = CheckBoxRunForDuration.Checked;
             if (ActiveRunDurationEnabled)
             {
-                DateTime value = DateTimeRunDuration.Value;
-                ActiveRunDuration = 1000 * ((value.Hour * 3600) + (value.Minute * 60) + value.Second);
+                ActiveRunDuration = DateTimeRunDuration.Value;
+                ActiveRunDurationMilliseconds = 1000 * ((ActiveRunDuration.Hour * 3600) + (ActiveRunDuration.Minute * 60) + ActiveRunDuration.Second);
             }
 
             // Resume the stopwatch
@@ -1068,7 +1083,7 @@ namespace MotorwaySimulator
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
                     //if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
                     if (ScaledTimePassed >= instruction.RealTimeSpawnTime)
-                        {
+                    {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
                         switch (instruction.Type)
@@ -1140,13 +1155,13 @@ namespace MotorwaySimulator
                 double tempTime = ScaledTimePassed;
                 double scaledElapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
-                
+
                 // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
                 if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == -1)
                 {
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
-                    
+
                     // Update the last arrival timer value so delta time can be calculated next check
                     LastArrivalTimerValue = tempTime;
 
@@ -1178,7 +1193,7 @@ namespace MotorwaySimulator
                 // Adding the vehicle failed
 
                 // Create a node for the failed vehicle in the finished vehicle TreeView
-                TreeNode finishedVehicleNode = new TreeNode("#" + (newVehicle.VehicleId+1) + " - " + newVehicle.VehicleType + " - " + Math.Round(newVehicle.ActualSpeedMetresHour/1000, 0) + " kph");
+                TreeNode finishedVehicleNode = new TreeNode("#" + (newVehicle.VehicleId + 1) + " - " + newVehicle.VehicleType + " - " + Math.Round(newVehicle.ActualSpeedMetresHour / 1000, 0) + " kph");
                 finishedVehicleNode.Tag = newVehicle;
                 TreeViewFinishedVehicles.Nodes[0].Nodes.Add(finishedVehicleNode);
             }
@@ -1229,103 +1244,159 @@ namespace MotorwaySimulator
         }
 
         /// <summary>
-        /// The method which is in charge of updating each piece of information on the output data tab
+        /// The method that retrieves and calculates all the data for the vehicle specific records
         /// </summary>
-        private void UpdateData()
+        /// <param name="vehicle"></param>
+        private VehicleData GetVehicleData(Vehicle vehicle, DataFormat format)
         {
-            // Update the vehicles TreeView
-            UpdateTreeViewVehicles();
+            VehicleData data = new VehicleData();
 
-            if (SelectedVehicle != null)
+            bool finished = !vehicle.InEffect;
+            TimeSpan appearance = TimeSpan.FromMilliseconds(vehicle.TimeAppearance);
+            TimeSpan disappearance = TimeSpan.FromMilliseconds(vehicle.TimeDisappearance);
+            TimeSpan lifetime = TimeSpan.FromMilliseconds(vehicle.LifetimeMilliseconds);
+            
+            // Update the vehicle ID output
+            data.vehicleID = (vehicle.VehicleId + 1).ToString();
+
+            // Update the vehicle type output
+            data.vehicleType = vehicle.VehicleType.ToString();
+
+            string nullString = "";
+
+            if (format == DataFormat.Panel)
             {
-                // Vehicle is actually selected
-
-                bool finished = !SelectedVehicle.InEffect;
-                TimeSpan appearance = TimeSpan.FromMilliseconds(SelectedVehicle.TimeAppearance);
-                TimeSpan disappearance = TimeSpan.FromMilliseconds(SelectedVehicle.TimeDisappearance);
-                TimeSpan lifetime = TimeSpan.FromMilliseconds(SelectedVehicle.LifetimeMilliseconds);
-
-                // Update the vehicle ID output
-                LabelVehicleID.Text = (SelectedVehicle.VehicleId+1).ToString();
-
-                // Update the vehicle type output
-                LabelVehicleType.Text = SelectedVehicle.VehicleType.ToString();
+                // This is NOT to a file with units so add unit data etc
+                nullString = "---";
 
                 // Update the vehicle length output
-                LabelVehicleLength.Text = Math.Round(SelectedVehicle.VehicleLengthMetres, 2) + "m";
+                data.vehicleLength = Math.Round(vehicle.VehicleLengthMetres, 2) + "m";
 
                 // Update the vehicle desired speed output
-                LabelVehicleDesiredSpeed.Text = Math.Round(SelectedVehicle.DesiredSpeedMetresHour / 1000, 2) + "kph";
+                data.vehicleDesiredSpeed = Math.Round(vehicle.DesiredSpeedMetresHour / 1000, 2) + "kph";
 
                 // Update the vehicle actual speed output
-                if (SelectedVehicle.SuccessfulSpawn && !finished)
+                // Update the vehicle progress output
+                if (vehicle.SuccessfulSpawn && !finished)
                 {
-                    LabelVehicleActualSpeed.Text = Math.Round(SelectedVehicle.ActualSpeedMetresHour / 1000, 2) + "kph";
+                    data.vehicleActualSpeed = Math.Round(vehicle.ActualSpeedMetresHour / 1000, 2) + "kph";
+                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1) + "m";
                 }
                 else
                 {
-                    LabelVehicleActualSpeed.Text = "---";
+                    data.vehicleActualSpeed = nullString;
+                    data.vehicleProgress = nullString;
                 }
-
-                // Update the vehicle successful spawn output
-                LabelVehicleSuccessfulSpawn.Text = SelectedVehicle.SuccessfulSpawn.ToString();
 
                 // Update the vehicle spawn time output
-                LabelVehicleSpawnTime.Text = appearance.Hours.ToString().PadLeft(2,'0') + "h " + appearance.Minutes.ToString().PadLeft(2, '0') + "m " + appearance.Seconds.ToString().PadLeft(2, '0') + "s " + appearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
+                data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "h " + appearance.Minutes.ToString().PadLeft(2, '0') + "m " + appearance.Seconds.ToString().PadLeft(2, '0') + "s " + appearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
 
                 // Update the vehicle despawn time output
-                if (SelectedVehicle.SuccessfulSpawn && finished)
+                if (vehicle.SuccessfulSpawn && finished)
                 {
-                    LabelVehicleDespawnTime.Text = disappearance.Hours.ToString().PadLeft(2, '0') + "h " + disappearance.Minutes.ToString().PadLeft(2, '0') + "m " + disappearance.Seconds.ToString().PadLeft(2, '0') + "s " + disappearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
+                    data.vehicleDespawnTime = disappearance.Hours.ToString().PadLeft(2, '0') + "h " + disappearance.Minutes.ToString().PadLeft(2, '0') + "m " + disappearance.Seconds.ToString().PadLeft(2, '0') + "s " + disappearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
                 }
                 else
                 {
-                    LabelVehicleDespawnTime.Text = "---";
+                    data.vehicleDespawnTime = nullString;
                 }
 
                 // Update the vehicle lifetime output
-                if (SelectedVehicle.SuccessfulSpawn)
-                {
-                    LabelVehicleLifetime.Text = lifetime.Hours.ToString().PadLeft(2, '0') + "h " + lifetime.Minutes.ToString().PadLeft(2, '0') + "m " + lifetime.Seconds.ToString().PadLeft(2, '0') + "s " + lifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
-                }
-                else
-                {
-                    LabelVehicleLifetime.Text = "---";
-                }
-
-                // Update the vehicle progress output
-                if (SelectedVehicle.SuccessfulSpawn && !finished)
-                {
-                    LabelVehicleProgress.Text = Math.Round(SelectedVehicle.ExactProgressMetres,0) + "m";
-                }
-                else
-                {
-                    LabelVehicleProgress.Text = "---";
-                }
-
                 // Update the vehicle average speed output
-                if (SelectedVehicle.SuccessfulSpawn)
+                if (vehicle.SuccessfulSpawn)
                 {
-                    LabelVehicleAverageSpeed.Text = Math.Round(SelectedVehicle.AverageSpeedMetresHour / 1000, 2) + "kph";
+                    data.vehicleLifetime = lifetime.Hours.ToString().PadLeft(2, '0') + "h " + lifetime.Minutes.ToString().PadLeft(2, '0') + "m " + lifetime.Seconds.ToString().PadLeft(2, '0') + "s " + lifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
+                    data.vehicleAverageSpeed = Math.Round(vehicle.AverageSpeedMetresHour / 1000, 2) + "kph";
                 }
                 else
                 {
-                    LabelVehicleAverageSpeed.Text = "---";
+                    data.vehicleLifetime = nullString;
+                    data.vehicleAverageSpeed = nullString;
                 }
-
-                // Update the vehicle congestion output
-                if (SelectedVehicle.SuccessfulSpawn)
-                {
-                    LabelVehicleCongestion.Text = SelectedVehicle.Congestion.ToString();
-                }
-                else
-                {
-                    LabelVehicleCongestion.Text = "---";
-                }
-
-                // Update the vehicle crashed output
-                LabelVehicleCrashed.Text = SelectedVehicle.Crashed.ToString();
             }
+            else
+            {
+                // This is to a file with units so remove unncecessary data
+
+                nullString = "";
+
+                // Update the vehicle length output
+                data.vehicleLength = Math.Round(vehicle.VehicleLengthMetres, 2).ToString();
+
+                // Update the vehicle desired speed output
+                data.vehicleDesiredSpeed = vehicle.DesiredSpeedMetresHour.ToString();
+
+                // Update the vehicle actual speed output
+                // Update the vehicle progress output
+                if (vehicle.SuccessfulSpawn && !finished)
+                {
+                    data.vehicleActualSpeed = vehicle.ActualSpeedMetresHour.ToString();
+                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1).ToString();
+                }
+                else
+                {
+                    data.vehicleActualSpeed = nullString;
+                    data.vehicleProgress = nullString;
+                }
+
+                // Update the vehicle spawn time output
+                data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "-" + appearance.Minutes.ToString().PadLeft(2, '0') + "-" + appearance.Seconds.ToString().PadLeft(2, '0') + "." + appearance.Milliseconds.ToString().PadLeft(3, '0');
+
+                // Update the vehicle despawn time output
+                if (vehicle.SuccessfulSpawn && finished)
+                {
+                    data.vehicleDespawnTime = disappearance.Hours.ToString().PadLeft(2, '0') + "-" + disappearance.Minutes.ToString().PadLeft(2, '0') + "-" + disappearance.Seconds.ToString().PadLeft(2, '0') + "." + disappearance.Milliseconds.ToString().PadLeft(3, '0');
+                }
+                else
+                {
+                    data.vehicleDespawnTime = nullString;
+                }
+
+                // Update the vehicle lifetime output
+                // Update the vehicle average speed output
+                if (vehicle.SuccessfulSpawn)
+                {
+                    data.vehicleAverageSpeed = vehicle.AverageSpeedMetresHour.ToString();
+                    data.vehicleLifetime = lifetime.Hours.ToString().PadLeft(2, '0') + "-" + lifetime.Minutes.ToString().PadLeft(2, '0') + "-" + lifetime.Seconds.ToString().PadLeft(2, '0') + "." + lifetime.Milliseconds.ToString().PadLeft(3, '0');
+                }
+                else
+                {
+                    data.vehicleAverageSpeed = nullString;
+                    data.vehicleLifetime = nullString;
+                }
+            }
+
+            // Update the vehicle successful spawn output
+            data.vehicleSuccessfulSpawn = vehicle.SuccessfulSpawn.ToString();
+
+            // Update the vehicle congestion output
+            // Update the vehicle lane output
+            if (vehicle.SuccessfulSpawn)
+            {
+                data.vehicleCongestion = vehicle.Congestion.ToString();
+                data.vehicleLane = (vehicle.ParentLane.LaneId + 1).ToString();
+            }
+            else
+            {
+                data.vehicleCongestion = nullString;
+                data.vehicleLane = nullString;
+            }
+
+            // Update the vehicle camper output
+            data.vehicleCamper = vehicle.Camper.ToString();
+
+            // Update the vehicle crashed output
+            data.vehicleCrashed = vehicle.Crashed.ToString();
+
+            return data;
+        }
+
+        /// <summary>
+        /// The method that retrieves and calculates all the data for the simulation
+        /// </summary>
+        private SimulationData GetSimulationData(DataFormat format)
+        {
+            SimulationData data = new SimulationData();
 
             int successCount = 0;
             int failedCount = 0;
@@ -1339,6 +1410,11 @@ namespace MotorwaySimulator
             int lGVCrashes = 0;
             int hGVCrashes = 0;
             int busCrashes = 0;
+
+            int carCampers = 0;
+            int lGVCampers = 0;
+            int hGVCampers = 0;
+            int busCampers = 0;
 
             int notCongestedCount = 0;
             int mildyCongestedCount = 0;
@@ -1361,7 +1437,7 @@ namespace MotorwaySimulator
 
                     if (vehicle.Crashed)
                     {
-                        switch(vehicle.VehicleType)
+                        switch (vehicle.VehicleType)
                         {
                             case VehicleTypes.Car:
                                 carCrashes++;
@@ -1374,6 +1450,25 @@ namespace MotorwaySimulator
                                 break;
                             case VehicleTypes.Bus:
                                 busCrashes++;
+                                break;
+                        }
+                    }
+
+                    if (vehicle.Camper)
+                    {
+                        switch (vehicle.VehicleType)
+                        {
+                            case VehicleTypes.Car:
+                                carCampers++;
+                                break;
+                            case VehicleTypes.LGV:
+                                lGVCampers++;
+                                break;
+                            case VehicleTypes.HGV:
+                                hGVCampers++;
+                                break;
+                            case VehicleTypes.Bus:
+                                busCampers++;
                                 break;
                         }
                     }
@@ -1396,7 +1491,7 @@ namespace MotorwaySimulator
                     failedCount++;
                 }
 
-                switch(vehicle.VehicleType)
+                switch (vehicle.VehicleType)
                 {
                     case VehicleTypes.Car:
                         carCount++;
@@ -1414,115 +1509,372 @@ namespace MotorwaySimulator
             }
 
 
+
+            string nullString = "";
+
+            if (format == DataFormat.Panel)
+            {
+                // This is NOT to a file with units so add unit data etc
+
+                if (AllVehicles.Count > 0)
+                {
+                    // Percentages can be calculated as won't divide by 0
+                    // The (double)s are required to avoid integer division
+
+                    // Calculate and update the all vehicle successful spawn percentage output
+                    data.simulationSuccessfulSpawnsPercent = Math.Round((successCount / (double)AllVehicles.Count) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle failed spawn percentage output
+                    data.simulationFailedSpawnsPercent = Math.Round((failedCount / (double)AllVehicles.Count) * 100, 1) + "%";
+
+
+                    // Calculate and update the all vehicle car percentage output 
+                    data.simulationCarPercent = Math.Round((carCount / (double)AllVehicles.Count) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle LGV percentage output 
+                    data.simulationLGVPercent = Math.Round((lGVCount / (double)AllVehicles.Count) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle HGV percentage output 
+                    data.simulationHGVPercent = Math.Round((hGVCount / (double)AllVehicles.Count) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle bus percentage output 
+                    data.simulationBusPercent = Math.Round((busCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                }
+                else
+                {
+                    // Calculating percentages will result in dividing by 0 so just update the labels to default values
+
+                    data.simulationSuccessfulSpawnsPercent = nullString;
+                    data.simulationFailedSpawnsPercent = nullString;
+
+                    data.simulationCarPercent = nullString;
+                    data.simulationLGVPercent = nullString;
+                    data.simulationHGVPercent = nullString;
+                    data.simulationBusPercent = nullString;
+                }
+
+                if (successCount > 0)
+                {
+                    // Percentages can be calculated as won't divide by 0
+                    // The (double)s are required to avoid integer division
+
+                    // Calculate and update the all vehicle not congested percentage output 
+                    data.simulationNotCongestedPercent = Math.Round((notCongestedCount / (double)successCount) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle mildly congested percentage output 
+                    data.simulationMildlyCongestedPercent = Math.Round((mildyCongestedCount / (double)successCount) * 100, 1) + "%";
+
+                    // Calculate and update the all vehicle severely congested percentage output 
+                    data.simulationSeverelyCongestedPercent = Math.Round((severelyCongestedCount / (double)successCount) * 100, 1) + "%";
+                }
+                else
+                {
+                    // Calculating percentages will result in dividing by 0 so just update the labels to default values
+                    data.simulationNotCongestedPercent = nullString;
+                    data.simulationMildlyCongestedPercent = nullString;
+                    data.simulationSeverelyCongestedPercent = nullString;
+                }
+
+                // Update the simulation lifetime output
+                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
+                data.simulationLifetime = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "h " + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "m " + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "s " + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
+
+            }
+            else
+            {
+                // This is to a file with units so remove unncecessary data
+
+                nullString = "";
+
+                if (AllVehicles.Count > 0)
+                {
+                    // Percentages can be calculated as won't divide by 0
+                    // The (double)s are required to avoid integer division
+
+                    // Calculate and update the all vehicle successful spawn percentage output
+                    data.simulationSuccessfulSpawnsPercent = Math.Round(successCount / (double)AllVehicles.Count,3).ToString();
+
+                    // Calculate and update the all vehicle failed spawn percentage output
+                    data.simulationFailedSpawnsPercent = Math.Round(failedCount / (double)AllVehicles.Count,3).ToString();
+
+
+                    // Calculate and update the all vehicle car percentage output 
+                    data.simulationCarPercent = Math.Round(carCount / (double)AllVehicles.Count,3).ToString();
+
+                    // Calculate and update the all vehicle LGV percentage output 
+                    data.simulationLGVPercent = Math.Round(lGVCount / (double)AllVehicles.Count,3).ToString();
+
+                    // Calculate and update the all vehicle HGV percentage output 
+                    data.simulationHGVPercent = Math.Round(hGVCount / (double)AllVehicles.Count,3).ToString();
+
+                    // Calculate and update the all vehicle bus percentage output 
+                    data.simulationBusPercent = Math.Round(busCount / (double)AllVehicles.Count,3).ToString();
+                }
+                else
+                {
+                    // Calculating percentages will result in dividing by 0 so just update the labels to default values
+
+                    data.simulationSuccessfulSpawnsPercent = nullString;
+                    data.simulationFailedSpawnsPercent = nullString;
+
+                    data.simulationCarPercent = nullString;
+                    data.simulationLGVPercent = nullString;
+                    data.simulationHGVPercent = nullString;
+                    data.simulationBusPercent = nullString;
+                }
+
+                if (successCount > 0)
+                {
+                    // Percentages can be calculated as won't divide by 0
+                    // The (double)s are required to avoid integer division
+
+                    // Calculate and update the all vehicle not congested percentage output 
+                    data.simulationNotCongestedPercent = Math.Round(notCongestedCount / (double)successCount,3).ToString();
+
+                    // Calculate and update the all vehicle mildly congested percentage output 
+                    data.simulationMildlyCongestedPercent = Math.Round(mildyCongestedCount / (double)successCount,3).ToString();
+
+                    // Calculate and update the all vehicle severely congested percentage output 
+                    data.simulationSeverelyCongestedPercent = Math.Round(severelyCongestedCount / (double)successCount,3).ToString();
+                }
+                else
+                {
+                    // Calculating percentages will result in dividing by 0 so just update the labels to default values
+                    data.simulationNotCongestedPercent = nullString;
+                    data.simulationMildlyCongestedPercent = nullString;
+                    data.simulationSeverelyCongestedPercent = nullString;
+                }
+
+                // Update the simulation lifetime output
+                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
+                data.simulationLifetime = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "-" + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "-" + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "." + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0');
+            }
+
+
+
             // Update the all vehicle total vehicles output
-            LabelAllVehiclesTotalVehicles.Text = AllVehicles.Count.ToString();
+            data.simulationTotalVehicles = AllVehicles.Count.ToString();
 
             // Update the all vehicle successful spawns output
-            LabelAllVehiclesTotalSuccessfulSpawns.Text = successCount.ToString();
+            data.simulationTotalSuccessfulSpawns = successCount.ToString();
 
             // Update the all vehicle failed spawns output
-            LabelAllVehiclesTotalFailedSpawns.Text = failedCount.ToString();
+            data.simulationTotalFailedSpawns = failedCount.ToString();
 
 
             // Update the all vehicle total cars output
-            LabelAllVehiclesTotalCar.Text = carCount.ToString();
+            data.simulationTotalCar = carCount.ToString();
 
             // Update the all vehicle total LGVs output
-            LabelAllVehiclesTotalLGV.Text = lGVCount.ToString();
+            data.simulationTotalLGV = lGVCount.ToString();
 
             // Update the all vehicle total HGVs output
-            LabelAllVehiclesTotalHGV.Text = hGVCount.ToString();
+            data.simulationTotalHGV = hGVCount.ToString();
 
             // Update the all vehicle total buses output
-            LabelAllVehiclesTotalBus.Text = busCount.ToString();
+            data.simulationTotalBus = busCount.ToString();
 
 
             // Update the Car Crashes count
-            LabelAllVehiclesCarCrashes.Text = carCrashes.ToString();
+            data.simulationCarCrashes = carCrashes.ToString();
 
             // Update the LGV Crashes count
-            LabelAllVehiclesLGVCrashes.Text = lGVCrashes.ToString();
+            data.simulationLGVCrashes = lGVCrashes.ToString();
 
             // Update the HGV Crashes count
-            LabelAllVehiclesHGVCrashes.Text = hGVCrashes.ToString();
+            data.simulationHGVCrashes = hGVCrashes.ToString();
 
             // Update the Bus Crashes count
-            LabelAllVehiclesBusCrashes.Text = busCrashes.ToString();
+            data.simulationBusCrashes = busCrashes.ToString();
+
+            // Update the Total Crashes count
+            data.simulationTotalCrashes = (carCrashes + lGVCrashes + hGVCrashes + busCrashes).ToString();
+
+
+            // Update the Car Campers count
+            data.simulationCarCampers = carCampers.ToString();
+
+            // Update the LGV Campers count
+            data.simulationLGVCampers = lGVCampers.ToString();
+
+            // Update the HGV Campers count
+            data.simulationHGVCampers = hGVCampers.ToString();
+
+            // Update the Bus Campers count
+            data.simulationBusCampers = busCampers.ToString();
+
+            // Update the Total Campers count
+            data.simulationTotalCampers = (carCampers + lGVCampers + hGVCampers + busCampers).ToString();
 
 
             // Update the all vehicle total not congested output
-            LabelAllVehiclesTotalNotCongested.Text = notCongestedCount.ToString();
-            
+            data.simulationTotalNotCongested = notCongestedCount.ToString();
+
             // Update the all vehicle total mildly congested output
-            LabelAllVehiclesTotalMildlyCongested.Text = mildyCongestedCount.ToString();
+            data.simulationTotalMildlyCongested = mildyCongestedCount.ToString();
 
             // Update the all vehicle total severely congested output
-            LabelAllVehiclesTotalSeverelyCongested.Text = severelyCongestedCount.ToString();
+            data.simulationTotalSeverelyCongested = severelyCongestedCount.ToString();
 
-            if (AllVehicles.Count > 0)
+
+            return data;
+        }
+
+        /// <summary>
+        /// The method which is in charge of updating each piece of information on the output data tab
+        /// </summary>
+        private void UpdateData()
+        {
+            // Update the vehicles TreeView
+            UpdateTreeViewVehicles();
+
+            if (SelectedVehicle != null)
             {
-                // Percentages can be calculated as won't divide by 0
-                // The (double)s are required to avoid integer division
+                // Vehicle is actually selected
+                VehicleData selectedVehicleData = GetVehicleData(SelectedVehicle, DataFormat.Panel);
 
-                // Calculate and update the all vehicle successful spawn percentage output
-                LabelAllVehiclesSuccessfulSpawnsPercent.Text = Math.Round((successCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle ID output
+                LabelVehicleID.Text = selectedVehicleData.vehicleID;
 
-                // Calculate and update the all vehicle failed spawn percentage output
-                LabelAllVehiclesFailedSpawnsPercent.Text = Math.Round((failedCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle type output
+                LabelVehicleType.Text = selectedVehicleData.vehicleType;
 
+                // Update the vehicle length output
+                LabelVehicleLength.Text = selectedVehicleData.vehicleLength;
 
-                // Calculate and update the all vehicle car percentage output 
-                LabelAllVehiclesCarPercent.Text = Math.Round((carCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle desired speed output
+                LabelVehicleDesiredSpeed.Text = selectedVehicleData.vehicleDesiredSpeed;
 
-                // Calculate and update the all vehicle LGV percentage output 
-                LabelAllVehiclesLGVPercent.Text = Math.Round((lGVCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle actual speed output
+                LabelVehicleActualSpeed.Text = selectedVehicleData.vehicleActualSpeed;
 
-                // Calculate and update the all vehicle HGV percentage output 
-                LabelAllVehiclesHGVPercent.Text = Math.Round((hGVCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle successful spawn output
+                LabelVehicleSuccessfulSpawn.Text = selectedVehicleData.vehicleSuccessfulSpawn;
 
-                // Calculate and update the all vehicle bus percentage output 
-                LabelAllVehiclesBusPercent.Text = Math.Round((busCount / (double)AllVehicles.Count) * 100, 1) + "%";
+                // Update the vehicle spawn time output
+                LabelVehicleSpawnTime.Text = selectedVehicleData.vehicleSpawnTime;
+
+                // Update the vehicle despawn time output
+                LabelVehicleDespawnTime.Text = selectedVehicleData.vehicleDespawnTime;
+
+                // Update the vehicle lifetime output
+                LabelVehicleLifetime.Text = selectedVehicleData.vehicleLifetime;
+
+                // Update the vehicle progress output
+                LabelVehicleProgress.Text = selectedVehicleData.vehicleProgress;
+
+                // Update the vehicle lane output
+                LabelVehicleLane.Text = selectedVehicleData.vehicleLane;
+
+                // Update the vehicle camper output
+                LabelVehicleCamper.Text = selectedVehicleData.vehicleCamper;
+
+                // Update the vehicle average speed output
+                LabelVehicleAverageSpeed.Text = selectedVehicleData.vehicleAverageSpeed;
+
+                // Update the vehicle congestion output
+                LabelVehicleCongestion.Text = selectedVehicleData.vehicleCongestion;
+
+                // Update the vehicle crashed output
+                LabelVehicleCrashed.Text = selectedVehicleData.vehicleCrashed;
             }
-            else
-            {
-                // Calculating percentages will result in dividing by 0 so just update the labels to default values
 
-                LabelAllVehiclesSuccessfulSpawnsPercent.Text = "---";
-                LabelAllVehiclesFailedSpawnsPercent.Text = "---";
+            SimulationData simulationData = GetSimulationData(DataFormat.Panel);
 
-                LabelAllVehiclesCarPercent.Text = "---";
-                LabelAllVehiclesLGVPercent.Text = "---";
-                LabelAllVehiclesHGVPercent.Text = "---";
-                LabelAllVehiclesBusPercent.Text = "---";
-            }
+            // Update the all vehicle total vehicles output
+            LabelAllVehiclesTotalVehicles.Text = simulationData.simulationTotalVehicles;
+
+            // Update the all vehicle successful spawns output
+            LabelAllVehiclesTotalSuccessfulSpawns.Text = simulationData.simulationTotalSuccessfulSpawns;
+
+            // Update the all vehicle failed spawns output
+            LabelAllVehiclesTotalFailedSpawns.Text = simulationData.simulationTotalFailedSpawns;
+
+
+            // Update the all vehicle total cars output
+            LabelAllVehiclesTotalCar.Text = simulationData.simulationTotalCar;
+
+            // Update the all vehicle total LGVs output
+            LabelAllVehiclesTotalLGV.Text = simulationData.simulationTotalLGV;
+
+            // Update the all vehicle total HGVs output
+            LabelAllVehiclesTotalHGV.Text = simulationData.simulationTotalHGV;
+
+            // Update the all vehicle total buses output
+            LabelAllVehiclesTotalBus.Text = simulationData.simulationTotalBus;
+
+
+            // Update the Car Crashes count
+            LabelAllVehiclesCarCrashes.Text = simulationData.simulationCarCrashes;
+
+            // Update the LGV Crashes count
+            LabelAllVehiclesLGVCrashes.Text = simulationData.simulationLGVCrashes;
+
+            // Update the HGV Crashes count
+            LabelAllVehiclesHGVCrashes.Text = simulationData.simulationHGVCrashes;
+
+            // Update the Bus Crashes count
+            LabelAllVehiclesBusCrashes.Text = simulationData.simulationBusCrashes;
+
+            // Update the Total Crashes count
+            LabelAllVehiclesTotalCrashes.Text = simulationData.simulationTotalCrashes;
+
+
+            // Update the Car Campers count
+            LabelAllVehiclesCarCampers.Text = simulationData.simulationCarCampers;
+
+            // Update the LGV Campers count
+            LabelAllVehiclesLGVCampers.Text = simulationData.simulationLGVCampers;
+
+            // Update the HGV Campers count
+            LabelAllVehiclesHGVCampers.Text = simulationData.simulationHGVCampers;
+
+            // Update the Bus Campers count
+            LabelAllVehiclesBusCampers.Text = simulationData.simulationBusCampers;
+
+            // Update the Total Campers count
+            LabelAllVehiclesTotalCampers.Text = simulationData.simulationTotalCampers;
+
+
+            // Update the all vehicle total not congested output
+            LabelAllVehiclesTotalNotCongested.Text = simulationData.simulationTotalNotCongested;
+
+            // Update the all vehicle total mildly congested output
+            LabelAllVehiclesTotalMildlyCongested.Text = simulationData.simulationTotalMildlyCongested;
+
+            // Update the all vehicle total severely congested output
+            LabelAllVehiclesTotalSeverelyCongested.Text = simulationData.simulationTotalSeverelyCongested;
+
+            // Calculate and update the all vehicle successful spawn percentage output
+            LabelAllVehiclesSuccessfulSpawnsPercent.Text = simulationData.simulationSuccessfulSpawnsPercent;
+
+            // Calculate and update the all vehicle failed spawn percentage output
+            LabelAllVehiclesFailedSpawnsPercent.Text = simulationData.simulationFailedSpawnsPercent;
+
+
+            // Calculate and update the all vehicle car percentage output 
+            LabelAllVehiclesCarPercent.Text = simulationData.simulationCarPercent;
+
+            // Calculate and update the all vehicle LGV percentage output 
+            LabelAllVehiclesLGVPercent.Text = simulationData.simulationLGVPercent;
+
+            // Calculate and update the all vehicle HGV percentage output 
+            LabelAllVehiclesHGVPercent.Text = simulationData.simulationHGVPercent;
+
+            // Calculate and update the all vehicle bus percentage output 
+            LabelAllVehiclesBusPercent.Text = simulationData.simulationBusPercent;
             
-            if (successCount > 0)
-            {
-                // Percentages can be calculated as won't divide by 0
-                // The (double)s are required to avoid integer division
+            // Calculate and update the all vehicle not congested percentage output 
+            LabelAllVehiclesNotCongestedPercent.Text = simulationData.simulationNotCongestedPercent;
 
-                // Calculate and update the all vehicle not congested percentage output 
-                LabelAllVehiclesNotCongestedPercent.Text = Math.Round((notCongestedCount / (double)successCount) * 100, 1) + "%";
+            // Calculate and update the all vehicle mildly congested percentage output 
+            LabelAllVehiclesMildlyCongestedPercent.Text = simulationData.simulationMildlyCongestedPercent;
 
-                // Calculate and update the all vehicle mildly congested percentage output 
-                LabelAllVehiclesMildlyCongestedPercent.Text = Math.Round((mildyCongestedCount / (double)successCount) * 100, 1) + "%";
-
-                // Calculate and update the all vehicle severely congested percentage output 
-                LabelAllVehiclesSeverelyCongestedPercent.Text = Math.Round((severelyCongestedCount / (double)successCount) * 100, 1) + "%";
-            }
-            else
-            {
-                // Calculating percentages will result in dividing by 0 so just update the labels to default values
-
-                LabelAllVehiclesSuccessfulSpawnsPercent.Text = "---";
-                LabelAllVehiclesNotCongestedPercent.Text = "---";
-                LabelAllVehiclesMildlyCongestedPercent.Text = "---";
-                LabelAllVehiclesSeverelyCongestedPercent.Text = "---";
-            }
+            // Calculate and update the all vehicle severely congested percentage output 
+            LabelAllVehiclesSeverelyCongestedPercent.Text = simulationData.simulationSeverelyCongestedPercent;
 
             // Update the simulation lifetime output
-            TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
-            LabelAllVehiclesLifetime.Text = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "h " + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "m " + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "s " + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
+            LabelAllVehiclesLifetime.Text = simulationData.simulationLifetime;
         }
 
         private void SaveData()
@@ -1532,48 +1884,52 @@ namespace MotorwaySimulator
             Directory.CreateDirectory("Data");
             using (StreamWriter inDataFile = new StreamWriter(path + "-INPUT.csv"))
             {
-                string header = "RunDurationEnabled(Boolean)," +
-                    "RunDuration(Milliseconds)," +
-                    "RoadLength(Metres)," +
-                    "InterarrivalTimeBase(Seconds)," +
-                    "InterarrivalVariation(±%)," +
-                    "StoppingTime(Seconds)," +
-                    "LaneCount(Lanes)," +
-                    "VehicleWidth(Metres)," +
-                    "MaxCrashCount(Crashes)," +
-                    "MetreToPixelScalingFactor," +
-                    "CongestionMildTripPoint(MPH)," +
-                    "CongestionSevereTripPoint(MPH)," +
-                    "LengthBaseCar(m)," +
-                    "LengthBaseLGV(m)," +
-                    "LengthBaseHGV(m)," +
-                    "LengthBaseBus(m)," +
-                    "LengthVariationCar(±m)," +
-                    "LengthVariationLGV(±m)," +
-                    "LengthVariationHGV(±m)," +
-                    "LengthVariationBus(±m)," +
-                    "SpeedBaseCar(KPH)," +
-                    "SpeedBaseLGV(KPH)," +
-                    "SpeedBaseHGV(KPH)," +
-                    "SpeedBaseBus(KPH)," +
-                    "SpeedVariationCar(±MPH)," +
-                    "SpeedVariationLGV(±MPH)," +
-                    "SpeedVariationHGV(±MPH)," +
-                    "SpeedVariationBus(±MPH)," +
-                    "MaximumLaneCar(#)," +
-                    "MaximumLaneLGV(#)," +
-                    "MaximumLaneHGV(#)," +
-                    "MaximumLaneBus(#)," +
-                    "CrashProbabilityCar(%)," +
-                    "CrashProbabilityLGV(%)," +
-                    "CrashProbabilityHGV(%)," +
-                    "CrashProbabilityBus(%)," +
-                    "SpawnProbabilityCar(%)," +
-                    "SpawnProbabilityLGV(%)," +
-                    "SpawnProbabilityHGV(%)," +
-                    "SpawnProbabilityBus(%)";
-                string data = ActiveRunDurationEnabled + "," +
-                    ActiveRunDuration + "," +
+                string header = "Run Duration Enabled (Boolean)," +
+                    "Run Duration (hh-mm-ss.ms)," +
+                    "Road Length (Metres)," +
+                    "Interarrival Time Base (Seconds)," +
+                    "Interarrival Variation (±%)," +
+                    "Stopping Time (Seconds)," +
+                    "Lane Count (Lanes)," +
+                    "Vehicle Width (Metres)," +
+                    "Max Crash Count (Crashes)," +
+                    "Metre To Pixel Scaling Factor," +
+                    "Congestion Mild Trip Point (Metres/H)," +
+                    "Congestion Severe Trip Point (Metres/H)," +
+                    "Length Base Car (Metres)," +
+                    "Length Base LGV (Metres)," +
+                    "Length Base HGV (Metres)," +
+                    "Length Base Bus (Metres)," +
+                    "Length Variation Car (±Metres)," +
+                    "Length Variation LGV (±Metres)," +
+                    "Length Variation HGV (±Metres)," +
+                    "Length Variation Bus (±Metres)," +
+                    "Speed Base Car (Metres/H)," +
+                    "Speed Base LGV (Metres/H)," +
+                    "Speed Base HGV (Metres/H)," +
+                    "Speed Base Bus (Metres/H)," +
+                    "Speed Variation Car (±Metres/H)," +
+                    "Speed Variation LGV (±Metres/H)," +
+                    "Speed Variation HGV (±Metres/H)," +
+                    "Speed Variation Bus (±Metres/H)," +
+                    "Maximum Lane Car (Lane #)," +
+                    "Maximum Lane LGV (Lane #)," +
+                    "Maximum Lane HGV (Lane #)," +
+                    "Maximum Lane Bus (Lane #)," +
+                    "Camper Probability Car," +
+                    "Camper Probability LGV," +
+                    "Camper Probability HGV," +
+                    "Camper Probability Bus," +
+                    "Crash Probability Car," +
+                    "Crash Probability LGV," +
+                    "Crash Probability HGV," +
+                    "Crash Probability Bus," +
+                    "Spawn Probability Car," +
+                    "Spawn Probability LGV," +
+                    "Spawn Probability HGV," +
+                    "Spawn Probability Bus";
+                string dataString = ActiveRunDurationEnabled + "," +
+                    ActiveRunDuration.Hour + "-" + ActiveRunDuration.Minute + "-" + ActiveRunDuration.Second + "." + ActiveRunDuration.Millisecond + "," +
                     ActiveRoadLengthMetres + "," +
                     ActiveInterArrivalTime + "," +
                     ActiveInterArrivalTimeVariationPercentage + "," +
@@ -1604,6 +1960,10 @@ namespace MotorwaySimulator
                     VehicleParameters[VehicleTypes.LGV].MaximumLane + "," +
                     VehicleParameters[VehicleTypes.HGV].MaximumLane + "," +
                     VehicleParameters[VehicleTypes.Bus].MaximumLane + "," +
+                    VehicleParameters[VehicleTypes.Car].CamperProbability + "," +
+                    VehicleParameters[VehicleTypes.LGV].CamperProbability + "," +
+                    VehicleParameters[VehicleTypes.HGV].CamperProbability + "," +
+                    VehicleParameters[VehicleTypes.Bus].CamperProbability + "," +
                     VehicleParameters[VehicleTypes.Car].CrashProbability + "," +
                     VehicleParameters[VehicleTypes.LGV].CrashProbability + "," +
                     VehicleParameters[VehicleTypes.HGV].CrashProbability + "," +
@@ -1613,15 +1973,112 @@ namespace MotorwaySimulator
                     VehicleParameters[VehicleTypes.HGV].Probability + "," +
                     VehicleParameters[VehicleTypes.Bus].Probability;
                 inDataFile.WriteLine(header);
-                inDataFile.WriteLine(data);
+                inDataFile.WriteLine(dataString);
             }
             using (StreamWriter outOverallDataFile = new StreamWriter(path + "-OVERALL-OUTPUT.csv"))
             {
-                //dataFile.WriteLine(data);
+                string header = "Total Vehicles (#)," +
+                    "Total Cars (#)," +
+                    "Total LGVs (#)," +
+                    "Total HGVs (#)," +
+                    "Total Buses (#)," +
+                    "Cars (%)," +
+                    "LGVs (%)," +
+                    "HGVs (%)," +
+                    "Buses (%)," +
+                    "Total Not Congested (#)," +
+                    "Total Mildly Congested (#)," +
+                    "Total Severely Congested (#)," +
+                    "Not Congested (%)," +
+                    "Mildly Congested (%)," +
+                    "Severely Congested (%)," +
+                    "Car Crashes (#)," +
+                    "LGV Crashes (#)," +
+                    "HGV Crashes (#)," +
+                    "Bus Crashes (#)," +
+                    "Total Crashes (#)," +
+                    "Car Campers (#)," +
+                    "LGV Campers (#)," +
+                    "HGV Campers (#)," +
+                    "Bus Campers (#)," +
+                    "Total Campers (#)," +
+                    "Successful Spawns (#)," +
+                    "Failed Spawns (#)," +
+                    "Successful Spawns (%)," +
+                    "Failed Spawns (%)," +
+                    "Total Lifetime (hh-mm-ss.ms)";
+                SimulationData simulationData = GetSimulationData(DataFormat.File);
+                string dataString = simulationData.simulationTotalVehicles + "," +
+                    simulationData.simulationTotalCar + "," +
+                    simulationData.simulationTotalLGV + "," +
+                    simulationData.simulationTotalHGV + "," +
+                    simulationData.simulationTotalBus + "," +
+                    simulationData.simulationCarPercent + "," +
+                    simulationData.simulationLGVPercent + "," +
+                    simulationData.simulationHGVPercent + "," +
+                    simulationData.simulationBusPercent + "," +
+                    simulationData.simulationTotalNotCongested + "," +
+                    simulationData.simulationTotalMildlyCongested + "," +
+                    simulationData.simulationTotalSeverelyCongested + "," +
+                    simulationData.simulationNotCongestedPercent + "," +
+                    simulationData.simulationMildlyCongestedPercent + "," +
+                    simulationData.simulationSeverelyCongestedPercent + "," +
+                    simulationData.simulationCarCrashes + "," +
+                    simulationData.simulationLGVCrashes + "," +
+                    simulationData.simulationHGVCrashes + "," +
+                    simulationData.simulationBusCrashes + "," +
+                    simulationData.simulationTotalCrashes + "," +
+                    simulationData.simulationCarCampers + "," +
+                    simulationData.simulationLGVCampers + "," +
+                    simulationData.simulationHGVCampers + "," +
+                    simulationData.simulationBusCampers + "," +
+                    simulationData.simulationTotalCampers + "," +
+                    simulationData.simulationTotalSuccessfulSpawns + "," +
+                    simulationData.simulationTotalFailedSpawns + "," +
+                    simulationData.simulationSuccessfulSpawnsPercent + "," +
+                    simulationData.simulationFailedSpawnsPercent + "," +
+                    simulationData.simulationLifetime;
+                outOverallDataFile.WriteLine(header);
+                outOverallDataFile.WriteLine(dataString);
             }
             using (StreamWriter outVehicleDataFile = new StreamWriter(path + "-VEHICLE-OUTPUT.csv"))
             {
-                //dataFile.WriteLine(data);
+                string header = "Vehicle ID," +
+                    "Vehicle Type," +
+                    "Vehicle Length (Metres)," +
+                    "Successful Spawn (Boolean)," +
+                    "Spawn Time (hh-mm-ss.ms)," +
+                    "Despawn Time (hh-mm-ss.ms)," +
+                    "Lifetime (hh-mm-ss.ms)," +
+                    "Progress (Metres)," +
+                    "Lane (#)," +
+                    "Lane Camper (Boolean)," +
+                    "Desired Speed (Metres/H)," +
+                    "Actual Speed (Metres/H)," +
+                    "Average Speed (Metres/H)," +
+                    "Congestion," +
+                    "Crashed (Boolean)";
+                outVehicleDataFile.WriteLine(header);
+                foreach (Vehicle vehicle in AllVehicles)
+                {
+                    VehicleData vehicleData = GetVehicleData(vehicle, DataFormat.File);
+                    string dataString = vehicleData.vehicleID + "," +
+                        vehicleData.vehicleType + "," +
+                        vehicleData.vehicleLength + "," +
+                        vehicleData.vehicleSuccessfulSpawn + "," +
+                        vehicleData.vehicleSpawnTime + "," +
+                        vehicleData.vehicleDespawnTime + "," +
+                        vehicleData.vehicleLifetime + "," +
+                        vehicleData.vehicleProgress + "," +
+                        vehicleData.vehicleLane + "," +
+                        vehicleData.vehicleCamper + "," +
+                        vehicleData.vehicleDesiredSpeed + "," +
+                        vehicleData.vehicleActualSpeed + "," +
+                        vehicleData.vehicleAverageSpeed + "," +
+                        vehicleData.vehicleCongestion + "," +
+                        vehicle.Crashed;
+                    outVehicleDataFile.WriteLine(dataString);
+                }
             }
         }
 
@@ -1707,6 +2164,7 @@ namespace MotorwaySimulator
             DesiredSpeed = desiredSpeed;
             DesiredSpeedVariation = desiredSpeedVariation;
             MaximumLane = maximumLane;
+            CrashProbability = crashProbability;
             CamperProbability = camperProbability;
             Probability = spawnProbability;
         }
@@ -1782,5 +2240,70 @@ namespace MotorwaySimulator
             VehicleLength = vehicleLength;
             Camper = camper;
         }
+    }
+
+    public enum DataFormat
+    {
+        Panel,
+        File
+    }
+
+    /// <summary>
+    /// Each instance of this class contains the data for a vehicle that should be displayed on its record
+    /// </summary>
+    public class VehicleData
+    {
+        public string vehicleID;
+        public string vehicleType;
+        public string vehicleLength;
+        public string vehicleDesiredSpeed;
+        public string vehicleActualSpeed;
+        public string vehicleSuccessfulSpawn;
+        public string vehicleSpawnTime;
+        public string vehicleDespawnTime;
+        public string vehicleLifetime;
+        public string vehicleProgress;
+        public string vehicleLane;
+        public string vehicleCamper;
+        public string vehicleAverageSpeed;
+        public string vehicleCongestion;
+        public string vehicleCrashed;
+    }
+
+    /// <summary>
+    /// Each instance of this class contains the data for the overall simulation
+    /// </summary>
+    public class SimulationData
+    {
+        public string simulationTotalVehicles;
+        public string simulationTotalSuccessfulSpawns;
+        public string simulationTotalFailedSpawns;
+        public string simulationSuccessfulSpawnsPercent;
+        public string simulationFailedSpawnsPercent;
+        public string simulationTotalCar;
+        public string simulationTotalLGV;
+        public string simulationTotalHGV;
+        public string simulationTotalBus;
+        public string simulationCarPercent;
+        public string simulationLGVPercent;
+        public string simulationHGVPercent;
+        public string simulationBusPercent;
+        public string simulationCarCrashes;
+        public string simulationLGVCrashes;
+        public string simulationHGVCrashes;
+        public string simulationBusCrashes;
+        public string simulationTotalCrashes;
+        public string simulationCarCampers;
+        public string simulationLGVCampers;
+        public string simulationHGVCampers;
+        public string simulationBusCampers;
+        public string simulationTotalCampers;
+        public string simulationTotalNotCongested;
+        public string simulationTotalMildlyCongested;
+        public string simulationTotalSeverelyCongested;
+        public string simulationNotCongestedPercent;
+        public string simulationMildlyCongestedPercent;
+        public string simulationSeverelyCongestedPercent;
+        public string simulationLifetime;
     }
 }
