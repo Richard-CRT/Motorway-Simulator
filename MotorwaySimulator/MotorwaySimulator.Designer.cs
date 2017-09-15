@@ -86,7 +86,6 @@ namespace MotorwaySimulator
             this.NumericHGVSpawnProbability = new System.Windows.Forms.NumericUpDown();
             this.LabelSpawnProbabilityTitle = new System.Windows.Forms.Label();
             this.NumericBusSpawnProbability = new System.Windows.Forms.NumericUpDown();
-            this.LabelLaneCount = new System.Windows.Forms.Label();
             this.LabelLaneCountTitle = new System.Windows.Forms.Label();
             this.LabelDesiredSpeedVarUnit = new System.Windows.Forms.Label();
             this.LabelRoadLengthTitle = new System.Windows.Forms.Label();
@@ -125,6 +124,7 @@ namespace MotorwaySimulator
             this.LabelLengthTitle = new System.Windows.Forms.Label();
             this.NumericBusDesiredSpeedVar = new System.Windows.Forms.NumericUpDown();
             this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
+            this.LabelLaneCount = new System.Windows.Forms.Label();
             this.TabPageSimulation = new System.Windows.Forms.TabPage();
             this.LableVehicleDataTitle = new System.Windows.Forms.Label();
             this.ButtonSaveData = new System.Windows.Forms.Button();
@@ -292,14 +292,14 @@ namespace MotorwaySimulator
             // 
             // TrackBarTimescale
             // 
-            this.TrackBarTimescale.LargeChange = 10;
+            this.TrackBarTimescale.LargeChange = 2;
             this.TrackBarTimescale.Location = new System.Drawing.Point(306, 12);
-            this.TrackBarTimescale.Maximum = 100;
+            this.TrackBarTimescale.Maximum = 20;
             this.TrackBarTimescale.Minimum = 1;
             this.TrackBarTimescale.Name = "TrackBarTimescale";
             this.TrackBarTimescale.Size = new System.Drawing.Size(831, 45);
             this.TrackBarTimescale.TabIndex = 3;
-            this.TrackBarTimescale.Value = 100;
+            this.TrackBarTimescale.Value = 20;
             this.TrackBarTimescale.Scroll += new System.EventHandler(this.UpdateTimescale);
             // 
             // PanelSettings
@@ -441,7 +441,6 @@ namespace MotorwaySimulator
             this.TabPageSetup.Controls.Add(this.NumericHGVSpawnProbability);
             this.TabPageSetup.Controls.Add(this.LabelSpawnProbabilityTitle);
             this.TabPageSetup.Controls.Add(this.NumericBusSpawnProbability);
-            this.TabPageSetup.Controls.Add(this.LabelLaneCount);
             this.TabPageSetup.Controls.Add(this.LabelLaneCountTitle);
             this.TabPageSetup.Controls.Add(this.LabelDesiredSpeedVarUnit);
             this.TabPageSetup.Controls.Add(this.LabelRoadLengthTitle);
@@ -480,6 +479,7 @@ namespace MotorwaySimulator
             this.TabPageSetup.Controls.Add(this.LabelLengthTitle);
             this.TabPageSetup.Controls.Add(this.NumericBusDesiredSpeedVar);
             this.TabPageSetup.Controls.Add(this.TrackBarRoadLength);
+            this.TabPageSetup.Controls.Add(this.LabelLaneCount);
             this.TabPageSetup.Location = new System.Drawing.Point(4, 22);
             this.TabPageSetup.Name = "TabPageSetup";
             this.TabPageSetup.Padding = new System.Windows.Forms.Padding(3);
@@ -590,6 +590,11 @@ namespace MotorwaySimulator
             this.NumericMaxCrashCount.Name = "NumericMaxCrashCount";
             this.NumericMaxCrashCount.Size = new System.Drawing.Size(45, 20);
             this.NumericMaxCrashCount.TabIndex = 86;
+            this.NumericMaxCrashCount.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             // 
             // LabelMaxCrashCount
             // 
@@ -787,9 +792,9 @@ namespace MotorwaySimulator
             // LabelStoppingTime
             // 
             this.LabelStoppingTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelStoppingTime.Location = new System.Drawing.Point(243, 114);
+            this.LabelStoppingTime.Location = new System.Drawing.Point(232, 114);
             this.LabelStoppingTime.Name = "LabelStoppingTime";
-            this.LabelStoppingTime.Size = new System.Drawing.Size(52, 28);
+            this.LabelStoppingTime.Size = new System.Drawing.Size(64, 28);
             this.LabelStoppingTime.TabIndex = 74;
             this.LabelStoppingTime.Text = "0s";
             this.LabelStoppingTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1078,20 +1083,10 @@ namespace MotorwaySimulator
             0});
             this.NumericBusSpawnProbability.ValueChanged += new System.EventHandler(this.ValidateProbabilityChange);
             // 
-            // LabelLaneCount
-            // 
-            this.LabelLaneCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelLaneCount.Location = new System.Drawing.Point(224, 144);
-            this.LabelLaneCount.Name = "LabelLaneCount";
-            this.LabelLaneCount.Size = new System.Drawing.Size(71, 28);
-            this.LabelLaneCount.TabIndex = 49;
-            this.LabelLaneCount.Text = "0 lane(s)";
-            this.LabelLaneCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // LabelLaneCountTitle
             // 
             this.LabelLaneCountTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelLaneCountTitle.Location = new System.Drawing.Point(38, 145);
+            this.LabelLaneCountTitle.Location = new System.Drawing.Point(38, 144);
             this.LabelLaneCountTitle.Name = "LabelLaneCountTitle";
             this.LabelLaneCountTitle.Size = new System.Drawing.Size(187, 28);
             this.LabelLaneCountTitle.TabIndex = 47;
@@ -1131,7 +1126,7 @@ namespace MotorwaySimulator
             // LabelRoadLength
             // 
             this.LabelRoadLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelRoadLength.Location = new System.Drawing.Point(240, 26);
+            this.LabelRoadLength.Location = new System.Drawing.Point(236, 26);
             this.LabelRoadLength.Name = "LabelRoadLength";
             this.LabelRoadLength.Size = new System.Drawing.Size(60, 28);
             this.LabelRoadLength.TabIndex = 46;
@@ -1336,15 +1331,14 @@ namespace MotorwaySimulator
             // 
             // TrackBarInterArrivalVariation
             // 
-            this.TrackBarInterArrivalVariation.LargeChange = 1000;
+            this.TrackBarInterArrivalVariation.LargeChange = 10;
             this.TrackBarInterArrivalVariation.Location = new System.Drawing.Point(296, 86);
-            this.TrackBarInterArrivalVariation.Maximum = 1000;
+            this.TrackBarInterArrivalVariation.Maximum = 100;
             this.TrackBarInterArrivalVariation.Name = "TrackBarInterArrivalVariation";
             this.TrackBarInterArrivalVariation.Size = new System.Drawing.Size(283, 45);
-            this.TrackBarInterArrivalVariation.SmallChange = 10;
             this.TrackBarInterArrivalVariation.TabIndex = 2;
-            this.TrackBarInterArrivalVariation.TickFrequency = 50;
-            this.TrackBarInterArrivalVariation.Value = 500;
+            this.TrackBarInterArrivalVariation.TickFrequency = 5;
+            this.TrackBarInterArrivalVariation.Value = 10;
             this.TrackBarInterArrivalVariation.Scroll += new System.EventHandler(this.UpdateInterArrivalVariation);
             // 
             // NumericLGVDesiredSpeed
@@ -1373,7 +1367,7 @@ namespace MotorwaySimulator
             // LabelInterArrivalVariation
             // 
             this.LabelInterArrivalVariation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelInterArrivalVariation.Location = new System.Drawing.Point(242, 86);
+            this.LabelInterArrivalVariation.Location = new System.Drawing.Point(243, 84);
             this.LabelInterArrivalVariation.Name = "LabelInterArrivalVariation";
             this.LabelInterArrivalVariation.Size = new System.Drawing.Size(53, 28);
             this.LabelInterArrivalVariation.TabIndex = 42;
@@ -1439,7 +1433,7 @@ namespace MotorwaySimulator
             // LabelInterArrivalTime
             // 
             this.LabelInterArrivalTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelInterArrivalTime.Location = new System.Drawing.Point(247, 56);
+            this.LabelInterArrivalTime.Location = new System.Drawing.Point(253, 56);
             this.LabelInterArrivalTime.Name = "LabelInterArrivalTime";
             this.LabelInterArrivalTime.Size = new System.Drawing.Size(43, 28);
             this.LabelInterArrivalTime.TabIndex = 40;
@@ -1469,12 +1463,12 @@ namespace MotorwaySimulator
             // 
             this.TrackBarInterArrivalTime.LargeChange = 10;
             this.TrackBarInterArrivalTime.Location = new System.Drawing.Point(296, 58);
-            this.TrackBarInterArrivalTime.Maximum = 1000;
+            this.TrackBarInterArrivalTime.Maximum = 100;
             this.TrackBarInterArrivalTime.Minimum = 1;
             this.TrackBarInterArrivalTime.Name = "TrackBarInterArrivalTime";
             this.TrackBarInterArrivalTime.Size = new System.Drawing.Size(283, 45);
             this.TrackBarInterArrivalTime.TabIndex = 1;
-            this.TrackBarInterArrivalTime.TickFrequency = 50;
+            this.TrackBarInterArrivalTime.TickFrequency = 5;
             this.TrackBarInterArrivalTime.Value = 5;
             this.TrackBarInterArrivalTime.Scroll += new System.EventHandler(this.UpdateInterArrivalTime);
             // 
@@ -1658,17 +1652,26 @@ namespace MotorwaySimulator
             // 
             // TrackBarRoadLength
             // 
-            this.TrackBarRoadLength.LargeChange = 100;
+            this.TrackBarRoadLength.LargeChange = 10;
             this.TrackBarRoadLength.Location = new System.Drawing.Point(296, 27);
-            this.TrackBarRoadLength.Maximum = 5000;
+            this.TrackBarRoadLength.Maximum = 500;
             this.TrackBarRoadLength.Minimum = 10;
             this.TrackBarRoadLength.Name = "TrackBarRoadLength";
             this.TrackBarRoadLength.Size = new System.Drawing.Size(283, 45);
-            this.TrackBarRoadLength.SmallChange = 10;
             this.TrackBarRoadLength.TabIndex = 0;
-            this.TrackBarRoadLength.TickFrequency = 250;
-            this.TrackBarRoadLength.Value = 100;
+            this.TrackBarRoadLength.TickFrequency = 25;
+            this.TrackBarRoadLength.Value = 10;
             this.TrackBarRoadLength.Scroll += new System.EventHandler(this.UpdateRoadLength);
+            // 
+            // LabelLaneCount
+            // 
+            this.LabelLaneCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelLaneCount.Location = new System.Drawing.Point(225, 144);
+            this.LabelLaneCount.Name = "LabelLaneCount";
+            this.LabelLaneCount.Size = new System.Drawing.Size(71, 28);
+            this.LabelLaneCount.TabIndex = 49;
+            this.LabelLaneCount.Text = "0 lane(s)";
+            this.LabelLaneCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // TabPageSimulation
             // 

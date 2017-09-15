@@ -279,8 +279,8 @@ namespace MotorwaySimulator
         {
             // The TrackBar stores increments of 10 metres, so divide by 100 to get kilometres or multiple by 10 to get metres
             // The (double) is required to avoid integer division
-            LabelRoadLength.Text = Math.Round(TrackBarRoadLength.Value / (double)100, 2) + " km";
-            RoadLengthMetres = TrackBarRoadLength.Value * 10;
+            LabelRoadLength.Text = Math.Round(TrackBarRoadLength.Value / (double)10, 2) + " km";
+            RoadLengthMetres = TrackBarRoadLength.Value * 100;
         }
 
         /// <summary>
@@ -305,8 +305,8 @@ namespace MotorwaySimulator
         {
             // The TrackBar stores increments of 0.1%, so divide by 10 to get % or divide by 1000 to get decimal %
             // The (double) is required to avoid integer division
-            LabelInterArrivalVariation.Text = Math.Round(TrackBarInterArrivalVariation.Value / (double)10, 1) + "%";
-            InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)1000;
+            LabelInterArrivalVariation.Text = TrackBarInterArrivalVariation.Value + "%";
+            InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)100;
         }
 
         /// <summary>
@@ -348,8 +348,8 @@ namespace MotorwaySimulator
         {
             // The TrackBar stores increments of 0.01x, so divide by 100 to get the scaling factor
             // The (double) is required to avoid integer division
-            TimeScale = TrackBarTimescale.Value / (double)100;
-            LabelTimeScale.Text = Math.Round(TrackBarTimescale.Value / (double)100, 2) + "x";
+            TimeScale = (TrackBarTimescale.Value / (double)100)*5;
+            LabelTimeScale.Text = Math.Round((TrackBarTimescale.Value / (double)100)*5, 2) + "x";
         }
 
         /// <summary>
@@ -941,9 +941,9 @@ namespace MotorwaySimulator
                 // Length (metres), Length Variation (+-) (metres), Desired Speed (meters/hour), Desired Speed Variation (+-) (meters/hour), Maximum Lane, Camper Probability, Crash Probability, Spawn Probability
 
                 { VehicleTypes.Car, new VehicleTemplate((double)NumericCarLength.Value, (double)NumericCarLengthVar.Value,  (int)(NumericCarDesiredSpeed.Value*1000),  (double)(NumericCarDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericCarCamperProbability.Value/(decimal)100),  (double)(NumericCarCrashProbability.Value/(decimal)100),  (double)(NumericCarSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericLGVCamperProbability.Value/(decimal)100),  (double)(NumericLGVCrashProbability.Value/(decimal)100),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericHGVCamperProbability.Value/(decimal)100),  (double)(NumericHGVCrashProbability.Value/(decimal)100),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
-                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericCarMaximumLane.Value),  (double)(NumericBusCamperProbability.Value/(decimal)100),  (double)(NumericBusCrashProbability.Value/(decimal)100),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
+                { VehicleTypes.LGV, new VehicleTemplate((double)NumericLGVLength.Value, (double)NumericLGVLengthVar.Value,  (int)(NumericLGVDesiredSpeed.Value*1000),  (double)(NumericLGVDesiredSpeedVar.Value*1000), (int)(NumericLGVMaximumLane.Value),  (double)(NumericLGVCamperProbability.Value/(decimal)100),  (double)(NumericLGVCrashProbability.Value/(decimal)100),  (double)(NumericLGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.HGV, new VehicleTemplate((double)NumericHGVLength.Value, (double)NumericHGVLengthVar.Value,  (int)(NumericHGVDesiredSpeed.Value*1000),  (double)(NumericHGVDesiredSpeedVar.Value*1000), (int)(NumericHGVMaximumLane.Value),  (double)(NumericHGVCamperProbability.Value/(decimal)100),  (double)(NumericHGVCrashProbability.Value/(decimal)100),  (double)(NumericHGVSpawnProbability.Value/(decimal)100)) },
+                { VehicleTypes.Bus, new VehicleTemplate((double)NumericBusLength.Value, (double)NumericBusLengthVar.Value,  (int)(NumericBusDesiredSpeed.Value*1000),  (double)(NumericBusDesiredSpeedVar.Value*1000), (int)(NumericBusMaximumLane.Value),  (double)(NumericBusCamperProbability.Value/(decimal)100),  (double)(NumericBusCrashProbability.Value/(decimal)100),  (double)(NumericBusSpawnProbability.Value/(decimal)100)) }
             };
 
             ActiveLaneCount = LaneCount;
@@ -991,19 +991,13 @@ namespace MotorwaySimulator
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
 
-
+            /*
             // Create an individual spawn instruction
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 100, -1);
             DebugModeInstructions.Add(instruction);
             instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 96000, 100, -1);
             DebugModeInstructions.Add(instruction);
-
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[2], 0, 96000, 3.5, 80);
-            DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(3, VehicleTypes.Car, Lanes[2], 1500, 96000, 3.5, -1);
-            DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(4, VehicleTypes.Car, Lanes[2], 3000, 96000, 3.5, -1);
-            DebugModeInstructions.Add(instruction);
+            */
 
 
 
