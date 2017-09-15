@@ -213,12 +213,12 @@ namespace MotorwaySimulator
                             // The vehicle ahead of this vehicle is travelling slower than this vehicle
                             // Therefore this vehicle can slow down, meaning the stopping distance can overlap
 
-                            double stoppingDistanceNextVehicleMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
+                            double projectedStoppingDistanceNextVehicleMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
 
-                            // Calculate the overlap allowed in pixels
-                            double stoppingDistanceChangeByChangingSpeedsPixels = projectedActualStoppingDistanceMetres - stoppingDistanceNextVehicleMetres;
+                            // Calculate the overlap allowed in metres
+                            double stoppingDistanceChangeByChangingSpeedsMetres = projectedActualStoppingDistanceMetres - projectedStoppingDistanceNextVehicleMetres;
 
-                            if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsPixels)
+                            if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
                             {
                                 // Stopping distance overlaps too far past the allowed overlap
 
@@ -226,9 +226,9 @@ namespace MotorwaySimulator
                                 ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
                             }
                         }
-                        else if (IsTravellingAtDesiredSpeed)
+                        else if (ExactProgressMetres + (projectedActualStoppingDistanceMetres * 0.9) >= backOfNextVehicle)
                         {
-                            // The vehicle ahead of this vehicle is travelling either at the same speed or faster than this vehicle
+                            // Matching speed or slower than next vehicle but stopping distance still overlaps the back of the next vehicle by a significant amount (10%)
                             // Therefore this vehicle needs to stop to wait for the next vehicle to get far enough away
 
                             ActualSpeedMetresHour = 0;
@@ -241,12 +241,35 @@ namespace MotorwaySimulator
                         // Calculate the stopping distance of this vehicle at desired speed
                         double projectedDesiredStoppingDistanceMetres = MainForm.StoppingDistance(DesiredSpeedMetresHour);
 
-                        if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle)
+                        if (nextVehicle.ActualSpeedMetresHour < DesiredSpeedMetresHour)
                         {
-                            // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed does not overlap the back of the next vehicle
+                            // Vehicle stopping distance is allowed to overlap as it can slow down again
 
-                            // Go to full desired speed
-                            ActualSpeedMetresHour = DesiredSpeedMetresHour;
+                            // Calculate the current stopping distance of the next vehicle
+                            double nextVehicleStoppingDistanceMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
+
+                            // Calculate the overlap allowed in metres
+                            double stoppingDistanceChangeByChangingSpeedsMetres = projectedDesiredStoppingDistanceMetres - nextVehicleStoppingDistanceMetres;
+
+                            if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
+                            {
+                                // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle + the distance that can be gained by slowing down
+
+                                // Go to full desired speed
+                                ActualSpeedMetresHour = DesiredSpeedMetresHour;
+                            }
+                        }
+                        else
+                        {
+                            // No overlap allowed
+
+                            if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle)
+                            {
+                                // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle
+
+                                // Go to full desired speed
+                                ActualSpeedMetresHour = DesiredSpeedMetresHour;
+                            }
                         }
                     }
                 }

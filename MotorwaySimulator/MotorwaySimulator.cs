@@ -303,7 +303,7 @@ namespace MotorwaySimulator
         /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
         private void UpdateInterArrivalVariation(object sender, EventArgs e)
         {
-            // The TrackBar stores increments of 0.1%, so divide by 10 to get % or divide by 1000 to get decimal %
+            // The TrackBar stores increments of 1%, so divide by 100 to get decimal %
             // The (double) is required to avoid integer division
             LabelInterArrivalVariation.Text = TrackBarInterArrivalVariation.Value + "%";
             InterArrivalTimeVariationPercentage = TrackBarInterArrivalVariation.Value / (double)100;
@@ -993,11 +993,15 @@ namespace MotorwaySimulator
 
             /*
             // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 100, -1);
+            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 40, 120, false);
             DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[1], 0, 96000, 100, -1);
+            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[0], 3000, 112000, 4, -1, false);
+            DebugModeInstructions.Add(instruction);
+            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 2700, 86000, 4, -1, true);
             DebugModeInstructions.Add(instruction);
             */
+
+
 
 
 
@@ -2232,6 +2236,7 @@ namespace MotorwaySimulator
             RealTimeSpawnTime = realTimeSpawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
+            CrashLocation = crashLocation;
             Camper = camper;
         }
     }

@@ -138,6 +138,11 @@ namespace MotorwaySimulator
             foreach (TreeNode treeNode in LaneNode.Nodes)
             {
                 Vehicle vehicle = (Vehicle)treeNode.Tag;
+                string newString = "#" + (vehicle.VehicleId + 1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour / 1000, 0) + " kph";
+                if (treeNode.Text != newString)
+                {
+                    treeNode.Text = newString;
+                }
                 if (vehicle.Crashed)
                 {
                     treeNode.BackColor = Color.Black;
@@ -362,7 +367,7 @@ namespace MotorwaySimulator
                 }
 
                 // If the stopping distance does not overlap with the back of the vehicle in the next lane with a 1 metre buffer (since sometimes there's some overlap and it's hard to compensate)
-                if (vehicleFromOtherLane.ExactProgressMetres + vehicleFromOtherLaneProjectedStoppingDistanceMetres <= backOfNextVehicle + 1)
+                if (vehicleFromOtherLane.ExactProgressMetres + vehicleFromOtherLaneProjectedStoppingDistanceMetres <= backOfNextVehicle)
                 {
                     // The stopping distance of the vehicle from the other lane does not overlap with the next vehicle
 
