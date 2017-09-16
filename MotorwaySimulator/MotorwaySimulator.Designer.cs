@@ -36,6 +36,10 @@ namespace MotorwaySimulator
             this.Road = new System.Windows.Forms.Panel();
             this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
             this.PanelSettings = new System.Windows.Forms.Panel();
+            this.LabelRoadInterval = new System.Windows.Forms.Label();
+            this.LabelRoadIntervalTitle = new System.Windows.Forms.Label();
+            this.LabelTicksPerSecond = new System.Windows.Forms.Label();
+            this.LabelTicksPerSecondTitle = new System.Windows.Forms.Label();
             this.CheckBoxSaveOnStop = new System.Windows.Forms.CheckBox();
             this.DateTimeRunDuration = new System.Windows.Forms.DateTimePicker();
             this.CheckBoxRunForDuration = new System.Windows.Forms.CheckBox();
@@ -278,7 +282,7 @@ namespace MotorwaySimulator
             // 
             // FormTick
             // 
-            this.FormTick.Interval = 15;
+            this.FormTick.Interval = 1;
             this.FormTick.Tick += new System.EventHandler(this.FormTick_Tick);
             // 
             // Road
@@ -297,7 +301,7 @@ namespace MotorwaySimulator
             this.TrackBarTimescale.Maximum = 20;
             this.TrackBarTimescale.Minimum = 1;
             this.TrackBarTimescale.Name = "TrackBarTimescale";
-            this.TrackBarTimescale.Size = new System.Drawing.Size(831, 45);
+            this.TrackBarTimescale.Size = new System.Drawing.Size(476, 45);
             this.TrackBarTimescale.TabIndex = 3;
             this.TrackBarTimescale.Value = 20;
             this.TrackBarTimescale.Scroll += new System.EventHandler(this.UpdateTimescale);
@@ -305,6 +309,10 @@ namespace MotorwaySimulator
             // PanelSettings
             // 
             this.PanelSettings.BackColor = System.Drawing.SystemColors.Control;
+            this.PanelSettings.Controls.Add(this.LabelRoadInterval);
+            this.PanelSettings.Controls.Add(this.LabelRoadIntervalTitle);
+            this.PanelSettings.Controls.Add(this.LabelTicksPerSecond);
+            this.PanelSettings.Controls.Add(this.LabelTicksPerSecondTitle);
             this.PanelSettings.Controls.Add(this.CheckBoxSaveOnStop);
             this.PanelSettings.Controls.Add(this.DateTimeRunDuration);
             this.PanelSettings.Controls.Add(this.CheckBoxRunForDuration);
@@ -319,6 +327,46 @@ namespace MotorwaySimulator
             this.PanelSettings.Name = "PanelSettings";
             this.PanelSettings.Size = new System.Drawing.Size(1146, 479);
             this.PanelSettings.TabIndex = 7;
+            // 
+            // LabelRoadInterval
+            // 
+            this.LabelRoadInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelRoadInterval.Location = new System.Drawing.Point(1026, 18);
+            this.LabelRoadInterval.Name = "LabelRoadInterval";
+            this.LabelRoadInterval.Size = new System.Drawing.Size(111, 18);
+            this.LabelRoadInterval.TabIndex = 60;
+            this.LabelRoadInterval.Text = "0";
+            this.LabelRoadInterval.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelRoadIntervalTitle
+            // 
+            this.LabelRoadIntervalTitle.AutoSize = true;
+            this.LabelRoadIntervalTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelRoadIntervalTitle.Location = new System.Drawing.Point(903, 18);
+            this.LabelRoadIntervalTitle.Name = "LabelRoadIntervalTitle";
+            this.LabelRoadIntervalTitle.Size = new System.Drawing.Size(117, 20);
+            this.LabelRoadIntervalTitle.TabIndex = 59;
+            this.LabelRoadIntervalTitle.Text = "Road Interval";
+            // 
+            // LabelTicksPerSecond
+            // 
+            this.LabelTicksPerSecond.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelTicksPerSecond.Location = new System.Drawing.Point(867, 18);
+            this.LabelTicksPerSecond.Name = "LabelTicksPerSecond";
+            this.LabelTicksPerSecond.Size = new System.Drawing.Size(26, 18);
+            this.LabelTicksPerSecond.TabIndex = 58;
+            this.LabelTicksPerSecond.Text = "0";
+            this.LabelTicksPerSecond.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelTicksPerSecondTitle
+            // 
+            this.LabelTicksPerSecondTitle.AutoSize = true;
+            this.LabelTicksPerSecondTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelTicksPerSecondTitle.Location = new System.Drawing.Point(797, 18);
+            this.LabelTicksPerSecondTitle.Name = "LabelTicksPerSecondTitle";
+            this.LabelTicksPerSecondTitle.Size = new System.Drawing.Size(64, 20);
+            this.LabelTicksPerSecondTitle.TabIndex = 57;
+            this.LabelTicksPerSecondTitle.Text = "Ticks/s";
             // 
             // CheckBoxSaveOnStop
             // 
@@ -1215,7 +1263,7 @@ namespace MotorwaySimulator
             // 
             this.NumericCarDesiredSpeed.Location = new System.Drawing.Point(773, 135);
             this.NumericCarDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            1000,
             0,
             0,
             0});
@@ -1345,7 +1393,7 @@ namespace MotorwaySimulator
             // 
             this.NumericLGVDesiredSpeed.Location = new System.Drawing.Point(844, 135);
             this.NumericLGVDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            1000,
             0,
             0,
             0});
@@ -1476,7 +1524,7 @@ namespace MotorwaySimulator
             // 
             this.NumericHGVDesiredSpeed.Location = new System.Drawing.Point(915, 135);
             this.NumericHGVDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            1000,
             0,
             0,
             0});
@@ -1604,7 +1652,7 @@ namespace MotorwaySimulator
             // 
             this.NumericBusDesiredSpeed.Location = new System.Drawing.Point(986, 135);
             this.NumericBusDesiredSpeed.Maximum = new decimal(new int[] {
-            500,
+            1000,
             0,
             0,
             0});
@@ -2873,6 +2921,7 @@ namespace MotorwaySimulator
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Motorway Simulator";
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.UpdateControlPanelLocation);
+            this.Resize += new System.EventHandler(this.UpdateResize);
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
             this.PanelSettings.ResumeLayout(false);
             this.PanelSettings.PerformLayout();
@@ -3123,6 +3172,10 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelVehicleLane;
         private System.Windows.Forms.Label LabelVehicleLaneTitle;
         private System.Windows.Forms.Button ButtonSaveData;
+        private System.Windows.Forms.Label LabelTicksPerSecond;
+        private System.Windows.Forms.Label LabelTicksPerSecondTitle;
+        private System.Windows.Forms.Label LabelRoadInterval;
+        private System.Windows.Forms.Label LabelRoadIntervalTitle;
     }
 }
 

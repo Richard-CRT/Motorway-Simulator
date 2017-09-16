@@ -187,6 +187,14 @@ namespace MotorwaySimulator
         /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
         /// </summary>
         private long LastTimerValue;
+        /// <summary>
+        /// The last timer value in milliseconds used to calculate the ticks per second
+        /// </summary>
+        private long LastTickMeasurementTimerValue;
+        /// <summary>
+        /// The number of ticks since the last tick measurement
+        /// </summary>
+        private long TickMeasurementTickCount;
 
 
         /* Random */
@@ -348,8 +356,8 @@ namespace MotorwaySimulator
         {
             // The TrackBar stores increments of 0.01x, so divide by 100 to get the scaling factor
             // The (double) is required to avoid integer division
-            TimeScale = (TrackBarTimescale.Value / (double)100)*5;
-            LabelTimeScale.Text = Math.Round((TrackBarTimescale.Value / (double)100)*5, 2) + "x";
+            TimeScale = (TrackBarTimescale.Value / (double)100) * 5;
+            LabelTimeScale.Text = Math.Round((TrackBarTimescale.Value / (double)100) * 5, 2) + "x";
         }
 
         /// <summary>
@@ -384,6 +392,26 @@ namespace MotorwaySimulator
         private void UpdateControlPanelLocation(object sender, ScrollEventArgs e)
         {
             PanelSettings.Location = new Point(12, 12);
+            int scrollPosition = this.HorizontalScroll.Value;
+            double metres1 = PixelsToMetres(scrollPosition);
+            double metres2 = PixelsToMetres(scrollPosition + Width);
+            if (metres1 < 0)
+            {
+                metres1 = 0;
+            }
+            if (metres2 > ActiveRoadLengthMetres)
+            {
+                metres2 = ActiveRoadLengthMetres;
+            }
+            LabelRoadInterval.Text = metres1 + "m - " + metres2 + "m";
+        }
+
+        /// <summary>
+        /// This method simply updates the panel control which contains the 'control panel' location to be on screen whenever the form is scrolled.
+        /// </summary>
+        private void UpdateResize(object sender, EventArgs e)
+        {
+            UpdateControlPanelLocation(null, null);
         }
 
         /// <summary>
@@ -619,6 +647,8 @@ namespace MotorwaySimulator
         /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
         private void FormTick_Tick(object sender, EventArgs e)
         {
+            TickMeasurementTickCount++;
+
             // Check if a new vehicle should be spawned
             CheckVehicle();
 
@@ -628,6 +658,14 @@ namespace MotorwaySimulator
             LastTimerValue = tempTime;
             double scaledElapsedTime = elapsedTime * TimeScale;
             ScaledTimePassed += scaledElapsedTime;
+
+            long elapsedTickMeasurementTime = tempTime - LastTickMeasurementTimerValue;
+            if (elapsedTickMeasurementTime > 500)
+            {
+                LastTickMeasurementTimerValue = tempTime;
+                LabelTicksPerSecond.Text = (TickMeasurementTickCount*2).ToString();
+                TickMeasurementTickCount = 0;
+            }
 
             if (ActiveRunDurationEnabled && ScaledTimePassed >= ActiveRunDurationMilliseconds)
             {
@@ -867,6 +905,23 @@ namespace MotorwaySimulator
         }
 
         /// <summary>
+        /// This method converts from pixels to metres using the MetresToPixelsScalingFactor constant
+        /// </summary>
+        /// <param name="pixels">The number of pixels to be converted metres pixels</param>
+        /// <returns>The number of metres for each pixel</returns>
+        public double PixelsToMetres(int pixels)
+        {
+            if (ActiveMetresToPixelsScalingFactor == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return pixels / ActiveMetresToPixelsScalingFactor;
+            }
+        }
+
+        /// <summary>
         /// This method calculates the stopping distance in metres given a speed in metres per hour (using a time period of 1s to stop in) using the StoppingTime constant
         /// </summary>
         /// <param name="metresHour">The number of metres per hour to be used in the calculation</param>
@@ -917,6 +972,7 @@ namespace MotorwaySimulator
             TreeViewVehicles.Nodes.Clear();
             TreeViewFinishedVehicles.Nodes.Clear();
             Road.Size = new Size(10, 10);
+            SelectedVehicle = null;
 
             ActiveRunStartTime = DateTime.UtcNow;
 
@@ -1004,8 +1060,9 @@ namespace MotorwaySimulator
 
 
 
-
             LastTimerValue = 0;
+            LastTickMeasurementTimerValue = 0;
+            TickMeasurementTickCount = 0;
             LastArrivalTimerValue = -1;
             ScaledTimePassed = 0;
             StopwatchTimer.Restart();
@@ -1253,7 +1310,7 @@ namespace MotorwaySimulator
             TimeSpan appearance = TimeSpan.FromMilliseconds(vehicle.TimeAppearance);
             TimeSpan disappearance = TimeSpan.FromMilliseconds(vehicle.TimeDisappearance);
             TimeSpan lifetime = TimeSpan.FromMilliseconds(vehicle.LifetimeMilliseconds);
-            
+
             // Update the vehicle ID output
             data.vehicleID = (vehicle.VehicleId + 1).ToString();
 
@@ -1278,12 +1335,10 @@ namespace MotorwaySimulator
                 if (vehicle.SuccessfulSpawn && !finished)
                 {
                     data.vehicleActualSpeed = Math.Round(vehicle.ActualSpeedMetresHour / 1000, 2) + "kph";
-                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1) + "m";
                 }
                 else
                 {
                     data.vehicleActualSpeed = nullString;
-                    data.vehicleProgress = nullString;
                 }
 
                 // Update the vehicle spawn time output
@@ -1305,11 +1360,13 @@ namespace MotorwaySimulator
                 {
                     data.vehicleLifetime = lifetime.Hours.ToString().PadLeft(2, '0') + "h " + lifetime.Minutes.ToString().PadLeft(2, '0') + "m " + lifetime.Seconds.ToString().PadLeft(2, '0') + "s " + lifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
                     data.vehicleAverageSpeed = Math.Round(vehicle.AverageSpeedMetresHour / 1000, 2) + "kph";
+                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1) + "m";
                 }
                 else
                 {
                     data.vehicleLifetime = nullString;
                     data.vehicleAverageSpeed = nullString;
+                    data.vehicleProgress = nullString;
                 }
             }
             else
@@ -1590,23 +1647,23 @@ namespace MotorwaySimulator
                     // The (double)s are required to avoid integer division
 
                     // Calculate and update the all vehicle successful spawn percentage output
-                    data.simulationSuccessfulSpawnsPercent = Math.Round(successCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationSuccessfulSpawnsPercent = Math.Round(successCount / (double)AllVehicles.Count, 3).ToString();
 
                     // Calculate and update the all vehicle failed spawn percentage output
-                    data.simulationFailedSpawnsPercent = Math.Round(failedCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationFailedSpawnsPercent = Math.Round(failedCount / (double)AllVehicles.Count, 3).ToString();
 
 
                     // Calculate and update the all vehicle car percentage output 
-                    data.simulationCarPercent = Math.Round(carCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationCarPercent = Math.Round(carCount / (double)AllVehicles.Count, 3).ToString();
 
                     // Calculate and update the all vehicle LGV percentage output 
-                    data.simulationLGVPercent = Math.Round(lGVCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationLGVPercent = Math.Round(lGVCount / (double)AllVehicles.Count, 3).ToString();
 
                     // Calculate and update the all vehicle HGV percentage output 
-                    data.simulationHGVPercent = Math.Round(hGVCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationHGVPercent = Math.Round(hGVCount / (double)AllVehicles.Count, 3).ToString();
 
                     // Calculate and update the all vehicle bus percentage output 
-                    data.simulationBusPercent = Math.Round(busCount / (double)AllVehicles.Count,3).ToString();
+                    data.simulationBusPercent = Math.Round(busCount / (double)AllVehicles.Count, 3).ToString();
                 }
                 else
                 {
@@ -1627,13 +1684,13 @@ namespace MotorwaySimulator
                     // The (double)s are required to avoid integer division
 
                     // Calculate and update the all vehicle not congested percentage output 
-                    data.simulationNotCongestedPercent = Math.Round(notCongestedCount / (double)successCount,3).ToString();
+                    data.simulationNotCongestedPercent = Math.Round(notCongestedCount / (double)successCount, 3).ToString();
 
                     // Calculate and update the all vehicle mildly congested percentage output 
-                    data.simulationMildlyCongestedPercent = Math.Round(mildyCongestedCount / (double)successCount,3).ToString();
+                    data.simulationMildlyCongestedPercent = Math.Round(mildyCongestedCount / (double)successCount, 3).ToString();
 
                     // Calculate and update the all vehicle severely congested percentage output 
-                    data.simulationSeverelyCongestedPercent = Math.Round(severelyCongestedCount / (double)successCount,3).ToString();
+                    data.simulationSeverelyCongestedPercent = Math.Round(severelyCongestedCount / (double)successCount, 3).ToString();
                 }
                 else
                 {
@@ -1861,7 +1918,7 @@ namespace MotorwaySimulator
 
             // Calculate and update the all vehicle bus percentage output 
             LabelAllVehiclesBusPercent.Text = simulationData.simulationBusPercent;
-            
+
             // Calculate and update the all vehicle not congested percentage output 
             LabelAllVehiclesNotCongestedPercent.Text = simulationData.simulationNotCongestedPercent;
 
