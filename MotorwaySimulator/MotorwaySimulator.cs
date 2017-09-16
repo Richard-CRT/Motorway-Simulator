@@ -178,17 +178,13 @@ namespace MotorwaySimulator
         /// </summary>
         public Stopwatch StopwatchTimer;
         /// <summary>
-        /// The scaling factor for all delta-times in the simulation - Allows for slowing down the simulation realtime
+        /// The amount of simulation time that passes between each tick
         /// </summary>
-        public double TimeScale;
+        public double TickTime;
         /// <summary>
         /// The scaled time passed since the beginning of the simulation
         /// </summary>
-        public double ScaledTimePassed;
-        /// <summary>
-        /// The timer value in milliseconds recorded during the last tick used to calculate delta-time for the scaled time passed
-        /// </summary>
-        private long LastTimerValue;
+        public double TimePassed;
         /// <summary>
         /// The last timer value in milliseconds used to calculate the ticks per second
         /// </summary>
@@ -273,7 +269,7 @@ namespace MotorwaySimulator
             UpdateInterArrivalVariation(null, null);
             UpdateLaneCount(null, null);
             UpdateStoppingTime(null, null);
-            UpdateTimescale(null, null);
+            UpdateTickTime(null, null);
             ValidateProbabilityChange(null, null);
 
             // Make window fill screen
@@ -352,16 +348,15 @@ namespace MotorwaySimulator
         }
 
         /// <summary>
-        /// Updates LabelTimeScale and the TimeScale variable to the new value whenever TrackBarTimescale changes value.
+        /// Updates LabelTickTime and the TickTime variable to the new value whenever TrackBarTickTime changes value.
         /// </summary>
         /// <param name="sender">(Auto-generated) Object that sends the event</param>
         /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
-        private void UpdateTimescale(object sender, EventArgs e)
+        private void UpdateTickTime(object sender, EventArgs e)
         {
-            // The TrackBar stores increments of 0.01x, so divide by 100 to get the scaling factor
-            // The (double) is required to avoid integer division
-            TimeScale = (TrackBarTimescale.Value / (double)100) * 5;
-            LabelTimeScale.Text = Math.Round((TrackBarTimescale.Value / (double)100) * 5, 2) + "x";
+            // The TrackBar stores increments of 1
+            TickTime = TrackBarTickTime.Value;
+            LabelTickTime.Text = TrackBarTickTime.Value + "ms";
         }
 
         /// <summary>
@@ -705,10 +700,9 @@ namespace MotorwaySimulator
 
             // Increment the scaled time passed by the scaled elapsed time
             long tempTime = StopwatchTimer.ElapsedMilliseconds;
-            long elapsedTime = tempTime - LastTimerValue;
-            LastTimerValue = tempTime;
-            double scaledElapsedTime = elapsedTime * TimeScale;
-            ScaledTimePassed += scaledElapsedTime;
+            double elapsedTime = TrackBarTickTime.Value;
+
+            TimePassed += elapsedTime;
 
             long elapsedTickMeasurementTime = tempTime - LastTickMeasurementTimerValue;
             if (elapsedTickMeasurementTime > 1000)
@@ -718,7 +712,7 @@ namespace MotorwaySimulator
                 TickMeasurementTickCount = 0;
             }
 
-            if (ActiveRunDurationEnabled && ScaledTimePassed >= ActiveRunDurationMilliseconds)
+            if (ActiveRunDurationEnabled && TimePassed >= ActiveRunDurationMilliseconds)
             {
                 ButtonStop_Click(null, null);
             }
@@ -864,7 +858,7 @@ namespace MotorwaySimulator
                     vehicle.ParentLane.Vehicles.Remove(vehicle);
 
                     // Record the time of disappearance
-                    vehicle.TimeDisappearance = ScaledTimePassed;
+                    vehicle.TimeDisappearance = TimePassed;
 
                     // Construct a TreeNode for the finished vehicle TreeView
                     TreeNode finishedVehicleNode = new TreeNode("#" + (vehicle.VehicleId + 1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour / 1000, 0) + " kph");
@@ -1122,15 +1116,11 @@ namespace MotorwaySimulator
             instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 2700, 86000, 4, -1, true);
             DebugModeInstructions.Add(instruction);
             */
-
-
-
-
-            LastTimerValue = 0;
+            
             LastTickMeasurementTimerValue = 0;
             TickMeasurementTickCount = 0;
             LastArrivalTimerValue = -1;
-            ScaledTimePassed = 0;
+            TimePassed = 0;
             StopwatchTimer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
@@ -1207,7 +1197,7 @@ namespace MotorwaySimulator
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
                     //if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
-                    if (ScaledTimePassed >= instruction.RealTimeSpawnTime)
+                    if (TimePassed >= instruction.RealTimeSpawnTime)
                     {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
@@ -1277,12 +1267,12 @@ namespace MotorwaySimulator
                 }
 
                 // Calculate the delta simulation time since the last tick
-                double tempTime = ScaledTimePassed;
-                double scaledElapsedTime = tempTime - LastArrivalTimerValue;
+                double tempTime = TimePassed;
+                double elapsedTime = tempTime - LastArrivalTimerValue;
                 double randomisedInterArrivalTime = ActiveInterArrivalTime + (ActiveInterArrivalTime * ChosenInterArrivalVariationPercentage);
 
                 // Lower the trigger time by 1% since timer has resolution of 15ms and without a lower bound will always check *after* the trigger point by some number of ms
-                if (scaledElapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == -1)
+                if (elapsedTime >= randomisedInterArrivalTime * 0.99 || LastArrivalTimerValue == -1)
                 {
                     // Reset the chosen variation percentage
                     ChosenInterArrivalVariationPercentage = -1;
@@ -1690,7 +1680,7 @@ namespace MotorwaySimulator
                 }
 
                 // Update the simulation lifetime output
-                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
+                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(TimePassed);
                 data.simulationLifetime = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "h " + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "m " + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "s " + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
 
             }
@@ -1760,7 +1750,7 @@ namespace MotorwaySimulator
                 }
 
                 // Update the simulation lifetime output
-                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(ScaledTimePassed);
+                TimeSpan simulationLifetime = TimeSpan.FromMilliseconds(TimePassed);
                 data.simulationLifetime = simulationLifetime.Hours.ToString().PadLeft(2, '0') + "-" + simulationLifetime.Minutes.ToString().PadLeft(2, '0') + "-" + simulationLifetime.Seconds.ToString().PadLeft(2, '0') + "." + simulationLifetime.Milliseconds.ToString().PadLeft(3, '0');
             }
 

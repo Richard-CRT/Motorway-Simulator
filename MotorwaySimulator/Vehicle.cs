@@ -339,19 +339,18 @@ namespace MotorwaySimulator
         public void MovementTick()
         {
             // Calculate the delta simulation time since the last tick
-            double tempTime = MainForm.ScaledTimePassed;
-            double scaledElapsedTime = tempTime - LastStopwatchTimerValue;
-            LastStopwatchTimerValue = tempTime;
+
+            double elapsedTime = MainForm.TickTime;
 
             // Increment the lifetime of this vehicle by the scaled elapsed time
-            LifetimeMilliseconds += scaledElapsedTime;
+            LifetimeMilliseconds += elapsedTime;
 
             if (!Crashed)
             {
                 #region Move Forward
 
                 // Calculate the exact metres moved since the last tick
-                double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, scaledElapsedTime);
+                double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, elapsedTime);
 
                 // Move the vehicle by the exact metres that it has moved since the last tick
                 ExactProgressMetres += metresMoved;
@@ -426,13 +425,12 @@ namespace MotorwaySimulator
             InEffect = true;
             VehicleType = type;
             MaximumLane = mainForm.VehicleParameters[type].MaximumLane;
-            LastStopwatchTimerValue = mainForm.ScaledTimePassed;
             ParentLane = null;
             CrashLocationMetres = predeterminedCrashLocation;
             Camper = predeterminedCamper;
 
             // Record the time of appearance
-            TimeAppearance = mainForm.ScaledTimePassed;
+            TimeAppearance = mainForm.TimePassed;
 
             double length;
             if (predeterminedVehicleLength == 0)

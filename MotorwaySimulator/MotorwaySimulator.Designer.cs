@@ -34,7 +34,7 @@ namespace MotorwaySimulator
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MotorwaySimulatorForm));
             this.FormTick = new System.Windows.Forms.Timer(this.components);
             this.Road = new System.Windows.Forms.Panel();
-            this.TrackBarTimescale = new System.Windows.Forms.TrackBar();
+            this.TrackBarTickTime = new System.Windows.Forms.TrackBar();
             this.PanelSettings = new System.Windows.Forms.Panel();
             this.LabelRoadInterval = new System.Windows.Forms.Label();
             this.LabelRoadIntervalTitle = new System.Windows.Forms.Label();
@@ -46,8 +46,8 @@ namespace MotorwaySimulator
             this.CheckBoxSaveOnStop = new System.Windows.Forms.CheckBox();
             this.DateTimeRunDuration = new System.Windows.Forms.DateTimePicker();
             this.CheckBoxRunForDuration = new System.Windows.Forms.CheckBox();
-            this.LabelTimeScale = new System.Windows.Forms.Label();
-            this.LabelTimescaleTitle = new System.Windows.Forms.Label();
+            this.LabelTickTime = new System.Windows.Forms.Label();
+            this.LabelTickTimeTitle = new System.Windows.Forms.Label();
             this.ButtonPause = new System.Windows.Forms.Button();
             this.TabControlControlPanel = new System.Windows.Forms.TabControl();
             this.TabPageSetup = new System.Windows.Forms.TabPage();
@@ -234,7 +234,7 @@ namespace MotorwaySimulator
             this.LabelVehicleLifetimeTitle = new System.Windows.Forms.Label();
             this.ButtonStop = new System.Windows.Forms.Button();
             this.ButtonStart = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTickTime)).BeginInit();
             this.PanelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadStartPoint)).BeginInit();
             this.TabControlControlPanel.SuspendLayout();
@@ -298,17 +298,16 @@ namespace MotorwaySimulator
             this.Road.TabIndex = 0;
             this.Road.Visible = false;
             // 
-            // TrackBarTimescale
+            // TrackBarTickTime
             // 
-            this.TrackBarTimescale.LargeChange = 2;
-            this.TrackBarTimescale.Location = new System.Drawing.Point(306, 12);
-            this.TrackBarTimescale.Maximum = 20;
-            this.TrackBarTimescale.Minimum = 1;
-            this.TrackBarTimescale.Name = "TrackBarTimescale";
-            this.TrackBarTimescale.Size = new System.Drawing.Size(349, 45);
-            this.TrackBarTimescale.TabIndex = 3;
-            this.TrackBarTimescale.Value = 20;
-            this.TrackBarTimescale.Scroll += new System.EventHandler(this.UpdateTimescale);
+            this.TrackBarTickTime.LargeChange = 2;
+            this.TrackBarTickTime.Location = new System.Drawing.Point(306, 12);
+            this.TrackBarTickTime.Minimum = 1;
+            this.TrackBarTickTime.Name = "TrackBarTickTime";
+            this.TrackBarTickTime.Size = new System.Drawing.Size(349, 45);
+            this.TrackBarTickTime.TabIndex = 3;
+            this.TrackBarTickTime.Value = 10;
+            this.TrackBarTickTime.Scroll += new System.EventHandler(this.UpdateTickTime);
             // 
             // PanelSettings
             // 
@@ -323,11 +322,11 @@ namespace MotorwaySimulator
             this.PanelSettings.Controls.Add(this.CheckBoxSaveOnStop);
             this.PanelSettings.Controls.Add(this.DateTimeRunDuration);
             this.PanelSettings.Controls.Add(this.CheckBoxRunForDuration);
-            this.PanelSettings.Controls.Add(this.LabelTimeScale);
-            this.PanelSettings.Controls.Add(this.LabelTimescaleTitle);
+            this.PanelSettings.Controls.Add(this.LabelTickTime);
+            this.PanelSettings.Controls.Add(this.LabelTickTimeTitle);
             this.PanelSettings.Controls.Add(this.ButtonPause);
             this.PanelSettings.Controls.Add(this.TabControlControlPanel);
-            this.PanelSettings.Controls.Add(this.TrackBarTimescale);
+            this.PanelSettings.Controls.Add(this.TrackBarTickTime);
             this.PanelSettings.Controls.Add(this.ButtonStop);
             this.PanelSettings.Controls.Add(this.ButtonStart);
             this.PanelSettings.Location = new System.Drawing.Point(11, 12);
@@ -438,25 +437,25 @@ namespace MotorwaySimulator
             this.CheckBoxRunForDuration.UseVisualStyleBackColor = true;
             this.CheckBoxRunForDuration.CheckedChanged += new System.EventHandler(this.CheckBoxRunForDuration_CheckedChanged);
             // 
-            // LabelTimeScale
+            // LabelTickTime
             // 
-            this.LabelTimeScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelTimeScale.Location = new System.Drawing.Point(263, 17);
-            this.LabelTimeScale.Name = "LabelTimeScale";
-            this.LabelTimeScale.Size = new System.Drawing.Size(42, 22);
-            this.LabelTimeScale.TabIndex = 47;
-            this.LabelTimeScale.Text = "0x";
-            this.LabelTimeScale.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.LabelTickTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelTickTime.Location = new System.Drawing.Point(262, 17);
+            this.LabelTickTime.Name = "LabelTickTime";
+            this.LabelTickTime.Size = new System.Drawing.Size(42, 22);
+            this.LabelTickTime.TabIndex = 47;
+            this.LabelTickTime.Text = "10ms";
+            this.LabelTickTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // LabelTimescaleTitle
+            // LabelTickTimeTitle
             // 
-            this.LabelTimescaleTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelTimescaleTitle.Location = new System.Drawing.Point(172, 16);
-            this.LabelTimescaleTitle.Name = "LabelTimescaleTitle";
-            this.LabelTimescaleTitle.Size = new System.Drawing.Size(100, 22);
-            this.LabelTimescaleTitle.TabIndex = 45;
-            this.LabelTimescaleTitle.Text = "Timescale";
-            this.LabelTimescaleTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelTickTimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelTickTimeTitle.Location = new System.Drawing.Point(173, 16);
+            this.LabelTickTimeTitle.Name = "LabelTickTimeTitle";
+            this.LabelTickTimeTitle.Size = new System.Drawing.Size(92, 22);
+            this.LabelTickTimeTitle.TabIndex = 45;
+            this.LabelTickTimeTitle.Text = "Tick Time";
+            this.LabelTickTimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ButtonPause
             // 
@@ -2960,7 +2959,7 @@ namespace MotorwaySimulator
             this.Text = "Motorway Simulator";
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.UpdateControlPanelLocation);
             this.Resize += new System.EventHandler(this.UpdateResize);
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTimescale)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarTickTime)).EndInit();
             this.PanelSettings.ResumeLayout(false);
             this.PanelSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadStartPoint)).EndInit();
@@ -3019,7 +3018,6 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Timer FormTick;
         private System.Windows.Forms.Panel Road;
         private System.Windows.Forms.Button ButtonPause;
-        private System.Windows.Forms.TrackBar TrackBarTimescale;
         private System.Windows.Forms.Panel PanelSettings;
         private System.Windows.Forms.Button ButtonStart;
         private System.Windows.Forms.Button ButtonStop;
@@ -3064,8 +3062,8 @@ namespace MotorwaySimulator
         private System.Windows.Forms.NumericUpDown NumericBusDesiredSpeed;
         private System.Windows.Forms.Label LabelLengthTitle;
         private System.Windows.Forms.NumericUpDown NumericBusDesiredSpeedVar;
-        private System.Windows.Forms.Label LabelTimescaleTitle;
-        private System.Windows.Forms.Label LabelTimeScale;
+        private System.Windows.Forms.Label LabelTickTimeTitle;
+        private System.Windows.Forms.Label LabelTickTime;
         private System.Windows.Forms.Label LabelVehiclesTitle;
         private System.Windows.Forms.Label LabelLaneCountTitle;
         private System.Windows.Forms.Label LabelLaneCount;
@@ -3218,6 +3216,7 @@ namespace MotorwaySimulator
         public System.Windows.Forms.TrackBar TrackBarRoadStartPoint;
         private System.Windows.Forms.Label LabelRoadInterval;
         private System.Windows.Forms.Label LabelRoadIntervalTitle;
+        protected System.Windows.Forms.TrackBar TrackBarTickTime;
     }
 }
 
