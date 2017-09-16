@@ -1400,17 +1400,6 @@ namespace MotorwaySimulator
                 // Update the vehicle desired speed output
                 data.vehicleDesiredSpeed = Math.Round(vehicle.DesiredSpeedMetresHour / 1000, 2) + "kph";
 
-                // Update the vehicle actual speed output
-                // Update the vehicle progress output
-                if (vehicle.SuccessfulSpawn && !finished)
-                {
-                    data.vehicleActualSpeed = Math.Round(vehicle.ActualSpeedMetresHour / 1000, 2) + "kph";
-                }
-                else
-                {
-                    data.vehicleActualSpeed = nullString;
-                }
-
                 // Update the vehicle spawn time output
                 data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "h " + appearance.Minutes.ToString().PadLeft(2, '0') + "m " + appearance.Seconds.ToString().PadLeft(2, '0') + "s " + appearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
 
@@ -1426,17 +1415,21 @@ namespace MotorwaySimulator
 
                 // Update the vehicle lifetime output
                 // Update the vehicle average speed output
+                // Update the vehicle actual speed output
+                // Update the vehicle progress output
                 if (vehicle.SuccessfulSpawn)
                 {
                     data.vehicleLifetime = lifetime.Hours.ToString().PadLeft(2, '0') + "h " + lifetime.Minutes.ToString().PadLeft(2, '0') + "m " + lifetime.Seconds.ToString().PadLeft(2, '0') + "s " + lifetime.Milliseconds.ToString().PadLeft(3, '0') + "ms";
                     data.vehicleAverageSpeed = Math.Round(vehicle.AverageSpeedMetresHour / 1000, 2) + "kph";
                     data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1) + "m";
+                    data.vehicleActualSpeed = Math.Round(vehicle.ActualSpeedMetresHour / 1000, 2) + "kph";
                 }
                 else
                 {
                     data.vehicleLifetime = nullString;
                     data.vehicleAverageSpeed = nullString;
                     data.vehicleProgress = nullString;
+                    data.vehicleActualSpeed = nullString;
                 }
             }
             else
@@ -1453,16 +1446,6 @@ namespace MotorwaySimulator
 
                 // Update the vehicle actual speed output
                 // Update the vehicle progress output
-                if (vehicle.SuccessfulSpawn && !finished)
-                {
-                    data.vehicleActualSpeed = vehicle.ActualSpeedMetresHour.ToString();
-                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1).ToString();
-                }
-                else
-                {
-                    data.vehicleActualSpeed = nullString;
-                    data.vehicleProgress = nullString;
-                }
 
                 // Update the vehicle spawn time output
                 data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "-" + appearance.Minutes.ToString().PadLeft(2, '0') + "-" + appearance.Seconds.ToString().PadLeft(2, '0') + "." + appearance.Milliseconds.ToString().PadLeft(3, '0');
@@ -1479,15 +1462,21 @@ namespace MotorwaySimulator
 
                 // Update the vehicle lifetime output
                 // Update the vehicle average speed output
+                // Update the vehicle actual speed output
+                // Update the vehicle progress output
                 if (vehicle.SuccessfulSpawn)
                 {
                     data.vehicleAverageSpeed = vehicle.AverageSpeedMetresHour.ToString();
                     data.vehicleLifetime = lifetime.Hours.ToString().PadLeft(2, '0') + "-" + lifetime.Minutes.ToString().PadLeft(2, '0') + "-" + lifetime.Seconds.ToString().PadLeft(2, '0') + "." + lifetime.Milliseconds.ToString().PadLeft(3, '0');
+                    data.vehicleProgress = Math.Round(vehicle.ExactProgressMetres, 1).ToString();
+                    data.vehicleActualSpeed = vehicle.ActualSpeedMetresHour.ToString();
                 }
                 else
                 {
                     data.vehicleAverageSpeed = nullString;
                     data.vehicleLifetime = nullString;
+                    data.vehicleProgress = nullString;
+                    data.vehicleActualSpeed = nullString;
                 }
             }
 
