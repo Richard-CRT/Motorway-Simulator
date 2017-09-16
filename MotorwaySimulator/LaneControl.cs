@@ -552,6 +552,8 @@ namespace MotorwaySimulator
                 pe.Graphics.DrawLine(whitePen, new Point(0, Size.Height - 1), new Point(Size.Width, Size.Height - 1));
             }
 
+            int pixelOffset = MainForm.TrackBarRoadStartPoint.Value;
+
             // Prepare the coloured pens, brushes, and font in order to paint the lane and the vehicles
             using (Pen whitePen = new Pen(Color.White, 2))
             using (Pen blackPen = new Pen(Color.Black, 2))
@@ -574,12 +576,12 @@ namespace MotorwaySimulator
                     // Calculate the length of the stopping distance for the actual speed of the vehicle
                     int stoppingDistanceLength = (int)Math.Round(MainForm.MetresToPixels(MainForm.StoppingDistance(vehicle.ActualSpeedMetresHour)), 0);
                     
-                    if (vehicle.ProgressPixels + stoppingDistanceLength >= MainForm.HorizontalScroll.Value && vehicle.ProgressPixels - vehicle.VehicleLengthPixels < MainForm.HorizontalScroll.Value + MainForm.Width)
+                    if (vehicle.ProgressPixels + stoppingDistanceLength - pixelOffset >= MainForm.HorizontalScroll.Value && vehicle.ProgressPixels - vehicle.VehicleLengthPixels - pixelOffset < MainForm.HorizontalScroll.Value + MainForm.Width)
                     {
                         // The vehicle is within the viewport of the window
 
                         // Create a rectangle for stopping distance from the coordinates and dimensions
-                        Rectangle safetyRect = new Rectangle(new Point(vehicle.ProgressPixels, MainForm.LaneMarginPixels), new Size(stoppingDistanceLength, vehicle.VehicleWidthPixels));
+                        Rectangle safetyRect = new Rectangle(new Point(vehicle.ProgressPixels - pixelOffset, MainForm.LaneMarginPixels), new Size(stoppingDistanceLength, vehicle.VehicleWidthPixels));
                         if (vehicle.IsTravellingAtDesiredSpeed)
                         {
                             // Vehicle is travelling at its desired speed
@@ -599,7 +601,7 @@ namespace MotorwaySimulator
                         pe.Graphics.DrawRectangle(whitePen, safetyRect);
                         
                         // Create a rectangle for the vehicle from the coordinates and dimensions
-                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.ProgressPixels - vehicle.VehicleLengthPixels, MainForm.LaneMarginPixels), new Size(vehicle.VehicleLengthPixels, vehicle.VehicleWidthPixels));
+                        Rectangle vehicleRect = new Rectangle(new Point(vehicle.ProgressPixels - vehicle.VehicleLengthPixels - pixelOffset, MainForm.LaneMarginPixels), new Size(vehicle.VehicleLengthPixels, vehicle.VehicleWidthPixels));
                         switch (vehicle.VehicleType)
                         {
                             case VehicleTypes.Car:
@@ -631,7 +633,7 @@ namespace MotorwaySimulator
                         pe.Graphics.DrawRectangle(blackPen, vehicleRect);
 
                         // Print the vehicle ID in the vehicle rectangle
-                        pe.Graphics.DrawString((vehicle.VehicleId+1).ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.ProgressPixels - vehicle.VehicleLengthPixels, MainForm.LaneMarginPixels);
+                        pe.Graphics.DrawString((vehicle.VehicleId+1).ToString().PadLeft(3, '0'), drawFont, blackBrush, vehicle.ProgressPixels - vehicle.VehicleLengthPixels - pixelOffset, MainForm.LaneMarginPixels);
                     }
                 }
             }
@@ -640,7 +642,7 @@ namespace MotorwaySimulator
             {
                 using (Pen bluePen = new Pen(Color.Blue, 4))
                 {
-                    Rectangle vehicleRect = new Rectangle(new Point(MainForm.SelectedVehicle.ProgressPixels - MainForm.SelectedVehicle.VehicleLengthPixels, MainForm.LaneMarginPixels), new Size(MainForm.SelectedVehicle.VehicleLengthPixels, MainForm.SelectedVehicle.VehicleWidthPixels));
+                    Rectangle vehicleRect = new Rectangle(new Point(MainForm.SelectedVehicle.ProgressPixels - MainForm.SelectedVehicle.VehicleLengthPixels - pixelOffset, MainForm.LaneMarginPixels), new Size(MainForm.SelectedVehicle.VehicleLengthPixels, MainForm.SelectedVehicle.VehicleWidthPixels));
 
                     // Draw a blue rectangle around the vehicle
                     pe.Graphics.DrawRectangle(bluePen, vehicleRect);

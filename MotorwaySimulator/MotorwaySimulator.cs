@@ -72,6 +72,8 @@ namespace MotorwaySimulator
 
         /* Setup Parameters */
 
+        private bool FirstLaunch;
+
         /// <summary>
         /// The Road Length in metres being used by the simulation
         /// </summary>
@@ -253,6 +255,8 @@ namespace MotorwaySimulator
             // (Auto-generated) Intialises all the form controls in the form (see MotorwaySimulator.Designer.cs)
             InitializeComponent();
 
+            FirstLaunch = true;
+
             // Initialise variables
             DebugMode = false;
             StopwatchTimer = new Stopwatch();
@@ -393,8 +397,19 @@ namespace MotorwaySimulator
         {
             PanelSettings.Location = new Point(12, 12);
             int scrollPosition = this.HorizontalScroll.Value;
-            double metres1 = PixelsToMetres(scrollPosition);
-            double metres2 = PixelsToMetres(scrollPosition + Width);
+            double visibleMetres1 = PixelsToMetres(scrollPosition + TrackBarRoadStartPoint.Value);
+            double visibleMetres2 = PixelsToMetres(scrollPosition + Width + TrackBarRoadStartPoint.Value);
+            if (visibleMetres1 < 0)
+            {
+                visibleMetres1 = 0;
+            }
+            if (visibleMetres2 > ActiveRoadLengthMetres)
+            {
+                visibleMetres2 = ActiveRoadLengthMetres;
+            }
+            LabelVisibleRoadInterval.Text = visibleMetres1 + "m - " + visibleMetres2 + "m";
+            double metres1 = PixelsToMetres(TrackBarRoadStartPoint.Value);
+            double metres2 = PixelsToMetres(TrackBarRoadStartPoint.Value + 65535);
             if (metres1 < 0)
             {
                 metres1 = 0;
@@ -404,6 +419,14 @@ namespace MotorwaySimulator
                 metres2 = ActiveRoadLengthMetres;
             }
             LabelRoadInterval.Text = metres1 + "m - " + metres2 + "m";
+        }
+
+        /// <summary>
+        /// This method simply updates the panel control which contains the 'control panel' location to be on screen whenever the form is scrolled.
+        /// </summary>
+        private void UpdateStartPoint(object sender, EventArgs e)
+        {
+            UpdateControlPanelLocation(null, null);
         }
 
         /// <summary>
@@ -605,17 +628,45 @@ namespace MotorwaySimulator
                 // There is actually a selected vehicle
 
                 // Calculate the new scroll position from the vehicles progress in pixels and the width of the form
-                int newPosition = SelectedVehicle.ProgressPixels;
-                if (newPosition < 0)
+                int newScrollPosition = SelectedVehicle.ProgressPixels - TrackBarRoadStartPoint.Value;
+                if (newScrollPosition < 0)
                 {
-                    newPosition = 0;
+                    newScrollPosition = 0;
+                    if (SelectedVehicle.ProgressPixels > TrackBarRoadStartPoint.Maximum)
+                    {
+                        TrackBarRoadStartPoint.Value = TrackBarRoadStartPoint.Maximum;
+                    }
+                    else if (SelectedVehicle.ProgressPixels < TrackBarRoadStartPoint.Minimum)
+                    {
+                        TrackBarRoadStartPoint.Value = TrackBarRoadStartPoint.Minimum;
+                    }
+                    else
+                    {
+                        TrackBarRoadStartPoint.Value = SelectedVehicle.ProgressPixels;
+                    }
                 }
-                if (newPosition > HorizontalScroll.Maximum)
+                if (newScrollPosition > HorizontalScroll.Maximum)
                 {
-                    newPosition = HorizontalScroll.Maximum;
+                    if (SelectedVehicle.ProgressPixels > TrackBarRoadStartPoint.Maximum)
+                    {
+                        TrackBarRoadStartPoint.Value = TrackBarRoadStartPoint.Maximum;
+                    }
+                    else if (SelectedVehicle.ProgressPixels < TrackBarRoadStartPoint.Minimum)
+                    {
+                        TrackBarRoadStartPoint.Value = TrackBarRoadStartPoint.Minimum;
+                    }
+                    else
+                    {
+                        TrackBarRoadStartPoint.Value = SelectedVehicle.ProgressPixels;
+                    }
+                    newScrollPosition = SelectedVehicle.ProgressPixels - TrackBarRoadStartPoint.Value;
+                    if (newScrollPosition > HorizontalScroll.Maximum)
+                    {
+                        newScrollPosition = HorizontalScroll.Maximum;
+                    }
                 }
                 // Scroll the form to the right place
-                HorizontalScroll.Value = newPosition;
+                HorizontalScroll.Value = newScrollPosition;
                 // Update the location of the control panel so it is still in view
                 UpdateControlPanelLocation(null, null);
             }
@@ -660,10 +711,10 @@ namespace MotorwaySimulator
             ScaledTimePassed += scaledElapsedTime;
 
             long elapsedTickMeasurementTime = tempTime - LastTickMeasurementTimerValue;
-            if (elapsedTickMeasurementTime > 500)
+            if (elapsedTickMeasurementTime > 1000)
             {
                 LastTickMeasurementTimerValue = tempTime;
-                LabelTicksPerSecond.Text = (TickMeasurementTickCount*2).ToString();
+                LabelTicksPerSecond.Text = (TickMeasurementTickCount*1).ToString();
                 TickMeasurementTickCount = 0;
             }
 
@@ -845,7 +896,7 @@ namespace MotorwaySimulator
 
             if (SelectedVehicle != null && CheckBoxAutoFindVehicle.Checked)
             {
-                if (SelectedVehicle.ProgressPixels < this.HorizontalScroll.Value || SelectedVehicle.ProgressPixels > this.HorizontalScroll.Value + this.Width)
+                if (SelectedVehicle.ProgressPixels - TrackBarRoadStartPoint.Value < this.HorizontalScroll.Value || SelectedVehicle.ProgressPixels - TrackBarRoadStartPoint.Value > this.HorizontalScroll.Value + this.Width)
                 {
                     ButtonFindVehicle_Click(null, null);
                 }
@@ -965,6 +1016,7 @@ namespace MotorwaySimulator
         /// </summary>
         private void NewSimulation()
         {
+
             // Clear previous data/simulation
             Lanes.Clear();
             AllVehicles.Clear();
@@ -973,6 +1025,7 @@ namespace MotorwaySimulator
             TreeViewFinishedVehicles.Nodes.Clear();
             Road.Size = new Size(10, 10);
             SelectedVehicle = null;
+            CheckBoxAutoFindVehicle.Checked = false;
 
             ActiveRunStartTime = DateTime.UtcNow;
 
@@ -1006,6 +1059,14 @@ namespace MotorwaySimulator
 
             ActiveRoadLengthMetres = RoadLengthMetres;
             int activeRoadLengthPixels = (int)Math.Round(MetresToPixels(ActiveRoadLengthMetres), 0);
+            int overFlow = activeRoadLengthPixels - 65535;
+            if (overFlow < 0)
+            {
+                overFlow = 0;
+            }
+            TrackBarRoadStartPoint.Maximum = overFlow;
+            TrackBarRoadStartPoint.SmallChange = ActiveMetresToPixelsScalingFactor;
+            TrackBarRoadStartPoint.LargeChange = ActiveMetresToPixelsScalingFactor*10;
 
             ActiveMaxCrashCount = (int)NumericMaxCrashCount.Value;
 
@@ -1026,6 +1087,11 @@ namespace MotorwaySimulator
             Height = 530 + 17 + newHeight;
             Road.Width = activeRoadLengthPixels;
             Road.Height = newHeight;
+            if (FirstLaunch)
+            {
+                Road.Visible = true;
+                FirstLaunch = false;
+            }
 
             // Create the lane objects and populate the TreeViews with the lane nodes
             TreeNode finishedVehiclesLaneNode = new TreeNode("Failed");
@@ -1068,7 +1134,7 @@ namespace MotorwaySimulator
             StopwatchTimer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
-            Road.Visible = true;
+            //Road.Visible = true;
 
             // Update the enabled state of the Play, Pause and Stop and FindVehicle buttons
             ButtonStart.Enabled = false;
@@ -1077,6 +1143,10 @@ namespace MotorwaySimulator
             ButtonFindVehicle.Enabled = false;
             CheckBoxRunForDuration.Enabled = false;
             DateTimeRunDuration.Enabled = false;
+
+            // Reset the scroll bars
+            HorizontalScroll.Value = 0;
+            TrackBarRoadStartPoint.Value = 0;
         }
 
         /// <summary>
@@ -1832,6 +1902,26 @@ namespace MotorwaySimulator
 
                 // Update the vehicle crashed output
                 LabelVehicleCrashed.Text = selectedVehicleData.vehicleCrashed;
+            }
+            else
+            {
+                string nullString = "---";
+                
+                LabelVehicleID.Text = nullString;
+                LabelVehicleType.Text = nullString;
+                LabelVehicleLength.Text = nullString;
+                LabelVehicleDesiredSpeed.Text = nullString;
+                LabelVehicleActualSpeed.Text = nullString;
+                LabelVehicleSuccessfulSpawn.Text = nullString;
+                LabelVehicleSpawnTime.Text = nullString;
+                LabelVehicleDespawnTime.Text = nullString;
+                LabelVehicleLifetime.Text = nullString;
+                LabelVehicleProgress.Text = nullString;
+                LabelVehicleLane.Text = nullString;
+                LabelVehicleCamper.Text = nullString;
+                LabelVehicleAverageSpeed.Text = nullString;
+                LabelVehicleCongestion.Text = nullString;
+                LabelVehicleCrashed.Text = nullString;
             }
 
             SimulationData simulationData = GetSimulationData(DataFormat.Panel);
