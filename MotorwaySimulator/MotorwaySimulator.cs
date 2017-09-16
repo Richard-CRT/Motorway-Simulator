@@ -254,7 +254,7 @@ namespace MotorwaySimulator
             FirstLaunch = true;
 
             // Initialise variables
-            DebugMode = false;
+            DebugMode = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -680,7 +680,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// This is the underlying update structure of the simulation. Everytime the FormTick form control 'ticks' (every 15ms) this function is called.
         /// Firstly it checks to see if a new vehicle should be spawned.
-        /// Secondly, it increments the scaled time passed by the scaled elapsed miliseconds since the last tick
+        /// Secondly, it increments the scaled time passed by the elapsed miliseconds since the last tick
         /// Thirdly, it individually ticks each vehicle's lane and speed handling method in order of progress along the road.
         /// Then, it individually ticks each vehicle's movement handling method in order of progress along the road.
         /// Then, it individually checks if each vehicle is having an effect on any other visible vehicles on the road in order of progress along the road
@@ -693,10 +693,11 @@ namespace MotorwaySimulator
         /// <param name="e">(Auto-generated) Event arguments containing the details of the event</param>
         private void FormTick_Tick(object sender, EventArgs e)
         {
-            TickMeasurementTickCount++;
 
             // Check if a new vehicle should be spawned
             CheckVehicle();
+
+            TickMeasurementTickCount++;
 
             // Increment the scaled time passed by the scaled elapsed time
             long tempTime = StopwatchTimer.ElapsedMilliseconds;
@@ -1104,10 +1105,12 @@ namespace MotorwaySimulator
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
 
+            /*
+
             // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
             DebugVehicleSpawnInstruction instruction;
 
-            /*
+            
             // Create an individual spawn instruction
             instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 40, 120, false);
             DebugModeInstructions.Add(instruction);
@@ -1115,7 +1118,9 @@ namespace MotorwaySimulator
             DebugModeInstructions.Add(instruction);
             instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 2700, 86000, 4, -1, true);
             DebugModeInstructions.Add(instruction);
+
             */
+            
             
             LastTickMeasurementTimerValue = 0;
             TickMeasurementTickCount = 0;
@@ -1196,8 +1201,8 @@ namespace MotorwaySimulator
                 for (int instructionIndex = 0; instructionIndex < DebugModeInstructions.Count;)
                 {
                     DebugVehicleSpawnInstruction instruction = DebugModeInstructions[instructionIndex];
-                    //if (StopwatchTimer.ElapsedMilliseconds >= instruction.RealTimeSpawnTime)
-                    if (TimePassed >= instruction.RealTimeSpawnTime)
+                    //if (StopwatchTimer.ElapsedMilliseconds >= instruction.SpawnTime)
+                    if (TimePassed >= instruction.SpawnTime)
                     {
                         // Spawn time for this instruction has passed
                         Vehicle vehicle;
@@ -2319,7 +2324,7 @@ namespace MotorwaySimulator
         /// <summary>
         /// The time in realtime to spawn the vehicle
         /// </summary>
-        public long RealTimeSpawnTime;
+        public long SpawnTime;
 
         /// <summary>
         /// The desired speed in metres per hour of the vehicle to spawn
@@ -2354,12 +2359,12 @@ namespace MotorwaySimulator
         /// <param name="vehicleLength">The Length of the vehicle to spawn in metres</param>
         /// <param name="crashLocation">The location for the vehicle to crash</param>
         /// <param name="camper">If this vehicle is lane camper</param>
-        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long realTimeSpawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0, double crashLocation = -1, bool camper = false)
+        public DebugVehicleSpawnInstruction(int vehicleId, VehicleTypes type, LaneControl lane, long spawnTime, double desiredSpeedMetresHour = 0, double vehicleLength = 0, double crashLocation = -1, bool camper = false)
         {
             VehicleId = vehicleId;
             Type = type;
             Lane = lane;
-            RealTimeSpawnTime = realTimeSpawnTime;
+            SpawnTime = spawnTime;
             DesiredSpeedMetresHour = desiredSpeedMetresHour;
             VehicleLength = vehicleLength;
             CrashLocation = crashLocation;
