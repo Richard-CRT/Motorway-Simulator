@@ -36,6 +36,7 @@ namespace MotorwaySimulator
             this.Road = new System.Windows.Forms.Panel();
             this.TrackBarTickTime = new System.Windows.Forms.TrackBar();
             this.PanelSettings = new System.Windows.Forms.Panel();
+            this.CheckBoxShowGraphics = new System.Windows.Forms.CheckBox();
             this.LabelRoadInterval = new System.Windows.Forms.Label();
             this.LabelRoadIntervalTitle = new System.Windows.Forms.Label();
             this.TrackBarRoadStartPoint = new System.Windows.Forms.TrackBar();
@@ -312,6 +313,7 @@ namespace MotorwaySimulator
             // PanelSettings
             // 
             this.PanelSettings.BackColor = System.Drawing.SystemColors.Control;
+            this.PanelSettings.Controls.Add(this.CheckBoxShowGraphics);
             this.PanelSettings.Controls.Add(this.LabelRoadInterval);
             this.PanelSettings.Controls.Add(this.LabelRoadIntervalTitle);
             this.PanelSettings.Controls.Add(this.TrackBarRoadStartPoint);
@@ -333,6 +335,19 @@ namespace MotorwaySimulator
             this.PanelSettings.Name = "PanelSettings";
             this.PanelSettings.Size = new System.Drawing.Size(1146, 479);
             this.PanelSettings.TabIndex = 7;
+            // 
+            // CheckBoxShowGraphics
+            // 
+            this.CheckBoxShowGraphics.AutoSize = true;
+            this.CheckBoxShowGraphics.Checked = true;
+            this.CheckBoxShowGraphics.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckBoxShowGraphics.Location = new System.Drawing.Point(106, 81);
+            this.CheckBoxShowGraphics.Name = "CheckBoxShowGraphics";
+            this.CheckBoxShowGraphics.Size = new System.Drawing.Size(96, 17);
+            this.CheckBoxShowGraphics.TabIndex = 64;
+            this.CheckBoxShowGraphics.Text = "Show graphics";
+            this.CheckBoxShowGraphics.UseVisualStyleBackColor = true;
+            this.CheckBoxShowGraphics.CheckedChanged += new System.EventHandler(this.CheckBoxShowGraphics_CheckedChanged);
             // 
             // LabelRoadInterval
             // 
@@ -3217,6 +3232,7 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelRoadInterval;
         private System.Windows.Forms.Label LabelRoadIntervalTitle;
         protected System.Windows.Forms.TrackBar TrackBarTickTime;
+        private System.Windows.Forms.CheckBox CheckBoxShowGraphics;
     }
 }
 

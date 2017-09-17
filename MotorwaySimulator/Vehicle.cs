@@ -192,7 +192,7 @@ namespace MotorwaySimulator
 
                 // Get the vehicle ahead of this vehicle on the lane
                 Vehicle nextVehicle = ParentLane.NextVehicle(this);
-
+                
                 if (nextVehicle != null)
                 {
                     // There is a vehicle ahead of this vehicle
@@ -299,8 +299,6 @@ namespace MotorwaySimulator
                         // There is space in the lane to the right
 
                         // Switch lane to the right
-                        rightLane.Vehicles.Add(this);
-                        ParentLane.Vehicles.Remove(this);
                         ParentLane = rightLane;
                     }
                 }
@@ -323,8 +321,6 @@ namespace MotorwaySimulator
                         // There is space in the lane to the left
 
                         // Switch lane to the left
-                        leftLane.Vehicles.Add(this);
-                        ParentLane.Vehicles.Remove(this);
                         ParentLane = leftLane;
                     }
                 }
@@ -338,15 +334,15 @@ namespace MotorwaySimulator
         /// </summary>
         public void MovementTick()
         {
-            // Calculate the delta simulation time since the last tick
-
-            double elapsedTime = MainForm.TickTime;
-
-            // Increment the lifetime of this vehicle by the scaled elapsed time
-            LifetimeMilliseconds += elapsedTime;
-
             if (!Crashed)
             {
+                // Calculate the delta simulation time since the last tick
+
+                double elapsedTime = MainForm.TickTime;
+
+                // Increment the lifetime of this vehicle by the scaled elapsed time
+                LifetimeMilliseconds += elapsedTime;
+
                 #region Move Forward
 
                 // Calculate the exact metres moved since the last tick
@@ -357,23 +353,24 @@ namespace MotorwaySimulator
                 ProgressPixels = (int)Math.Round(MainForm.MetresToPixels(ExactProgressMetres), 0);
 
                 #endregion
-            }
 
-            // Update the average speed from the new lifetime and progress along the road
-            AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
+                if (CrashLocationMetres != -1 && ExactProgressMetres > CrashLocationMetres)
+                {
+                    ActualSpeedMetresHour = 0;
+                    Crashed = true;
+                    TimeDisappearance = MainForm.TimePassed;
+                }
 
-            if (CrashLocationMetres != -1 && ExactProgressMetres > CrashLocationMetres)
-            {
-                ActualSpeedMetresHour = 0;
-                Crashed = true;
-            }
+                if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
+                {
+                    // The vehicle is not within the visible bounds of the road
 
-            if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
-            {
-                // The vehicle is not within the visible bounds of the road
+                    // Update the InSight variable
+                    InSight = false;
+                }
 
-                // Update the InSight variable
-                InSight = false;
+                // Update the average speed from the new lifetime and progress along the road
+                AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
             }
         }
 

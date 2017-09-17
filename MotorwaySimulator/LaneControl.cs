@@ -36,13 +36,9 @@ namespace MotorwaySimulator
         /* Contents of the lane */
 
         /// <summary>
-        /// The dynamic list of vehicles on this lane of the road
-        /// </summary>
-        public List<Vehicle> Vehicles;
-        /// <summary>
         /// Used for comparison to calculate the new vehicles from the old ones
         /// </summary>
-        private Vehicle[] OldOrderedLaneVehicles;
+        private List<Vehicle> OldLaneVehicles;
 
 
         /* Parents */
@@ -73,8 +69,7 @@ namespace MotorwaySimulator
             BackColor = Color.DarkGray;
 
             // Initialises the default values of these variables
-            Vehicles = new List<Vehicle>();
-            OldOrderedLaneVehicles = new Vehicle[0];
+            OldLaneVehicles = new List<Vehicle>();
 
             // Assign the properties of the class to the parameters of the constructor
             MainForm = mainForm;
@@ -84,9 +79,7 @@ namespace MotorwaySimulator
         #region Methods
 
         /// <summary>
-        /// This method will calculate which vehicles need to be added/removed from this lanes TreeNode in the vehicles 
-        /// 
-        /// 
+        /// This method will calculate which vehicles need to be added/removed from this lanes TreeNode in the vehicles
         /// on the main form
         /// </summary>
         public void UpdateTreeNode()
@@ -94,21 +87,21 @@ namespace MotorwaySimulator
             List<Vehicle> vehiclesToAdd = new List<Vehicle>();
             List<Vehicle> vehiclesToRemove = new List<Vehicle>();
 
-            Vehicle[] orderedLaneVehicles = VehiclesOrderByLocation();
+            List<Vehicle> laneVehicles = MainForm.VehiclesInLane(this);
 
             // Calculate the vehicles to add to this lane's TreeNode
-            foreach (Vehicle vehicle in orderedLaneVehicles)
+            foreach (Vehicle vehicle in laneVehicles)
             {
-                if (!OldOrderedLaneVehicles.Contains(vehicle))
+                if (!OldLaneVehicles.Contains(vehicle))
                 {
                     vehiclesToAdd.Add(vehicle);
                 }
             }
 
             // Calculate the vehicles to remove from this lane's TreeNode
-            foreach (Vehicle oldVehicle in OldOrderedLaneVehicles)
+            foreach (Vehicle oldVehicle in OldLaneVehicles)
             {
-                if (!orderedLaneVehicles.Contains(oldVehicle))
+                if (!laneVehicles.Contains(oldVehicle))
                 {
                     vehiclesToRemove.Add(oldVehicle);
                 }
@@ -164,30 +157,32 @@ namespace MotorwaySimulator
                 }
             }
 
-            TreeNode[] newVehicleNodes = new TreeNode[vehiclesToAdd.Count];
+            List<TreeNode> newVehicleNodesList = new List<TreeNode>();
             // Construct the nodes for the vehicles that need to be added to the lane's TreeNode
             for (int vehicleIndex = 0; vehicleIndex < vehiclesToAdd.Count; vehicleIndex++)
             {
                 Vehicle vehicle = vehiclesToAdd[vehicleIndex];
-                newVehicleNodes[vehicleIndex] = new TreeNode("#" + (vehicle.VehicleId+1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour/1000,0) + " kph");
-                newVehicleNodes[vehicleIndex].Tag = vehicle;
-                newVehicleNodes[vehicleIndex].ForeColor = Color.White;
+                TreeNode newNode;
+                newNode = new TreeNode("#" + (vehicle.VehicleId+1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour/1000,0) + " kph");
+                newNode.Tag = vehicle;
+                newNode.ForeColor = Color.White;
                 switch(vehicle.Congestion)
                 {
                     case CongestionStates.None:
-                        newVehicleNodes[vehicleIndex].BackColor = Color.LimeGreen;
+                        newNode.BackColor = Color.LimeGreen;
                         break;
                     case CongestionStates.Mild:
-                        newVehicleNodes[vehicleIndex].BackColor = Color.Red;
+                        newNode.BackColor = Color.Red;
                         break;
                     case CongestionStates.Severe:
-                        newVehicleNodes[vehicleIndex].BackColor = Color.DarkRed;
+                        newNode.BackColor = Color.DarkRed;
                         break;
                 }
+                newVehicleNodesList.Add(newNode);
             }
 
             // Iterate through the exisiting nodes and insert the new vehicle nodes in order of the vehicle's progress along the road. The vehicles further along the road are higher up the lane's TreeNode
-            List<TreeNode> newVehicleNodesList = newVehicleNodes.OrderByDescending(node => ((Vehicle)node.Tag).ExactProgressMetres).ToList();
+            //List<TreeNode> newVehicleNodesList = newVehicleNodes.OrderByDescending(node => ((Vehicle)node.Tag).ExactProgressMetres).ToList();
             for(int laneVehicleNodeIndex = 0; laneVehicleNodeIndex < LaneNode.Nodes.Count; laneVehicleNodeIndex++)
             {
                 TreeNode laneVehicleNode = LaneNode.Nodes[laneVehicleNodeIndex];
@@ -209,8 +204,7 @@ namespace MotorwaySimulator
             }
 
             // Add the nodes that have not been added yet because they do not fit in before the end of the lane's TreeNode
-            newVehicleNodes.Reverse();
-            foreach (TreeNode newVehicleNode in newVehicleNodes)
+            foreach (TreeNode newVehicleNode in newVehicleNodesList)
             {
                 if (LaneNode.Nodes.Count == 0 || ((Vehicle)newVehicleNode.Tag).ExactProgressMetres < ((Vehicle)LaneNode.Nodes[LaneNode.Nodes.Count-1].Tag).ExactProgressMetres)
                 {
@@ -219,7 +213,7 @@ namespace MotorwaySimulator
             }
 
             // Update the old dynamic list of vehicles so that the method can compare next tick
-            OldOrderedLaneVehicles = orderedLaneVehicles;
+            OldLaneVehicles = laneVehicles;
         }
 
         /// <summary>
@@ -228,13 +222,14 @@ namespace MotorwaySimulator
         /// <returns>The object of the last vehicle in the lane (i.e the one that has made the least progress)</returns>
         public Vehicle LastVehicle()
         {
-            Vehicle[] OrderedVehicles = VehiclesOrderByReverseLocation();
-            if (OrderedVehicles.Length > 0)
+            List<Vehicle> orderedVehicles = MainForm.VehiclesInLane(this);
+            int count = orderedVehicles.Count;
+            if (count > 0)
             {
                 // There are vehicles in this lane
 
                 // return the vehicle that has made the least progress
-                return OrderedVehicles[0];
+                return orderedVehicles[count-1];
             }
             else
             {
@@ -251,13 +246,15 @@ namespace MotorwaySimulator
         /// <returns>The object of the vehicle just ahead of the vehicle passed in as a parameter in this lane</returns>
         public Vehicle NextVehicle(Vehicle vehicle)
         {
-            Vehicle[] orderedVehicles = VehiclesOrderByReverseLocation();
+            List<Vehicle> orderedVehicles = MainForm.VehiclesInLane(this);
             Vehicle nextVehicle = null;
-            if (orderedVehicles.Length > 0)
+            int count = orderedVehicles.Count;
+            if (count > 0)
             {
-                foreach (Vehicle myVehicle in orderedVehicles)
+                for (int i = count - 1; i >= 0; i--)
                 {
-                    if (myVehicle.ExactProgressMetres > vehicle.ExactProgressMetres)
+                    Vehicle myVehicle = orderedVehicles[i];
+                    if (myVehicle.ExactProgressMetres > vehicle.ExactProgressMetres && myVehicle != vehicle)
                     {
                         nextVehicle = myVehicle;
                         break;
@@ -278,13 +275,14 @@ namespace MotorwaySimulator
         /// <returns>The object of the vehicle just after or at exactly the same place as the vehicle passed in as a parameter in this lane</returns>
         public Vehicle PreviousVehicle(Vehicle vehicle)
         {
-            Vehicle[] orderedVehicles = VehiclesOrderByLocation();
+            List<Vehicle> orderedVehicles = MainForm.VehiclesInLane(this);
             Vehicle previousVehicle = null;
-            if (orderedVehicles.Length > 0)
+            int count = orderedVehicles.Count;
+            if (count > 0)
             {
                 foreach (Vehicle myVehicle in orderedVehicles)
                 {
-                    if (myVehicle.ExactProgressMetres <= vehicle.ExactProgressMetres)
+                    if (myVehicle.ExactProgressMetres <= vehicle.ExactProgressMetres && myVehicle != vehicle)
                     {
                         previousVehicle = myVehicle;
                         break;
@@ -296,24 +294,6 @@ namespace MotorwaySimulator
             {
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Orders all the vehicles in this lane by progress along the road (furthest first)
-        /// </summary>
-        /// <returns>An array containing all the vehicles in this lane ordered by progress along the road (furthest first)</returns>
-        public Vehicle[] VehiclesOrderByLocation()
-        {
-            return Vehicles.OrderByDescending(vehicle => vehicle.ExactProgressMetres).ToArray();
-        }
-
-        /// <summary>
-        /// Orders all the vehicles in this lane by progress along the road (furthest last)
-        /// </summary>
-        /// <returns>An array containing all the vehicles in this lane ordered by progress along the road (furthest last)</returns>
-        public Vehicle[] VehiclesOrderByReverseLocation()
-        {
-            return Vehicles.OrderBy(vehicle => vehicle.ExactProgressMetres).ToArray();
         }
 
         /// <summary>
@@ -532,7 +512,6 @@ namespace MotorwaySimulator
 
             // Add the vehicle to the lane
             newVehicle.ParentLane = this;
-            Vehicles.Add(newVehicle);
 
             // Return that the attempt to add the vehicle to the lane was successful
             return true;
@@ -545,14 +524,15 @@ namespace MotorwaySimulator
         protected override void OnPaint(PaintEventArgs pe)
         {
             // Paint the dotted white lines down both sides of the lane
-            using (Pen whitePen = new Pen(Color.White, 1))
+            using (Pen whitePen = new Pen(Color.LightGray, 1))
             {
-                whitePen.DashPattern = new float[] { 15, 20 };
                 pe.Graphics.DrawLine(whitePen, new Point(0, 0), new Point(Size.Width, 0));
                 pe.Graphics.DrawLine(whitePen, new Point(0, Size.Height - 1), new Point(Size.Width, Size.Height - 1));
             }
 
             int pixelOffset = MainForm.TrackBarRoadStartPoint.Value;
+
+            List<Vehicle> laneVehicles = MainForm.VehiclesInLane(this);
 
             // Prepare the coloured pens, brushes, and font in order to paint the lane and the vehicles
             using (Pen whitePen = new Pen(Color.White, 2))
@@ -567,10 +547,10 @@ namespace MotorwaySimulator
             using (SolidBrush translucentRedBrush = new SolidBrush(Color.FromArgb(50, 255, 0, 0)))
             using (Font drawFont = new Font("Courier New", 9))
             {
-                for (int vehicleIndex = 0; vehicleIndex < Vehicles.Count; vehicleIndex++)
+                for (int vehicleIndex = 0; vehicleIndex < laneVehicles.Count; vehicleIndex++)
                 {
                     // For each vehicle on the lane
-                    Vehicle vehicle = Vehicles[vehicleIndex];
+                    Vehicle vehicle = laneVehicles[vehicleIndex];
                     
 
                     // Calculate the length of the stopping distance for the actual speed of the vehicle

@@ -250,11 +250,10 @@ namespace MotorwaySimulator
         {
             // (Auto-generated) Intialises all the form controls in the form (see MotorwaySimulator.Designer.cs)
             InitializeComponent();
-
-            FirstLaunch = true;
-
+            
             // Initialise variables
             DebugMode = false;
+            FirstLaunch = true;
             StopwatchTimer = new Stopwatch();
             RandomGenerator = new Random();
             SimulationState = SimulationStates.Stopped;
@@ -718,7 +717,7 @@ namespace MotorwaySimulator
                 ButtonStop_Click(null, null);
             }
 
-            Vehicle[] OrderedVehicles = AllActiveVehiclesOrderByLocation();
+            List<Vehicle> OrderedVehicles = AllActiveVehicles();
 
             // Tick the lane handling method of each vehicle by location
             foreach (Vehicle vehicle in OrderedVehicles)
@@ -731,6 +730,8 @@ namespace MotorwaySimulator
             {
                 vehicle.MovementTick();
             }
+
+            AllVehicles = AllVehicles.OrderByDescending(vehicle => vehicle.ExactProgressMetres).ToList();
 
             foreach (Vehicle vehicle in OrderedVehicles)
             {
@@ -855,9 +856,6 @@ namespace MotorwaySimulator
                 {
                     // This vehicle does not have a vehicle behind it in the lane to the left, in the lane it is in or in the lane to right which is within the visible bounds of the road
 
-                    // Remove the vehicle from the road
-                    vehicle.ParentLane.Vehicles.Remove(vehicle);
-
                     // Record the time of disappearance
                     vehicle.TimeDisappearance = TimePassed;
 
@@ -914,6 +912,19 @@ namespace MotorwaySimulator
                 {
                     DateTimeRunDuration.Enabled = false;
                 }
+            }
+        }
+
+        private void CheckBoxShowGraphics_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox CheckBoxShowGraphics = sender as CheckBox;
+            if (CheckBoxShowGraphics.Checked && !FirstLaunch)
+            {
+                Road.Visible = true;
+            }
+            else
+            {
+                Road.Visible = false;
             }
         }
 
@@ -1084,7 +1095,10 @@ namespace MotorwaySimulator
             Road.Height = newHeight;
             if (FirstLaunch)
             {
-                Road.Visible = true;
+                if (CheckBoxShowGraphics.Checked)
+                {
+                    Road.Visible = true;
+                }
                 FirstLaunch = false;
             }
 
@@ -1105,23 +1119,25 @@ namespace MotorwaySimulator
                 TreeViewVehicles.Nodes.Add(lane.LaneNode);
             }
 
-            /*
 
-            // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
-            DebugVehicleSpawnInstruction instruction;
+            if (DebugMode)
+            {
+                // Add some manual spawn instructions to the debug mode to allow for testing specific circumstances
+                DebugVehicleSpawnInstruction instruction;
 
-            
-            // Create an individual spawn instruction
-            instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 96000, 40, 120, false);
-            DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[0], 3000, 112000, 4, -1, false);
-            DebugModeInstructions.Add(instruction);
-            instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[1], 2700, 86000, 4, -1, true);
-            DebugModeInstructions.Add(instruction);
 
-            */
-            
-            
+                // Create an individual spawn instruction
+                instruction = new DebugVehicleSpawnInstruction(0, VehicleTypes.Car, Lanes[0], 0, 80000, 4, -1, false);
+                DebugModeInstructions.Add(instruction);
+                instruction = new DebugVehicleSpawnInstruction(1, VehicleTypes.Car, Lanes[0], 1500, 100000, 4, -1, false);
+                DebugModeInstructions.Add(instruction);
+                instruction = new DebugVehicleSpawnInstruction(2, VehicleTypes.Car, Lanes[0], 3000, 112000, 4, -1, false);
+                DebugModeInstructions.Add(instruction);
+            }
+
+
+
+
             LastTickMeasurementTimerValue = 0;
             TickMeasurementTickCount = 0;
             LastArrivalTimerValue = -1;
@@ -1129,7 +1145,6 @@ namespace MotorwaySimulator
             StopwatchTimer.Restart();
             FormTick.Enabled = true;
             SimulationState = SimulationStates.Started;
-            //Road.Visible = true;
 
             // Update the enabled state of the Play, Pause and Stop and FindVehicle buttons
             ButtonStart.Enabled = false;
@@ -1176,17 +1191,32 @@ namespace MotorwaySimulator
         /// Combines each lane's list of vehicles to produce a list of all active vehicles (i.e. vehicles on the road) then sorts by progress along the road
         /// </summary>
         /// <returns>A list of all active vehicles ordered by their progress along the road (furthest first)</returns>
-        private Vehicle[] AllActiveVehiclesOrderByLocation()
+        private List<Vehicle> AllActiveVehicles()
         {
             // Produce a list of all active vehicles
-            List<Vehicle> allVehicles = new List<Vehicle>();
-            foreach (LaneControl lane in Lanes)
+            List<Vehicle> allActiveVehicles = new List<Vehicle>();
+            foreach (Vehicle vehicle in AllVehicles)
             {
-                allVehicles.AddRange(lane.Vehicles);
+                if (vehicle.InEffect && vehicle.ParentLane != null)
+                {
+                    allActiveVehicles.Add(vehicle);
+                }
             }
+            
+            return allActiveVehicles;
+        }
 
-            // Sort the vehicles by progress
-            return allVehicles.OrderByDescending(vehicle => vehicle.ExactProgressMetres).ToArray();
+        public List<Vehicle> VehiclesInLane(LaneControl lane)
+        {
+            List<Vehicle> laneVehicles = new List<Vehicle>();
+            foreach (Vehicle vehicle in AllVehicles)
+            {
+                if (vehicle.ParentLane == lane && vehicle.InEffect)
+                {
+                    laneVehicles.Add(vehicle);
+                }
+            }
+            return laneVehicles;
         }
 
         /// <summary>
@@ -1244,6 +1274,7 @@ namespace MotorwaySimulator
                             // Adding the vehicle failed
 
                             // Create a node for the failed vehicle in the finished vehicle TreeView
+
                             TreeNode finishedVehicleNode = new TreeNode("#" + (vehicle.VehicleId + 1) + " - " + vehicle.VehicleType + " - " + Math.Round(vehicle.ActualSpeedMetresHour / 1000, 0) + " kph");
                             finishedVehicleNode.Tag = vehicle;
                             TreeViewFinishedVehicles.Nodes[0].Nodes.Add(finishedVehicleNode);
@@ -1399,7 +1430,7 @@ namespace MotorwaySimulator
                 data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "h " + appearance.Minutes.ToString().PadLeft(2, '0') + "m " + appearance.Seconds.ToString().PadLeft(2, '0') + "s " + appearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
 
                 // Update the vehicle despawn time output
-                if (vehicle.SuccessfulSpawn && finished)
+                if (vehicle.SuccessfulSpawn && (finished || vehicle.Crashed))
                 {
                     data.vehicleDespawnTime = disappearance.Hours.ToString().PadLeft(2, '0') + "h " + disappearance.Minutes.ToString().PadLeft(2, '0') + "m " + disappearance.Seconds.ToString().PadLeft(2, '0') + "s " + disappearance.Milliseconds.ToString().PadLeft(3, '0') + "ms";
                 }
@@ -1446,7 +1477,7 @@ namespace MotorwaySimulator
                 data.vehicleSpawnTime = appearance.Hours.ToString().PadLeft(2, '0') + "-" + appearance.Minutes.ToString().PadLeft(2, '0') + "-" + appearance.Seconds.ToString().PadLeft(2, '0') + "." + appearance.Milliseconds.ToString().PadLeft(3, '0');
 
                 // Update the vehicle despawn time output
-                if (vehicle.SuccessfulSpawn && finished)
+                if (vehicle.SuccessfulSpawn && (finished || vehicle.Crashed))
                 {
                     data.vehicleDespawnTime = disappearance.Hours.ToString().PadLeft(2, '0') + "-" + disappearance.Minutes.ToString().PadLeft(2, '0') + "-" + disappearance.Seconds.ToString().PadLeft(2, '0') + "." + disappearance.Milliseconds.ToString().PadLeft(3, '0');
                 }
