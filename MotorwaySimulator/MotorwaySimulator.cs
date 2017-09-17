@@ -1546,6 +1546,8 @@ namespace MotorwaySimulator
             int hGVCount = 0;
             int busCount = 0;
 
+            int activeVehicles = 0;
+
             int carCrashes = 0;
             int lGVCrashes = 0;
             int hGVCrashes = 0;
@@ -1591,6 +1593,13 @@ namespace MotorwaySimulator
                             case VehicleTypes.Bus:
                                 busCrashes++;
                                 break;
+                        }
+                    }
+                    else
+                    {
+                        if (vehicle.InEffect)
+                        {
+                            activeVehicles++;
                         }
                     }
 
@@ -1814,6 +1823,9 @@ namespace MotorwaySimulator
             // Update the all vehicle total buses output
             data.simulationTotalBus = busCount.ToString();
 
+            // Update the Active Vehicles count
+            data.simulationActiveVehicles = activeVehicles.ToString();
+
 
             // Update the Car Crashes count
             data.simulationCarCrashes = carCrashes.ToString();
@@ -1963,7 +1975,9 @@ namespace MotorwaySimulator
             // Update the all vehicle total buses output
             LabelAllVehiclesTotalBus.Text = simulationData.simulationTotalBus;
 
-
+            // Update the Active Vehicles count
+            LabelAllVehiclesActiveVehicles.Text = simulationData.simulationActiveVehicles;
+            
             // Update the Car Crashes count
             LabelAllVehiclesCarCrashes.Text = simulationData.simulationCarCrashes;
 
@@ -2146,6 +2160,7 @@ namespace MotorwaySimulator
                     "LGVs (%)," +
                     "HGVs (%)," +
                     "Buses (%)," +
+                    "Active Vehicles (#)," +
                     "Total Not Congested (#)," +
                     "Total Mildly Congested (#)," +
                     "Total Severely Congested (#)," +
@@ -2177,6 +2192,7 @@ namespace MotorwaySimulator
                     simulationData.simulationLGVPercent + "," +
                     simulationData.simulationHGVPercent + "," +
                     simulationData.simulationBusPercent + "," +
+                    simulationData.simulationActiveVehicles + "," +
                     simulationData.simulationTotalNotCongested + "," +
                     simulationData.simulationTotalMildlyCongested + "," +
                     simulationData.simulationTotalSeverelyCongested + "," +
@@ -2449,6 +2465,7 @@ namespace MotorwaySimulator
         public string simulationLGVPercent;
         public string simulationHGVPercent;
         public string simulationBusPercent;
+        public string simulationActiveVehicles;
         public string simulationCarCrashes;
         public string simulationLGVCrashes;
         public string simulationHGVCrashes;

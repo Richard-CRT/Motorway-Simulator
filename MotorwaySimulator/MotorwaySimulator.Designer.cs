@@ -134,6 +134,8 @@ namespace MotorwaySimulator
             this.TrackBarRoadLength = new System.Windows.Forms.TrackBar();
             this.LabelLaneCount = new System.Windows.Forms.Label();
             this.TabPageSimulation = new System.Windows.Forms.TabPage();
+            this.LabelAllVehiclesActiveVehicles = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesActiveVehiclesTitle = new System.Windows.Forms.Label();
             this.LableVehicleDataTitle = new System.Windows.Forms.Label();
             this.ButtonSaveData = new System.Windows.Forms.Button();
             this.LabelVehicleLane = new System.Windows.Forms.Label();
@@ -213,8 +215,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesNotCongestedPercentTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesMildlyCongestedPercentTitle = new System.Windows.Forms.Label();
             this.LabelAllVehiclesSeverelyCongestedPercentTitle = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesLifetimeTitle = new System.Windows.Forms.Label();
-            this.LabelAllVehiclesLifetime = new System.Windows.Forms.Label();
             this.LabelVehicleDesiredSpeed = new System.Windows.Forms.Label();
             this.LabelVehicleDesiredSpeedTitle = new System.Windows.Forms.Label();
             this.LabelVehicleActualSpeed = new System.Windows.Forms.Label();
@@ -235,6 +235,8 @@ namespace MotorwaySimulator
             this.LabelVehicleLifetimeTitle = new System.Windows.Forms.Label();
             this.ButtonStop = new System.Windows.Forms.Button();
             this.ButtonStart = new System.Windows.Forms.Button();
+            this.LabelAllVehiclesLifetimeTitle = new System.Windows.Forms.Label();
+            this.LabelAllVehiclesLifetime = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTickTime)).BeginInit();
             this.PanelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarRoadStartPoint)).BeginInit();
@@ -302,10 +304,10 @@ namespace MotorwaySimulator
             // TrackBarTickTime
             // 
             this.TrackBarTickTime.LargeChange = 2;
-            this.TrackBarTickTime.Location = new System.Drawing.Point(306, 12);
+            this.TrackBarTickTime.Location = new System.Drawing.Point(303, 12);
             this.TrackBarTickTime.Minimum = 1;
             this.TrackBarTickTime.Name = "TrackBarTickTime";
-            this.TrackBarTickTime.Size = new System.Drawing.Size(349, 45);
+            this.TrackBarTickTime.Size = new System.Drawing.Size(82, 45);
             this.TrackBarTickTime.TabIndex = 3;
             this.TrackBarTickTime.Value = 10;
             this.TrackBarTickTime.Scroll += new System.EventHandler(this.UpdateTickTime);
@@ -331,6 +333,8 @@ namespace MotorwaySimulator
             this.PanelSettings.Controls.Add(this.TrackBarTickTime);
             this.PanelSettings.Controls.Add(this.ButtonStop);
             this.PanelSettings.Controls.Add(this.ButtonStart);
+            this.PanelSettings.Controls.Add(this.LabelAllVehiclesLifetimeTitle);
+            this.PanelSettings.Controls.Add(this.LabelAllVehiclesLifetime);
             this.PanelSettings.Location = new System.Drawing.Point(11, 12);
             this.PanelSettings.Name = "PanelSettings";
             this.PanelSettings.Size = new System.Drawing.Size(1146, 479);
@@ -1776,6 +1780,8 @@ namespace MotorwaySimulator
             // TabPageSimulation
             // 
             this.TabPageSimulation.BackColor = System.Drawing.Color.White;
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesActiveVehicles);
+            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesActiveVehiclesTitle);
             this.TabPageSimulation.Controls.Add(this.LableVehicleDataTitle);
             this.TabPageSimulation.Controls.Add(this.ButtonSaveData);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleLane);
@@ -1855,8 +1861,6 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesNotCongestedPercentTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesMildlyCongestedPercentTitle);
             this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesSeverelyCongestedPercentTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetimeTitle);
-            this.TabPageSimulation.Controls.Add(this.LabelAllVehiclesLifetime);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeed);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleDesiredSpeedTitle);
             this.TabPageSimulation.Controls.Add(this.LabelVehicleActualSpeed);
@@ -1881,6 +1885,28 @@ namespace MotorwaySimulator
             this.TabPageSimulation.Size = new System.Drawing.Size(1130, 360);
             this.TabPageSimulation.TabIndex = 1;
             this.TabPageSimulation.Text = "Data";
+            // 
+            // LabelAllVehiclesActiveVehicles
+            // 
+            this.LabelAllVehiclesActiveVehicles.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesActiveVehicles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesActiveVehicles.Location = new System.Drawing.Point(987, 37);
+            this.LabelAllVehiclesActiveVehicles.Name = "LabelAllVehiclesActiveVehicles";
+            this.LabelAllVehiclesActiveVehicles.Size = new System.Drawing.Size(130, 28);
+            this.LabelAllVehiclesActiveVehicles.TabIndex = 152;
+            this.LabelAllVehiclesActiveVehicles.Text = "0";
+            this.LabelAllVehiclesActiveVehicles.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // LabelAllVehiclesActiveVehiclesTitle
+            // 
+            this.LabelAllVehiclesActiveVehiclesTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesActiveVehiclesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelAllVehiclesActiveVehiclesTitle.Location = new System.Drawing.Point(883, 37);
+            this.LabelAllVehiclesActiveVehiclesTitle.Name = "LabelAllVehiclesActiveVehiclesTitle";
+            this.LabelAllVehiclesActiveVehiclesTitle.Size = new System.Drawing.Size(103, 28);
+            this.LabelAllVehiclesActiveVehiclesTitle.TabIndex = 151;
+            this.LabelAllVehiclesActiveVehiclesTitle.Text = "Active Vehicles:";
+            this.LabelAllVehiclesActiveVehiclesTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LableVehicleDataTitle
             // 
@@ -1916,7 +1942,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalCampers.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalCampers.Location = new System.Drawing.Point(1003, 216);
+            this.LabelAllVehiclesTotalCampers.Location = new System.Drawing.Point(1003, 237);
             this.LabelAllVehiclesTotalCampers.Name = "LabelAllVehiclesTotalCampers";
             this.LabelAllVehiclesTotalCampers.Size = new System.Drawing.Size(115, 28);
             this.LabelAllVehiclesTotalCampers.TabIndex = 145;
@@ -1927,7 +1953,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalCampersTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalCampersTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalCampersTitle.Location = new System.Drawing.Point(883, 216);
+            this.LabelAllVehiclesTotalCampersTitle.Location = new System.Drawing.Point(883, 237);
             this.LabelAllVehiclesTotalCampersTitle.Name = "LabelAllVehiclesTotalCampersTitle";
             this.LabelAllVehiclesTotalCampersTitle.Size = new System.Drawing.Size(111, 28);
             this.LabelAllVehiclesTotalCampersTitle.TabIndex = 144;
@@ -1949,7 +1975,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLGVCampers.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLGVCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLGVCampers.Location = new System.Drawing.Point(1000, 155);
+            this.LabelAllVehiclesLGVCampers.Location = new System.Drawing.Point(1000, 176);
             this.LabelAllVehiclesLGVCampers.Name = "LabelAllVehiclesLGVCampers";
             this.LabelAllVehiclesLGVCampers.Size = new System.Drawing.Size(118, 28);
             this.LabelAllVehiclesLGVCampers.TabIndex = 143;
@@ -1960,7 +1986,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLGVCampersTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLGVCampersTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLGVCampersTitle.Location = new System.Drawing.Point(884, 155);
+            this.LabelAllVehiclesLGVCampersTitle.Location = new System.Drawing.Point(884, 176);
             this.LabelAllVehiclesLGVCampersTitle.Name = "LabelAllVehiclesLGVCampersTitle";
             this.LabelAllVehiclesLGVCampersTitle.Size = new System.Drawing.Size(96, 28);
             this.LabelAllVehiclesLGVCampersTitle.TabIndex = 142;
@@ -1982,7 +2008,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesHGVCampers.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesHGVCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesHGVCampers.Location = new System.Drawing.Point(1000, 175);
+            this.LabelAllVehiclesHGVCampers.Location = new System.Drawing.Point(1000, 196);
             this.LabelAllVehiclesHGVCampers.Name = "LabelAllVehiclesHGVCampers";
             this.LabelAllVehiclesHGVCampers.Size = new System.Drawing.Size(118, 28);
             this.LabelAllVehiclesHGVCampers.TabIndex = 141;
@@ -1993,7 +2019,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesHGVCampersTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesHGVCampersTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesHGVCampersTitle.Location = new System.Drawing.Point(884, 175);
+            this.LabelAllVehiclesHGVCampersTitle.Location = new System.Drawing.Point(884, 196);
             this.LabelAllVehiclesHGVCampersTitle.Name = "LabelAllVehiclesHGVCampersTitle";
             this.LabelAllVehiclesHGVCampersTitle.Size = new System.Drawing.Size(110, 28);
             this.LabelAllVehiclesHGVCampersTitle.TabIndex = 140;
@@ -2015,7 +2041,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesCarCampers.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesCarCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesCarCampers.Location = new System.Drawing.Point(997, 134);
+            this.LabelAllVehiclesCarCampers.Location = new System.Drawing.Point(997, 155);
             this.LabelAllVehiclesCarCampers.Name = "LabelAllVehiclesCarCampers";
             this.LabelAllVehiclesCarCampers.Size = new System.Drawing.Size(121, 28);
             this.LabelAllVehiclesCarCampers.TabIndex = 139;
@@ -2026,7 +2052,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesCarCampersTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesCarCampersTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesCarCampersTitle.Location = new System.Drawing.Point(884, 134);
+            this.LabelAllVehiclesCarCampersTitle.Location = new System.Drawing.Point(884, 155);
             this.LabelAllVehiclesCarCampersTitle.Name = "LabelAllVehiclesCarCampersTitle";
             this.LabelAllVehiclesCarCampersTitle.Size = new System.Drawing.Size(96, 28);
             this.LabelAllVehiclesCarCampersTitle.TabIndex = 138;
@@ -2037,7 +2063,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesBusCampers.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesBusCampers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesBusCampers.Location = new System.Drawing.Point(1003, 195);
+            this.LabelAllVehiclesBusCampers.Location = new System.Drawing.Point(1003, 216);
             this.LabelAllVehiclesBusCampers.Name = "LabelAllVehiclesBusCampers";
             this.LabelAllVehiclesBusCampers.Size = new System.Drawing.Size(115, 28);
             this.LabelAllVehiclesBusCampers.TabIndex = 137;
@@ -2048,7 +2074,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesBusCampersTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesBusCampersTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesBusCampersTitle.Location = new System.Drawing.Point(884, 195);
+            this.LabelAllVehiclesBusCampersTitle.Location = new System.Drawing.Point(884, 216);
             this.LabelAllVehiclesBusCampersTitle.Name = "LabelAllVehiclesBusCampersTitle";
             this.LabelAllVehiclesBusCampersTitle.Size = new System.Drawing.Size(94, 28);
             this.LabelAllVehiclesBusCampersTitle.TabIndex = 136;
@@ -2069,7 +2095,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalFailedSpawnsTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalFailedSpawnsTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalFailedSpawnsTitle.Location = new System.Drawing.Point(884, 256);
+            this.LabelAllVehiclesTotalFailedSpawnsTitle.Location = new System.Drawing.Point(884, 277);
             this.LabelAllVehiclesTotalFailedSpawnsTitle.Name = "LabelAllVehiclesTotalFailedSpawnsTitle";
             this.LabelAllVehiclesTotalFailedSpawnsTitle.Size = new System.Drawing.Size(100, 28);
             this.LabelAllVehiclesTotalFailedSpawnsTitle.TabIndex = 85;
@@ -2080,7 +2106,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.Location = new System.Drawing.Point(884, 275);
+            this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.Location = new System.Drawing.Point(884, 296);
             this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.Name = "LabelAllVehiclesSuccessfulSpawnsPercentTitle";
             this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.Size = new System.Drawing.Size(151, 28);
             this.LabelAllVehiclesSuccessfulSpawnsPercentTitle.TabIndex = 91;
@@ -2091,7 +2117,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesFailedSpawnsPercentTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesFailedSpawnsPercentTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesFailedSpawnsPercentTitle.Location = new System.Drawing.Point(884, 294);
+            this.LabelAllVehiclesFailedSpawnsPercentTitle.Location = new System.Drawing.Point(884, 315);
             this.LabelAllVehiclesFailedSpawnsPercentTitle.Name = "LabelAllVehiclesFailedSpawnsPercentTitle";
             this.LabelAllVehiclesFailedSpawnsPercentTitle.Size = new System.Drawing.Size(125, 28);
             this.LabelAllVehiclesFailedSpawnsPercentTitle.TabIndex = 93;
@@ -2135,9 +2161,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalCrashes.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalCrashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalCrashes.Location = new System.Drawing.Point(1002, 114);
+            this.LabelAllVehiclesTotalCrashes.Location = new System.Drawing.Point(978, 135);
             this.LabelAllVehiclesTotalCrashes.Name = "LabelAllVehiclesTotalCrashes";
-            this.LabelAllVehiclesTotalCrashes.Size = new System.Drawing.Size(115, 28);
+            this.LabelAllVehiclesTotalCrashes.Size = new System.Drawing.Size(139, 28);
             this.LabelAllVehiclesTotalCrashes.TabIndex = 135;
             this.LabelAllVehiclesTotalCrashes.Text = "0";
             this.LabelAllVehiclesTotalCrashes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2146,7 +2172,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalCrashesTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalCrashesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalCrashesTitle.Location = new System.Drawing.Point(882, 114);
+            this.LabelAllVehiclesTotalCrashesTitle.Location = new System.Drawing.Point(882, 135);
             this.LabelAllVehiclesTotalCrashesTitle.Name = "LabelAllVehiclesTotalCrashesTitle";
             this.LabelAllVehiclesTotalCrashesTitle.Size = new System.Drawing.Size(96, 28);
             this.LabelAllVehiclesTotalCrashesTitle.TabIndex = 134;
@@ -2157,9 +2183,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLGVCrashes.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLGVCrashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLGVCrashes.Location = new System.Drawing.Point(999, 56);
+            this.LabelAllVehiclesLGVCrashes.Location = new System.Drawing.Point(975, 76);
             this.LabelAllVehiclesLGVCrashes.Name = "LabelAllVehiclesLGVCrashes";
-            this.LabelAllVehiclesLGVCrashes.Size = new System.Drawing.Size(118, 28);
+            this.LabelAllVehiclesLGVCrashes.Size = new System.Drawing.Size(142, 28);
             this.LabelAllVehiclesLGVCrashes.TabIndex = 133;
             this.LabelAllVehiclesLGVCrashes.Text = "0";
             this.LabelAllVehiclesLGVCrashes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2168,9 +2194,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLGVCrashesTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLGVCrashesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLGVCrashesTitle.Location = new System.Drawing.Point(883, 56);
+            this.LabelAllVehiclesLGVCrashesTitle.Location = new System.Drawing.Point(883, 76);
             this.LabelAllVehiclesLGVCrashesTitle.Name = "LabelAllVehiclesLGVCrashesTitle";
-            this.LabelAllVehiclesLGVCrashesTitle.Size = new System.Drawing.Size(117, 28);
+            this.LabelAllVehiclesLGVCrashesTitle.Size = new System.Drawing.Size(92, 28);
             this.LabelAllVehiclesLGVCrashesTitle.TabIndex = 132;
             this.LabelAllVehiclesLGVCrashesTitle.Text = "LGV Crashes:";
             this.LabelAllVehiclesLGVCrashesTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2179,9 +2205,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesHGVCrashes.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesHGVCrashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesHGVCrashes.Location = new System.Drawing.Point(999, 75);
+            this.LabelAllVehiclesHGVCrashes.Location = new System.Drawing.Point(976, 95);
             this.LabelAllVehiclesHGVCrashes.Name = "LabelAllVehiclesHGVCrashes";
-            this.LabelAllVehiclesHGVCrashes.Size = new System.Drawing.Size(118, 28);
+            this.LabelAllVehiclesHGVCrashes.Size = new System.Drawing.Size(141, 28);
             this.LabelAllVehiclesHGVCrashes.TabIndex = 131;
             this.LabelAllVehiclesHGVCrashes.Text = "0";
             this.LabelAllVehiclesHGVCrashes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2190,7 +2216,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesHGVCrashesTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesHGVCrashesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesHGVCrashesTitle.Location = new System.Drawing.Point(883, 75);
+            this.LabelAllVehiclesHGVCrashesTitle.Location = new System.Drawing.Point(883, 95);
             this.LabelAllVehiclesHGVCrashesTitle.Name = "LabelAllVehiclesHGVCrashesTitle";
             this.LabelAllVehiclesHGVCrashesTitle.Size = new System.Drawing.Size(96, 28);
             this.LabelAllVehiclesHGVCrashesTitle.TabIndex = 130;
@@ -2201,9 +2227,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesCarCrashes.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesCarCrashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesCarCrashes.Location = new System.Drawing.Point(996, 36);
+            this.LabelAllVehiclesCarCrashes.Location = new System.Drawing.Point(968, 56);
             this.LabelAllVehiclesCarCrashes.Name = "LabelAllVehiclesCarCrashes";
-            this.LabelAllVehiclesCarCrashes.Size = new System.Drawing.Size(121, 28);
+            this.LabelAllVehiclesCarCrashes.Size = new System.Drawing.Size(149, 28);
             this.LabelAllVehiclesCarCrashes.TabIndex = 129;
             this.LabelAllVehiclesCarCrashes.Text = "0";
             this.LabelAllVehiclesCarCrashes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2212,7 +2238,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesCarCrashesTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesCarCrashesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesCarCrashesTitle.Location = new System.Drawing.Point(883, 36);
+            this.LabelAllVehiclesCarCrashesTitle.Location = new System.Drawing.Point(883, 56);
             this.LabelAllVehiclesCarCrashesTitle.Name = "LabelAllVehiclesCarCrashesTitle";
             this.LabelAllVehiclesCarCrashesTitle.Size = new System.Drawing.Size(88, 28);
             this.LabelAllVehiclesCarCrashesTitle.TabIndex = 128;
@@ -2223,9 +2249,9 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesBusCrashes.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesBusCrashes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesBusCrashes.Location = new System.Drawing.Point(1002, 94);
+            this.LabelAllVehiclesBusCrashes.Location = new System.Drawing.Point(968, 114);
             this.LabelAllVehiclesBusCrashes.Name = "LabelAllVehiclesBusCrashes";
-            this.LabelAllVehiclesBusCrashes.Size = new System.Drawing.Size(115, 28);
+            this.LabelAllVehiclesBusCrashes.Size = new System.Drawing.Size(149, 28);
             this.LabelAllVehiclesBusCrashes.TabIndex = 127;
             this.LabelAllVehiclesBusCrashes.Text = "0";
             this.LabelAllVehiclesBusCrashes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2234,7 +2260,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesBusCrashesTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesBusCrashesTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesBusCrashesTitle.Location = new System.Drawing.Point(883, 94);
+            this.LabelAllVehiclesBusCrashesTitle.Location = new System.Drawing.Point(883, 114);
             this.LabelAllVehiclesBusCrashesTitle.Name = "LabelAllVehiclesBusCrashesTitle";
             this.LabelAllVehiclesBusCrashesTitle.Size = new System.Drawing.Size(88, 28);
             this.LabelAllVehiclesBusCrashesTitle.TabIndex = 126;
@@ -2442,7 +2468,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesFailedSpawnsPercent.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesFailedSpawnsPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesFailedSpawnsPercent.Location = new System.Drawing.Point(1007, 294);
+            this.LabelAllVehiclesFailedSpawnsPercent.Location = new System.Drawing.Point(1007, 315);
             this.LabelAllVehiclesFailedSpawnsPercent.Name = "LabelAllVehiclesFailedSpawnsPercent";
             this.LabelAllVehiclesFailedSpawnsPercent.Size = new System.Drawing.Size(111, 28);
             this.LabelAllVehiclesFailedSpawnsPercent.TabIndex = 94;
@@ -2453,7 +2479,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesSuccessfulSpawnsPercent.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesSuccessfulSpawnsPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesSuccessfulSpawnsPercent.Location = new System.Drawing.Point(1033, 274);
+            this.LabelAllVehiclesSuccessfulSpawnsPercent.Location = new System.Drawing.Point(1033, 295);
             this.LabelAllVehiclesSuccessfulSpawnsPercent.Name = "LabelAllVehiclesSuccessfulSpawnsPercent";
             this.LabelAllVehiclesSuccessfulSpawnsPercent.Size = new System.Drawing.Size(85, 28);
             this.LabelAllVehiclesSuccessfulSpawnsPercent.TabIndex = 92;
@@ -2508,7 +2534,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalFailedSpawns.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalFailedSpawns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalFailedSpawns.Location = new System.Drawing.Point(980, 254);
+            this.LabelAllVehiclesTotalFailedSpawns.Location = new System.Drawing.Point(980, 275);
             this.LabelAllVehiclesTotalFailedSpawns.Name = "LabelAllVehiclesTotalFailedSpawns";
             this.LabelAllVehiclesTotalFailedSpawns.Size = new System.Drawing.Size(138, 28);
             this.LabelAllVehiclesTotalFailedSpawns.TabIndex = 86;
@@ -2519,7 +2545,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalSuccessfulSpawns.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalSuccessfulSpawns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalSuccessfulSpawns.Location = new System.Drawing.Point(1010, 235);
+            this.LabelAllVehiclesTotalSuccessfulSpawns.Location = new System.Drawing.Point(1010, 256);
             this.LabelAllVehiclesTotalSuccessfulSpawns.Name = "LabelAllVehiclesTotalSuccessfulSpawns";
             this.LabelAllVehiclesTotalSuccessfulSpawns.Size = new System.Drawing.Size(108, 28);
             this.LabelAllVehiclesTotalSuccessfulSpawns.TabIndex = 84;
@@ -2530,7 +2556,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Location = new System.Drawing.Point(884, 235);
+            this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Location = new System.Drawing.Point(884, 256);
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Name = "LabelAllVehiclesTotalSuccessfulSpawnsTitle";
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.Size = new System.Drawing.Size(138, 28);
             this.LabelAllVehiclesTotalSuccessfulSpawnsTitle.TabIndex = 83;
@@ -2726,28 +2752,6 @@ namespace MotorwaySimulator
             this.LabelAllVehiclesSeverelyCongestedPercentTitle.TabIndex = 113;
             this.LabelAllVehiclesSeverelyCongestedPercentTitle.Text = "Severely Congested (%):";
             this.LabelAllVehiclesSeverelyCongestedPercentTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelAllVehiclesLifetimeTitle
-            // 
-            this.LabelAllVehiclesLifetimeTitle.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(883, 314);
-            this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
-            this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(96, 28);
-            this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
-            this.LabelAllVehiclesLifetimeTitle.Text = "Total Lifetime: ";
-            this.LabelAllVehiclesLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // LabelAllVehiclesLifetime
-            // 
-            this.LabelAllVehiclesLifetime.BackColor = System.Drawing.Color.Transparent;
-            this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(969, 314);
-            this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
-            this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(148, 28);
-            this.LabelAllVehiclesLifetime.TabIndex = 125;
-            this.LabelAllVehiclesLifetime.Text = "---";
-            this.LabelAllVehiclesLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelVehicleDesiredSpeed
             // 
@@ -2953,6 +2957,28 @@ namespace MotorwaySimulator
             this.ButtonStart.TabIndex = 0;
             this.ButtonStart.UseVisualStyleBackColor = false;
             this.ButtonStart.Click += new System.EventHandler(this.ButtonStart_Click);
+            // 
+            // LabelAllVehiclesLifetimeTitle
+            // 
+            this.LabelAllVehiclesLifetimeTitle.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(385, 12);
+            this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
+            this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(123, 28);
+            this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
+            this.LabelAllVehiclesLifetimeTitle.Text = "Total Lifetime: ";
+            this.LabelAllVehiclesLifetimeTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LabelAllVehiclesLifetime
+            // 
+            this.LabelAllVehiclesLifetime.BackColor = System.Drawing.Color.Transparent;
+            this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(506, 12);
+            this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
+            this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(159, 28);
+            this.LabelAllVehiclesLifetime.TabIndex = 125;
+            this.LabelAllVehiclesLifetime.Text = "00h 00m 00s 000ms";
+            this.LabelAllVehiclesLifetime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MotorwaySimulatorForm
             // 
@@ -3233,6 +3259,8 @@ namespace MotorwaySimulator
         private System.Windows.Forms.Label LabelRoadIntervalTitle;
         protected System.Windows.Forms.TrackBar TrackBarTickTime;
         private System.Windows.Forms.CheckBox CheckBoxShowGraphics;
+        private System.Windows.Forms.Label LabelAllVehiclesActiveVehicles;
+        private System.Windows.Forms.Label LabelAllVehiclesActiveVehiclesTitle;
     }
 }
 
