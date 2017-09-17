@@ -307,7 +307,7 @@ namespace MotorwaySimulator
             this.TrackBarTickTime.Location = new System.Drawing.Point(303, 12);
             this.TrackBarTickTime.Minimum = 1;
             this.TrackBarTickTime.Name = "TrackBarTickTime";
-            this.TrackBarTickTime.Size = new System.Drawing.Size(82, 45);
+            this.TrackBarTickTime.Size = new System.Drawing.Size(137, 45);
             this.TrackBarTickTime.TabIndex = 3;
             this.TrackBarTickTime.Value = 10;
             this.TrackBarTickTime.Scroll += new System.EventHandler(this.UpdateTickTime);
@@ -387,9 +387,9 @@ namespace MotorwaySimulator
             // LabelVisibleRoadInterval
             // 
             this.LabelVisibleRoadInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelVisibleRoadInterval.Location = new System.Drawing.Point(956, 16);
+            this.LabelVisibleRoadInterval.Location = new System.Drawing.Point(1010, 16);
             this.LabelVisibleRoadInterval.Name = "LabelVisibleRoadInterval";
-            this.LabelVisibleRoadInterval.Size = new System.Drawing.Size(181, 18);
+            this.LabelVisibleRoadInterval.Size = new System.Drawing.Size(127, 18);
             this.LabelVisibleRoadInterval.TabIndex = 60;
             this.LabelVisibleRoadInterval.Text = "0";
             this.LabelVisibleRoadInterval.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -398,7 +398,7 @@ namespace MotorwaySimulator
             // 
             this.LabelVisibleRoadIntervalTitle.AutoSize = true;
             this.LabelVisibleRoadIntervalTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelVisibleRoadIntervalTitle.Location = new System.Drawing.Point(777, 16);
+            this.LabelVisibleRoadIntervalTitle.Location = new System.Drawing.Point(829, 16);
             this.LabelVisibleRoadIntervalTitle.Name = "LabelVisibleRoadIntervalTitle";
             this.LabelVisibleRoadIntervalTitle.Size = new System.Drawing.Size(175, 20);
             this.LabelVisibleRoadIntervalTitle.TabIndex = 59;
@@ -407,7 +407,7 @@ namespace MotorwaySimulator
             // LabelTicksPerSecond
             // 
             this.LabelTicksPerSecond.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelTicksPerSecond.Location = new System.Drawing.Point(741, 16);
+            this.LabelTicksPerSecond.Location = new System.Drawing.Point(799, 16);
             this.LabelTicksPerSecond.Name = "LabelTicksPerSecond";
             this.LabelTicksPerSecond.Size = new System.Drawing.Size(26, 18);
             this.LabelTicksPerSecond.TabIndex = 58;
@@ -418,7 +418,7 @@ namespace MotorwaySimulator
             // 
             this.LabelTicksPerSecondTitle.AutoSize = true;
             this.LabelTicksPerSecondTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelTicksPerSecondTitle.Location = new System.Drawing.Point(671, 16);
+            this.LabelTicksPerSecondTitle.Location = new System.Drawing.Point(729, 16);
             this.LabelTicksPerSecondTitle.Name = "LabelTicksPerSecondTitle";
             this.LabelTicksPerSecondTitle.Size = new System.Drawing.Size(64, 20);
             this.LabelTicksPerSecondTitle.TabIndex = 57;
@@ -2962,7 +2962,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLifetimeTitle.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLifetimeTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(385, 12);
+            this.LabelAllVehiclesLifetimeTitle.Location = new System.Drawing.Point(443, 12);
             this.LabelAllVehiclesLifetimeTitle.Name = "LabelAllVehiclesLifetimeTitle";
             this.LabelAllVehiclesLifetimeTitle.Size = new System.Drawing.Size(123, 28);
             this.LabelAllVehiclesLifetimeTitle.TabIndex = 124;
@@ -2973,7 +2973,7 @@ namespace MotorwaySimulator
             // 
             this.LabelAllVehiclesLifetime.BackColor = System.Drawing.Color.Transparent;
             this.LabelAllVehiclesLifetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
-            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(506, 12);
+            this.LabelAllVehiclesLifetime.Location = new System.Drawing.Point(572, 12);
             this.LabelAllVehiclesLifetime.Name = "LabelAllVehiclesLifetime";
             this.LabelAllVehiclesLifetime.Size = new System.Drawing.Size(159, 28);
             this.LabelAllVehiclesLifetime.TabIndex = 125;
