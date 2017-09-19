@@ -186,147 +186,144 @@ namespace MotorwaySimulator
         /// </summary>
         public void LaneTick()
         {
-            if (!Crashed)
+            #region Change Speed
+
+            // Get the vehicle ahead of this vehicle on the lane
+            Vehicle nextVehicle = ParentLane.NextVehicle(this);
+
+            if (nextVehicle != null)
             {
-                #region Change Speed
+                // There is a vehicle ahead of this vehicle
 
-                // Get the vehicle ahead of this vehicle on the lane
-                Vehicle nextVehicle = ParentLane.NextVehicle(this);
-                
-                if (nextVehicle != null)
+                // Calculate the stopping distance of this vehicle at its actual speed
+                double projectedActualStoppingDistanceMetres = MainForm.StoppingDistance(ActualSpeedMetresHour);
+
+                // Calculate the back of the vehicle ahead of this vehicle
+                double backOfNextVehicle = nextVehicle.ExactProgressMetres - nextVehicle.VehicleLengthMetres;
+
+
+                if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle)
                 {
-                    // There is a vehicle ahead of this vehicle
+                    // The stopping distance of this vehicle at its current speed overlaps the back of the next vehicle
 
-                    // Calculate the stopping distance of this vehicle at its actual speed
-                    double projectedActualStoppingDistanceMetres = MainForm.StoppingDistance(ActualSpeedMetresHour);
-
-                    // Calculate the back of the vehicle ahead of this vehicle
-                    double backOfNextVehicle = nextVehicle.ExactProgressMetres - nextVehicle.VehicleLengthMetres;
-
-
-                    if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle)
+                    if (nextVehicle.ActualSpeedMetresHour < ActualSpeedMetresHour)
                     {
-                        // The stopping distance of this vehicle at its current speed overlaps the back of the next vehicle
+                        // The vehicle ahead of this vehicle is travelling slower than this vehicle
+                        // Therefore this vehicle can slow down, meaning the stopping distance can overlap
 
-                        if (nextVehicle.ActualSpeedMetresHour < ActualSpeedMetresHour)
+                        double projectedStoppingDistanceNextVehicleMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
+
+                        // Calculate the overlap allowed in metres
+                        double stoppingDistanceChangeByChangingSpeedsMetres = projectedActualStoppingDistanceMetres - projectedStoppingDistanceNextVehicleMetres;
+
+                        if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
                         {
-                            // The vehicle ahead of this vehicle is travelling slower than this vehicle
-                            // Therefore this vehicle can slow down, meaning the stopping distance can overlap
+                            // Stopping distance overlaps too far past the allowed overlap
 
-                            double projectedStoppingDistanceNextVehicleMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
-
-                            // Calculate the overlap allowed in metres
-                            double stoppingDistanceChangeByChangingSpeedsMetres = projectedActualStoppingDistanceMetres - projectedStoppingDistanceNextVehicleMetres;
-
-                            if (ExactProgressMetres + projectedActualStoppingDistanceMetres >= backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
-                            {
-                                // Stopping distance overlaps too far past the allowed overlap
-
-                                // Match the speed of the vehicle ahead of this vehicle
-                                ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
-                            }
-                        }
-                        else if (ExactProgressMetres + (projectedActualStoppingDistanceMetres * 0.9) >= backOfNextVehicle)
-                        {
-                            // Matching speed or slower than next vehicle but stopping distance still overlaps the back of the next vehicle by a significant amount (10%)
-                            // Therefore this vehicle needs to stop to wait for the next vehicle to get far enough away
-
-                            ActualSpeedMetresHour = 0;
+                            // Match the speed of the vehicle ahead of this vehicle
+                            ActualSpeedMetresHour = nextVehicle.ActualSpeedMetresHour;
                         }
                     }
-                    else
+                    else if (ExactProgressMetres + (projectedActualStoppingDistanceMetres * 0.9) >= backOfNextVehicle)
                     {
-                        // The stopping distance of this vehicle at its current speed does not overlap the back of the next vehicle
+                        // Matching speed or slower than next vehicle but stopping distance still overlaps the back of the next vehicle by a significant amount (10%)
+                        // Therefore this vehicle needs to stop to wait for the next vehicle to get far enough away
 
-                        // Calculate the stopping distance of this vehicle at desired speed
-                        double projectedDesiredStoppingDistanceMetres = MainForm.StoppingDistance(DesiredSpeedMetresHour);
-
-                        if (nextVehicle.ActualSpeedMetresHour < DesiredSpeedMetresHour)
-                        {
-                            // Vehicle stopping distance is allowed to overlap as it can slow down again
-
-                            // Calculate the current stopping distance of the next vehicle
-                            double nextVehicleStoppingDistanceMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
-
-                            // Calculate the overlap allowed in metres
-                            double stoppingDistanceChangeByChangingSpeedsMetres = projectedDesiredStoppingDistanceMetres - nextVehicleStoppingDistanceMetres;
-
-                            if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
-                            {
-                                // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle + the distance that can be gained by slowing down
-
-                                // Go to full desired speed
-                                ActualSpeedMetresHour = DesiredSpeedMetresHour;
-                            }
-                        }
-                        else
-                        {
-                            // No overlap allowed
-
-                            if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle)
-                            {
-                                // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle
-
-                                // Go to full desired speed
-                                ActualSpeedMetresHour = DesiredSpeedMetresHour;
-                            }
-                        }
+                        ActualSpeedMetresHour = 0;
                     }
                 }
                 else
                 {
-                    // There is no vehicle ahead of this vehicle
+                    // The stopping distance of this vehicle at its current speed does not overlap the back of the next vehicle
 
-                    // Go to full desired speed
-                    ActualSpeedMetresHour = DesiredSpeedMetresHour;
-                }
+                    // Calculate the stopping distance of this vehicle at desired speed
+                    double projectedDesiredStoppingDistanceMetres = MainForm.StoppingDistance(DesiredSpeedMetresHour);
 
-                #endregion
-                
-                #region Change Lane n+1
-
-                if (ParentLane.LaneId != MainForm.ActiveLaneCount - 1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId + 1 < MaximumLane && !Camper)
-                {
-                    // This vehicle is not in the right most lane, is not in its own maximum lane and is not travelling at its desired speed
-
-                    // Get the object of the lane to the right of the lane this vehicle is in
-                    LaneControl rightLane = MainForm.Lanes[ParentLane.LaneId + 1];
-
-                    // Calculate if there is space in the lane to the right
-                    bool spaceInLane = rightLane.SpaceInLane(this);
-                    if (spaceInLane)
+                    if (nextVehicle.ActualSpeedMetresHour < DesiredSpeedMetresHour)
                     {
-                        // There is space in the lane to the right
+                        // Vehicle stopping distance is allowed to overlap as it can slow down again
 
-                        // Switch lane to the right
-                        ParentLane = rightLane;
+                        // Calculate the current stopping distance of the next vehicle
+                        double nextVehicleStoppingDistanceMetres = MainForm.StoppingDistance(nextVehicle.ActualSpeedMetresHour);
+
+                        // Calculate the overlap allowed in metres
+                        double stoppingDistanceChangeByChangingSpeedsMetres = projectedDesiredStoppingDistanceMetres - nextVehicleStoppingDistanceMetres;
+
+                        if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle + stoppingDistanceChangeByChangingSpeedsMetres)
+                        {
+                            // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle + the distance that can be gained by slowing down
+
+                            // Go to full desired speed
+                            ActualSpeedMetresHour = DesiredSpeedMetresHour;
+                        }
+                    }
+                    else
+                    {
+                        // No overlap allowed
+
+                        if (ExactProgressMetres + (projectedDesiredStoppingDistanceMetres * 1.1) < backOfNextVehicle)
+                        {
+                            // The stopping distance (plus an extra 10% margin to avoid quick switching between states) of this vehicle at desired speed DOES NOT overlap the back of the next vehicle
+
+                            // Go to full desired speed
+                            ActualSpeedMetresHour = DesiredSpeedMetresHour;
+                        }
                     }
                 }
-
-                #endregion
-
-                #region Change Lane n-1
-
-                if (ParentLane.LaneId != 0 && !Camper)
-                {
-                    // This vehicle is not in the left most lane
-
-                    // Get the object of the lane to the left of the lane this vehicle is in
-                    LaneControl leftLane = MainForm.Lanes[ParentLane.LaneId - 1];
-
-                    // Calculate if there is space in the lane to the left
-                    bool spaceInLane = leftLane.SpaceInLane(this);
-                    if (spaceInLane)
-                    {
-                        // There is space in the lane to the left
-
-                        // Switch lane to the left
-                        ParentLane = leftLane;
-                    }
-                }
-
-                #endregion
             }
+            else
+            {
+                // There is no vehicle ahead of this vehicle
+
+                // Go to full desired speed
+                ActualSpeedMetresHour = DesiredSpeedMetresHour;
+            }
+
+            #endregion
+
+            #region Change Lane n+1
+
+            if (ParentLane.LaneId != MainForm.ActiveLaneCount - 1 && !IsTravellingAtDesiredSpeed && ParentLane.LaneId + 1 < MaximumLane && !Camper)
+            {
+                // This vehicle is not in the right most lane, is not in its own maximum lane and is not travelling at its desired speed
+
+                // Get the object of the lane to the right of the lane this vehicle is in
+                LaneControl rightLane = MainForm.Lanes[ParentLane.LaneId + 1];
+
+                // Calculate if there is space in the lane to the right
+                bool spaceInLane = rightLane.SpaceInLane(this);
+                if (spaceInLane)
+                {
+                    // There is space in the lane to the right
+
+                    // Switch lane to the right
+                    ParentLane = rightLane;
+                }
+            }
+
+            #endregion
+
+            #region Change Lane n-1
+
+            if (ParentLane.LaneId != 0 && !Camper)
+            {
+                // This vehicle is not in the left most lane
+
+                // Get the object of the lane to the left of the lane this vehicle is in
+                LaneControl leftLane = MainForm.Lanes[ParentLane.LaneId - 1];
+
+                // Calculate if there is space in the lane to the left
+                bool spaceInLane = leftLane.SpaceInLane(this);
+                if (spaceInLane)
+                {
+                    // There is space in the lane to the left
+
+                    // Switch lane to the left
+                    ParentLane = leftLane;
+                }
+            }
+
+            #endregion
         }
 
         /// <summary>
@@ -334,44 +331,41 @@ namespace MotorwaySimulator
         /// </summary>
         public void MovementTick()
         {
-            if (!Crashed)
+            // Calculate the delta simulation time since the last tick
+
+            double elapsedTime = MainForm.TickTime;
+
+            // Increment the lifetime of this vehicle by the scaled elapsed time
+            LifetimeMilliseconds += elapsedTime;
+
+            #region Move Forward
+
+            // Calculate the exact metres moved since the last tick
+            double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, elapsedTime);
+
+            // Move the vehicle by the exact metres that it has moved since the last tick
+            ExactProgressMetres += metresMoved;
+            ProgressPixels = (int)Math.Round(MainForm.MetresToPixels(ExactProgressMetres), 0);
+
+            #endregion
+
+            if (CrashLocationMetres != -1 && ExactProgressMetres > CrashLocationMetres)
             {
-                // Calculate the delta simulation time since the last tick
-
-                double elapsedTime = MainForm.TickTime;
-
-                // Increment the lifetime of this vehicle by the scaled elapsed time
-                LifetimeMilliseconds += elapsedTime;
-
-                #region Move Forward
-
-                // Calculate the exact metres moved since the last tick
-                double metresMoved = MainForm.PerHourToPerTick(ActualSpeedMetresHour, elapsedTime);
-
-                // Move the vehicle by the exact metres that it has moved since the last tick
-                ExactProgressMetres += metresMoved;
-                ProgressPixels = (int)Math.Round(MainForm.MetresToPixels(ExactProgressMetres), 0);
-
-                #endregion
-
-                if (CrashLocationMetres != -1 && ExactProgressMetres > CrashLocationMetres)
-                {
-                    ActualSpeedMetresHour = 0;
-                    Crashed = true;
-                    TimeDisappearance = MainForm.TimePassed;
-                }
-
-                if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
-                {
-                    // The vehicle is not within the visible bounds of the road
-
-                    // Update the InSight variable
-                    InSight = false;
-                }
-
-                // Update the average speed from the new lifetime and progress along the road
-                AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
+                ActualSpeedMetresHour = 0;
+                Crashed = true;
+                TimeDisappearance = MainForm.TimePassed;
             }
+
+            if (ExactProgressMetres > MainForm.ActiveRoadLengthMetres + VehicleLengthMetres)
+            {
+                // The vehicle is not within the visible bounds of the road
+
+                // Update the InSight variable
+                InSight = false;
+            }
+
+            // Update the average speed from the new lifetime and progress along the road
+            AverageSpeedMetresHour = (ExactProgressMetres + OriginalDistanceOffsetMetres) / (LifetimeMilliseconds / 1000 / 60 / 60);
         }
 
         /// <summary>
@@ -399,7 +393,7 @@ namespace MotorwaySimulator
             double speedVariation = (MainForm.RandomGenerator.NextDouble() * MainForm.VehicleParameters[vehicleType].DesiredSpeedVariation * 2) - MainForm.VehicleParameters[vehicleType].DesiredSpeedVariation;
 
             // Calculate the desired speed of this vehicle 
-            int speedMetresHour = (int) Math.Round(MainForm.VehicleParameters[vehicleType].DesiredSpeed + speedVariation,0);
+            int speedMetresHour = (int)Math.Round(MainForm.VehicleParameters[vehicleType].DesiredSpeed + speedVariation, 0);
 
             return speedMetresHour;
         }
@@ -448,9 +442,9 @@ namespace MotorwaySimulator
                     crashingCount++;
                 }
             }
-            
+
             double rand = MainForm.RandomGenerator.NextDouble();
-            
+
             if (rand < MainForm.VehicleParameters[type].CamperProbability)
             {
                 Camper = true;
@@ -509,7 +503,7 @@ namespace MotorwaySimulator
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
         /// <param name="predeterminedVehicleLength">The (optional) predetermined vehicle length, used for debug mode</param>
         /// <param name="predeterminedDesiredSpeedMetresHour">The (optional) predetermined vehicle desired speed in metres per hour, used for debug mode</param>
-        public Car (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
+        public Car(MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
             GenerateVehicle(VehicleTypes.Car, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
@@ -526,7 +520,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public LGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
+        public LGV(MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
             GenerateVehicle(VehicleTypes.LGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
@@ -543,7 +537,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public HGV (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
+        public HGV(MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
             GenerateVehicle(VehicleTypes.HGV, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }
@@ -560,7 +554,7 @@ namespace MotorwaySimulator
         /// </summary>
         /// <param name="mainForm">The main form object which allows access to the main form's methods, properties and controls</param>
         /// <param name="vehicleId">The ID of the vehicle to construct</param>
-        public Bus (MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
+        public Bus(MotorwaySimulatorForm mainForm, int vehicleId, double predeterminedVehicleLength = 0, double predeterminedDesiredSpeedMetresHour = 0, double predeterminedCrashLocation = -1, bool predeterminedCamper = false)
         {
             GenerateVehicle(VehicleTypes.Bus, mainForm, vehicleId, predeterminedVehicleLength, predeterminedDesiredSpeedMetresHour, predeterminedCrashLocation, predeterminedCamper);
         }

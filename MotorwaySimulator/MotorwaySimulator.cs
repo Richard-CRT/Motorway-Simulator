@@ -720,21 +720,36 @@ namespace MotorwaySimulator
             List<Vehicle> OrderedVehicles = AllActiveVehicles();
 
             // Tick the lane handling method of each vehicle by location
-            foreach (Vehicle vehicle in OrderedVehicles)
+            Task[] tasks = new Task[OrderedVehicles.Count];
+            for (int i = 0; i < OrderedVehicles.Count; i++)
             {
-                vehicle.LaneTick();
+                Vehicle vehicle = OrderedVehicles[i];
+                tasks[i] = new Task(() =>
+                {
+                    vehicle.LaneTick();
+                });
+                tasks[i].Start();
             }
+            Task.WaitAll(tasks);
 
             // Tick the movement handling method of each vehicle by location
-            foreach (Vehicle vehicle in OrderedVehicles)
+            tasks = new Task[OrderedVehicles.Count];
+            for (int i = 0; i < OrderedVehicles.Count; i++)
             {
-                vehicle.MovementTick();
+                Vehicle vehicle = OrderedVehicles[i];
+                tasks[i] = new Task(() =>
+                {
+                    vehicle.MovementTick();
+                });
+                tasks[i].Start();
             }
+            Task.WaitAll(tasks);
 
             AllVehicles = AllVehicles.OrderByDescending(vehicle => vehicle.ExactProgressMetres).ToList();
-
-            foreach (Vehicle vehicle in OrderedVehicles)
+                       
+            for (int i = 0; i < OrderedVehicles.Count; i++)
             {
+                Vehicle vehicle = OrderedVehicles[i];
                 if (!vehicle.InSight)
                 {
                     // The vehicle is not in sight
@@ -880,7 +895,7 @@ namespace MotorwaySimulator
                     }
                 }
             }
-
+            
             // Mark each lane for repainting
             foreach (LaneControl lane in Lanes)
             {
@@ -1197,7 +1212,7 @@ namespace MotorwaySimulator
             List<Vehicle> allActiveVehicles = new List<Vehicle>();
             foreach (Vehicle vehicle in AllVehicles)
             {
-                if (vehicle.InEffect && vehicle.ParentLane != null)
+                if (vehicle.InEffect && !vehicle.Crashed && vehicle.ParentLane != null)
                 {
                     allActiveVehicles.Add(vehicle);
                 }
